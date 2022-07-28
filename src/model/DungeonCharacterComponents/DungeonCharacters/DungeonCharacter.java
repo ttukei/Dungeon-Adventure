@@ -2,7 +2,9 @@ package model.DungeonCharacterComponents.DungeonCharacters;
 
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonObject;
+import model.RoomItemComponents.RoomItems.HealthPotion;
 import model.RoomItemComponents.RoomItems.RoomItem;
+import model.RoomItemComponents.RoomItems.VisionPotion;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -73,25 +75,45 @@ public abstract class DungeonCharacter extends DungeonObject {
         isDeceased();
     }
 
-    // TODO Create a method that can either return whats in the inventory and or uses whats in the inventory
-
-    /**
-     * Collects an item an places it in the dungeon characters backpack.
-     * @param theItemToCollect
-     * @return
-     */
-    public boolean collectItem(final RoomItem theItemToCollect) {
-        try {
-            //maybe have health pass "H:5-15" in constructor so when added it can add String so
-            //myInventory can be a list of strings?? ask tim for his thoughts
-            this.myInventory.add(theItemToCollect);
-            return true;
-        } catch(IllegalArgumentException e) {
-            e.printStackTrace();
+    public boolean useHealthPotion() {
+        for (int index = 0; index < this.myInventory.size(); index++) {
+            if (this.myInventory.get(index).getClass().equals(HealthPotion.class)) {
+                HealthPotion healthPotion = (HealthPotion) this.myInventory.remove(index);
+                this.setMyHealthPoints(this.getMyHealthPoints() + healthPotion.getMyHealthToBeRegained());
+                return true;
+            }
         }
         return false;
     }
 
+    public boolean useVisionPotion() {
+        for (int index = 0; index < this.myInventory.size(); index++) {
+            if (this.myInventory.get(index).getClass().equals(VisionPotion.class)) {
+                VisionPotion visionPotion = (VisionPotion) this.myInventory.remove(index);
+                // TODO implement code to activate vision
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Picks up and places a room item in the heroes inventory.
+     * @param theItemToPickUp The room item to pick up.
+     * @return True if the item was successfully placed in the inventory and false otherwise.
+     */
+    public boolean pickUpRoomItem(RoomItem theItemToPickUp) {
+        return this.myInventory.add(theItemToPickUp);
+    }
+
+    public String displayInventory() {
+        StringBuilder result = new StringBuilder("[");
+        for (int i = 0; i < myInventory.size() - 1; i++) {
+            result.append(myInventory.get(i).getClass() + ", ");
+        }
+        result.append(myInventory.get(myInventory.size() - 1) + "]");
+        return result.toString();
+    }
 
     /**
      * Attacks an opponent.
@@ -204,14 +226,6 @@ public abstract class DungeonCharacter extends DungeonObject {
         return random.nextInt(getMyDamageRange().getMyUpperBound() - getMyDamageRange().getMyLowerBound()) + getMyDamageRange().getMyLowerBound();
     }
 
-    public String displayInventory() {
-        StringBuilder result = new StringBuilder("[");
-        for (int i = 0; i < myInventory.size() - 1; i++) {
-            result.append(myInventory.get(i).getClass() + ", ");
-        }
-        result.append(myInventory.get(myInventory.size() - 1) + "]");
-        return result.toString();
-    }
 
     @Override
     public String toString() {

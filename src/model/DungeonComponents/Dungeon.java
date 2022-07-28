@@ -169,4 +169,8 @@ public class Dungeon {
 
     }
 
+    public static void main(String... args) {
+        Dungeon dungeon = new Dungeon(new Coordinates(6,6));
+    }
+
 }

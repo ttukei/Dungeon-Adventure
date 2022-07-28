@@ -2,6 +2,9 @@ package model.DungeonCharacterComponents.DungeonCharacters.Heros;
 
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
+import model.RoomItemComponents.RoomItems.*;
+
+import java.util.ArrayList;
 
 /**
  * @author Timon Tukei
@@ -12,6 +15,8 @@ public abstract class Hero extends DungeonCharacter {
      * Probability to defend against an attack.
      */
     private final double myChanceToDefend;
+
+
 
     /**
      *
@@ -29,5 +34,7 @@ public abstract class Hero extends DungeonCharacter {
     }
 
     public abstract boolean specialAttack(final DungeonCharacter theMonsterToAttack);
+
+
 
 }
