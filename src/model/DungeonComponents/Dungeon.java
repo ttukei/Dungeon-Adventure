@@ -5,6 +5,7 @@ import model.DataTypes.Coordinates;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Dungeon {
@@ -18,6 +19,8 @@ public class Dungeon {
     final int MIN_LOCATION;
     final int MAX_LOCATION;
 
+    /* CONSTRUCTORS */
+
     private Dungeon(Coordinates size) {
         System.out.println("Building New Dungeon");
         myDungeonGrid = new Room[size.getX()][size.getY()];
@@ -26,11 +29,79 @@ public class Dungeon {
         createMaze();
     }
 
+    private Dungeon() {
+        System.out.println("Building New Mock Dungeon");
+        myDungeonGrid = new Room[][]{
+            {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR))),
+                new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR, Doors.WESTDOOR))),
+                new Room(new LinkedList<>(List.of(Doors.WESTDOOR)))},
+            {   null,
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.SOUTHDOOR))),
+                null},
+            {   null,
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR))),
+                null}
+        };
+        MIN_LOCATION = 0;
+        MAX_LOCATION = myDungeonGrid.length - 1;
+        System.out.println(this);
+    }
+
+    /* GET SINGLETONS */
+
+    /**
+     * Singleton accessor for Dungeon which generates the floor plan using creatMaze().
+     * @return the existing or new Singleton instance of Dungeon
+     */
     public static synchronized Dungeon getDungeon(Coordinates size){
         if (uniqueInstanceOfDungeon == null){
             uniqueInstanceOfDungeon = new Dungeon(size);
         }
         return uniqueInstanceOfDungeon;
+    }
+
+    /**
+     * Singleton accessor for MockDungeon which forgoes generating the
+     * floor plan randomly for early iterations of game.
+     * @return the existing or new Singleton instance of Dungeon
+     */
+    public static synchronized Dungeon getMockDungeon(){
+        if (uniqueInstanceOfDungeon == null){
+            uniqueInstanceOfDungeon = new Dungeon();
+        }
+        return uniqueInstanceOfDungeon;
+    }
+
+    /* OVERRIDDEN PUBLIC METHODS */
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString(){
+        StringBuilder dungeonToString = new StringBuilder("");
+        int roomNumber = 0;
+        for (int i = 0; i < myDungeonGrid.length; i++){
+            if (myDungeonGrid[i] != null){
+                Room[] roomRow = myDungeonGrid[i];
+                dungeonToString.append("Row ").append((char)('A' + i)).append("\n");            // Row Letter
+                for (int j = 0; j < roomRow.length; j++){
+                    Room currentRoom = myDungeonGrid[i][j];
+                    if (currentRoom != null) {
+                        dungeonToString.append("Room ").append(roomNumber++             // Room Number
+                        ).append(", at (").append(i).append(", ").append(j              // Coordinates
+                        ).append(") has doors: ").append(currentRoom.getDoors()         // Doors
+                        ).append("\n");                                                 // New Line
+                    } else{
+                        dungeonToString.append("Empty Room at (").append(i).append(", ").append(j).append(")\n");
+                    }
+                }
+            } else {
+                dungeonToString.append("ERROR: No values in row").append(i).append("\n");
+            }
+        }
+        return dungeonToString.toString();
     }
 
     private void createMaze(){
@@ -139,7 +210,7 @@ public class Dungeon {
      * @param theCoordinates Coordinates to check the neighbors of.
      * @return neighbors - a list of Coordinates containing rooms.
      */
-    public LinkedList<Coordinates> whoAreMyNeighbors(Coordinates theCoordinates){
+    private LinkedList<Coordinates> whoAreMyNeighbors(Coordinates theCoordinates){
 
         LinkedList<Coordinates> neighbors = new LinkedList<>();
 

@@ -20,6 +20,10 @@ public class Room {
 
     }
 
+    public String getDoors(){
+        return roomDoors.toString();
+    }
+
     public boolean hasNorthDoor() {
         return roomDoors.contains(Doors.NORTHDOOR);
     }

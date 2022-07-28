@@ -4,7 +4,7 @@ import model.DataTypes.Coordinates;
 import model.DungeonComponents.Dungeon;
 
 import static controller.Handler.getHandler;
-import static model.DungeonComponents.Dungeon.getDungeon;
+import static model.DungeonComponents.Dungeon.*;
 
 public class DungeonAdventure implements Runnable {
 
@@ -17,7 +17,7 @@ public class DungeonAdventure implements Runnable {
     private DungeonAdventure(){
 
         handler = getHandler();
-        dungeon = getDungeon(new Coordinates(7, 7));
+        dungeon = getMockDungeon();
 
     }
 
