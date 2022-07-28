@@ -19,15 +19,22 @@ public class MonsterFactory {
     private static final String myQuery = "SELECT * FROM Monsters";
 
     /**
+     * Monsters
+     */
+    private ArrayList<Monster> myMonsters;
+
+    /**
      * Inhibits external instantiation.
      */
-    private MonsterFactory() {}
+    private MonsterFactory() {
+        myMonsters = getMonsters();
+    }
 
     /**
      * Connects to a sqlight database.
      * @return
      */
-    private static Connection connect() {
+    private Connection connect() {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(myURL);
@@ -44,7 +51,7 @@ public class MonsterFactory {
      * array list with all the monsters from the data.
      * @return
      */
-    private static ArrayList<Monster> getMonsters() {
+    private ArrayList<Monster> getMonsters() {
         ArrayList<Monster> monsters = new ArrayList<>();
         try(Connection connection = connect()) {
             Statement statement = connection.createStatement();
@@ -94,15 +101,20 @@ public class MonsterFactory {
         return monsters;
     }
 
+    public ArrayList<Monster> getMyMonsters() {
+        return this.myMonsters;
+    }
+
     /**
      * Randomly picks from a set of monsters of type specified in the parameter.
      * @param theMonsterToGet To get a monster of type Ogre for example: getMonster(Oger.class).
      * @return One of the monster of type specified in the parameter from the set in the database./
      */
-    public static Monster getMonster(Class theMonsterToGet) {
-        ArrayList<Monster> monsters = getMonsters();
+    public Monster getMonster(Class theMonsterToGet) {
+        ArrayList<Monster> monsters = getMyMonsters();
         for (Monster monster : monsters) {
             if (monster.getClass() == theMonsterToGet) {
+                myMonsters.remove(monster);
                 return monster;
             }
         }
@@ -118,7 +130,10 @@ public class MonsterFactory {
 //        for (Monster monster : monsters) {
 //            System.out.println(monster);
 //        }
-        Monster ogre = getMonster(Ogre.class);
+        MonsterFactory monsterFactory = new MonsterFactory();
+        Monster ogre = monsterFactory.getMonster(Ogre.class);
         System.out.println(ogre);
+        Monster ogre1 = monsterFactory.getMonster(Ogre.class);
+        System.out.println(ogre1);
     }
 }
