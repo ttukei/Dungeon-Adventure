@@ -3,37 +3,20 @@ package model.DungeonCharacterComponents.DungeonCharacters.Monsters;
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.HealingRange;
 
+import java.sql.*;
+import java.util.ArrayList;
+
 public class MonsterFactory {
 
     /**
-     * Gremlins Stats
+     * The sqlight database url.
      */
-    private static final int GREMLIN_HEALTH_POINTS = 70;
-    private static final DamageRange GREMLIN_DAMAGE_RANGE = new DamageRange(15, 30);
-    private static final int GREMLIN_ATTACK_SPEED = 5;
-    private static final double GREMLIN_CHANCE_TO_HIT = 0.8;
-    private static final double GREMLIN_CHANCE_TO_HEAL = 0.4;
-    private static final HealingRange GREMLIN_HEALING_RANGE = new HealingRange(20, 40);
+    private static final String myURL = "jdbc:sqlite:Resources/Monsters.db";
 
     /**
-     * Ogres Stats
+     * The query.
      */
-    private static final int OGRE_HEALTH_POINTS = 200;
-    private static final DamageRange OGRE_DAMAGE_RANGE = new DamageRange(30, 60);
-    private static final int OGRE_ATTACK_SPEED = 2;
-    private static final double OGRE_CHANCE_TO_HIT = 0.6;
-    private static final double OGRE_CHANCE_TO_HEAL = 0.1;
-    private static final HealingRange OGRE_HEALING_RANGE = new HealingRange(30, 60);
-
-    /**
-     * Skeletons Stats
-     */
-    private static final int SKELETON_HEALTH_POINTS = 100;
-    private static final DamageRange SKELETON_DAMAGE_RANGE = new DamageRange(30, 50);
-    private static final int SKELETON_ATTACK_SPEED = 3;
-    private static final double SKELETON_CHANCE_TO_HIT = 0.8;
-    private static final double SKELETON_CHANCE_TO_HEAL = 0.3;
-    private static final HealingRange SKELETON_HEALING_RANGE = new HealingRange(30, 50);
+    private static final String myQuery = "SELECT * FROM Monsters";
 
     /**
      * Inhibits external instantiation.
@@ -41,26 +24,101 @@ public class MonsterFactory {
     private MonsterFactory() {}
 
     /**
-     * Instantiates an instance of type <code>Monster</code>.
-     * @param theMonsterToInstantiate One of the three child classes of <code>Monster</code>.
-     * @param theMonstersName The name of the monster.
-     * @return an instance of type <code>Monster</code>
+     * Connects to a sqlight database.
+     * @return
      */
-    public static Monster instantiateMonster(final Monsters theMonsterToInstantiate, final String theMonstersName) {
-        switch (theMonsterToInstantiate) {
-            case GREMLIN -> {
-                return new Gremlin(theMonstersName, GREMLIN_HEALTH_POINTS, GREMLIN_DAMAGE_RANGE,
-                        GREMLIN_ATTACK_SPEED, GREMLIN_CHANCE_TO_HIT, GREMLIN_CHANCE_TO_HEAL, GREMLIN_HEALING_RANGE);
+    private static Connection connect() {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(myURL);
+        } catch (SQLException exception) {
+            System.out.println(exception);
+            exception.printStackTrace();
+        }
+        return connection;
+    }
+
+    /**
+     * Retrieves data about monsters from sqlite database,
+     * constructs monsters with that data, then returns an
+     * array list with all the monsters from the data.
+     * @return
+     */
+    private static ArrayList<Monster> getMonsters() {
+        ArrayList<Monster> monsters = new ArrayList<>();
+        try(Connection connection = connect()) {
+            Statement statement = connection.createStatement();
+            ResultSet monsterData = statement.executeQuery(myQuery);
+            while(monsterData.next()) {
+                Monsters monster = Monsters.values()[monsterData.getInt("Monster Type") - 1];
+                switch(monster) {
+                    case GREMLIN -> {
+                        monsters.add(new Gremlin(monsterData.getString("Name"),
+                                monsterData.getInt("Health"),
+                                new DamageRange(monsterData.getInt("Minimum Damage"),
+                                        monsterData.getInt("Maximum Damage")),
+                                monsterData.getInt("Attack Speed"),
+                                monsterData.getDouble("Chance to Hit"),
+                                monsterData.getDouble("Chance to Heal"),
+                                new HealingRange(monsterData.getInt("Minimum Healing Points"),
+                                        monsterData.getInt("Maximum Healing Points"))));
+                    }
+                    case SKELETON -> {
+                        monsters.add(new Skeleton(monsterData.getString("Name"),
+                                monsterData.getInt("Health"),
+                                new DamageRange(monsterData.getInt("Minimum Damage"),
+                                        monsterData.getInt("Maximum Damage")),
+                                monsterData.getInt("Attack Speed"),
+                                monsterData.getDouble("Chance to Hit"),
+                                monsterData.getDouble("Chance to Heal"),
+                                new HealingRange(monsterData.getInt("Minimum Healing Points"),
+                                        monsterData.getInt("Maximum Healing Points"))));
+                    }
+                    case OGRE -> {
+                        monsters.add(new Ogre(monsterData.getString("Name"),
+                                monsterData.getInt("Health"),
+                                new DamageRange(monsterData.getInt("Minimum Damage"),
+                                        monsterData.getInt("Maximum Damage")),
+                                monsterData.getInt("Attack Speed"),
+                                monsterData.getDouble("Chance to Hit"),
+                                monsterData.getDouble("Chance to Heal"),
+                                new HealingRange(monsterData.getInt("Minimum Healing Points"),
+                                        monsterData.getInt("Maximum Healing Points"))));
+                    }
+                 }
             }
-            case OGRE -> {
-                return new Ogre(theMonstersName, OGRE_HEALTH_POINTS, OGRE_DAMAGE_RANGE,
-                        OGRE_ATTACK_SPEED, OGRE_CHANCE_TO_HIT, OGRE_CHANCE_TO_HEAL, OGRE_HEALING_RANGE);
-            }
-            case SKELETON -> {
-                return new Skeleton(theMonstersName, SKELETON_HEALTH_POINTS, SKELETON_DAMAGE_RANGE,
-                        SKELETON_ATTACK_SPEED, SKELETON_CHANCE_TO_HIT, SKELETON_CHANCE_TO_HEAL, SKELETON_HEALING_RANGE);
+        } catch (SQLException exception) {
+            System.out.println(exception);
+            exception.printStackTrace();
+        }
+        return monsters;
+    }
+
+    /**
+     * Randomly picks from a set of monsters of type specified in the parameter.
+     * @param theMonsterToGet To get a monster of type Ogre for example: getMonster(Oger.class).
+     * @return One of the monster of type specified in the parameter from the set in the database./
+     */
+    public static Monster getMonster(Class theMonsterToGet) {
+        ArrayList<Monster> monsters = getMonsters();
+        for (Monster monster : monsters) {
+            if (monster.getClass() == theMonsterToGet) {
+                return monster;
             }
         }
         return null;
+    }
+
+    /**
+     * For testing purposes
+     * @param args
+     */
+    public static void main(String... args) {
+//        ArrayList<Monster> monsters = getMonsters();
+//        for (Monster monster : monsters) {
+//            System.out.println(monster);
+//        }
+        Monster ogre = getMonster(Ogre.class);
+        System.out.println(ogre);
     }
 }
