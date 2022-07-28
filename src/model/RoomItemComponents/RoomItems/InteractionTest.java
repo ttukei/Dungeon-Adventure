@@ -12,5 +12,6 @@ public class InteractionTest {
         hero.collectItem(health);
         System.out.println(health.getMyHitPoint());
         System.out.println(hero.displayInventory());
+        //to test the new repo
     }
 }
