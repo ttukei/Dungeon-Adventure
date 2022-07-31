@@ -3,6 +3,7 @@ package model.DungeonCharacterComponents.DungeonCharacters;
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonObject;
 import model.RoomItemComponents.RoomItems.HealthPotion;
+import model.RoomItemComponents.RoomItems.Pit;
 import model.RoomItemComponents.RoomItems.RoomItem;
 import model.RoomItemComponents.RoomItems.VisionPotion;
 
@@ -97,6 +98,17 @@ public abstract class DungeonCharacter extends DungeonObject {
         return false;
     }
 
+    public boolean doPitDamage() {
+        for (int index = 0; index < this.myInventory.size(); index++) {
+            if (this.myInventory.get(index).getClass().equals(Pit.class)) {
+                Pit pit = (Pit) this.myInventory.remove(index);
+                this.setMyHealthPoints(this.getMyHealthPoints() + pit.getMyHealthToBeDamaged());
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Picks up and places a room item in the heroes inventory.
      * @param theItemToPickUp The room item to pick up.
@@ -109,9 +121,13 @@ public abstract class DungeonCharacter extends DungeonObject {
     public String displayInventory() {
         StringBuilder result = new StringBuilder("[");
         for (int i = 0; i < myInventory.size() - 1; i++) {
-            result.append(myInventory.get(i).getClass() + ", ");
+            result.append(myInventory.get(i).myName + ", ");
         }
-        result.append(myInventory.get(myInventory.size() - 1) + "]");
+        if (!myInventory.isEmpty()) {
+            result.append(myInventory.get(myInventory.size() - 1).myName + "]");
+        } else {
+            result.append("Empty]");
+        }
         return result.toString();
     }
 

@@ -9,8 +9,12 @@ public abstract class RoomItem extends DungeonObject {
     /** The 10% possibility of an item being in a room. */
     public static final int PLACE_ITEM_CHANCE = 1;
 
-    public RoomItem() {
+    /** The name of the RoomItem. */
+    public String myName;
+
+    public RoomItem(String theName) {
         super();
+        myName = theName;
     }
 
     /**

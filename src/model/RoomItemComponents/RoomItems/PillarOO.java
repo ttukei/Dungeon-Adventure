@@ -13,7 +13,7 @@ public class PillarOO extends RoomItem{
     public static final int POLYMORPHISM = 4;
 
     public PillarOO() {
-        super();
+        super("Pillar");
     }
 
     public void placePillar() {

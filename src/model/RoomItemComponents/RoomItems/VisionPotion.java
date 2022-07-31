@@ -3,7 +3,7 @@ package model.RoomItemComponents.RoomItems;
 public class VisionPotion extends RoomItem{
 
     public VisionPotion() {
-        super();
+        super("Vision");
     }
 
     public void usePotion() {
