@@ -13,7 +13,7 @@ public class HealthPotion extends RoomItem{
      * Constructor that will also generate a random HitPoint number
      */
     public HealthPotion() {
-        super();
+        super("Health");
         this.myHealthToBeRegained = getRandomHitPoint();
     }
 
@@ -25,6 +25,11 @@ public class HealthPotion extends RoomItem{
         return rand.nextInt(16 - 5) + 5;
     }
 
+    /**
+     * This returns the health points that was randomly generated
+     *
+     * @return the random number from 5-15
+     */
     public int getMyHealthToBeRegained() {
         return myHealthToBeRegained;
     }
