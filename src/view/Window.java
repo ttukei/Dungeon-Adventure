@@ -21,6 +21,11 @@ public class Window  extends Canvas {
 
         frame.setVisible(true);
 
+
+        /////////Philips testing///////
+        MainPanel mainPanel = new MainPanel();
+        frame.add(mainPanel);
+
     }
 
 }
