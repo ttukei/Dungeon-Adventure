@@ -22,10 +22,7 @@ public class MonsterFactory {
      * Monsters
      */
     private ArrayList<Monster> myMonsters;
-
-    /**
-     * Inhibits external instantiation.
-     */
+    
     public MonsterFactory() {
         myMonsters = getMonsters();
     }

@@ -3,6 +3,7 @@ package model.DungeonCharacterComponents.DungeonCharacters.Heros;
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
 import model.RoomItemComponents.RoomItems.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,6 @@ public abstract class Hero extends DungeonCharacter {
      * Probability to defend against an attack.
      */
     private final double myChanceToDefend;
-
 
 
     /**
