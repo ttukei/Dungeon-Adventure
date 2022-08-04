@@ -12,14 +12,14 @@ public class Window  extends Canvas {
         JFrame frame = new JFrame(theTitle);
 
         // Initial Window values
-        frame.setPreferredSize(theDimensions);                       // Window Size
-        frame.setMaximumSize(theDimensions);                         // Actual maximum possible size
-        frame.setMinimumSize(theDimensions);                         // Actual minimum possible size
+        frame.setPreferredSize(theDimensions);                      // Window Size
+        frame.setMaximumSize(theDimensions);                        // Actual maximum possible size
+        frame.setMinimumSize(theDimensions);                        // Actual minimum possible size
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);       // Window closes when you press the 'x'
         frame.setResizable(false);                                  // Window is force sized at the games resolution
         frame.setLocationRelativeTo(null);                          // Opens window in the middle of the monitor
 
-        frame.setVisible(true);
+        frame.setVisible(true);                                     // Show the window
 
 
         /////////Philips testing///////
