@@ -21,4 +21,8 @@ public class Coordinates {
     public String toString(){
         return "(" + myX + ", " + myY + ")";
     }
+
+    public boolean isLocatedAtTheCoordinate(Coordinates theCoordinateToCompare){
+        return getX() == theCoordinateToCompare.getX() && getY() == theCoordinateToCompare.getY();
+    }
 }
