@@ -104,6 +104,8 @@ public class Dungeon {
         return dungeonToString.toString();
     }
 
+    /* PRIVATE METHODS */
+
     private void createMaze(){
 
         // Linked list of the coordinates of rooms to make, randomly generate starting coordinates

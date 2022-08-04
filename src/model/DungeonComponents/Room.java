@@ -2,6 +2,9 @@ package model.DungeonComponents;
 
 import model.DataTypes.Coordinates;
 import model.RoomItemComponents.RoomItems.RoomItem;
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
+import model.RoomItemComponents.RoomItems.RoomItems;
+
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -11,6 +14,10 @@ public class Room {
     private int myNumberOfDoors;
 
     private LinkedList<Doors> roomDoors;
+
+    private LinkedList<RoomItems> roomInventory;
+
+    private LinkedList<Monsters> roomMonsters;
 
     private Coordinates myCoordinates;
 
@@ -42,6 +49,18 @@ public class Room {
 
     public boolean hasWestDoor() {
         return roomDoors.contains(Doors.WESTDOOR);
+    }
+
+    public void addItemsToRoom(LinkedList<RoomItems> theItemsToAdd){
+        for (RoomItems item : theItemsToAdd){
+            roomInventory.add(item);
+        }
+    }
+
+    public void addMonstersToRoom(LinkedList<Monsters> theMonstersToAdd){
+        for (Monsters monster : theMonstersToAdd){
+            roomMonsters.add(monster);
+        }
     }
 
 }
