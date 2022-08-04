@@ -1,9 +1,7 @@
 package model.DungeonComponents;
 
-import model.DataTypes.Coordinates;
+import model.DungeonComponents.DataTypes.Coordinates;
 
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;

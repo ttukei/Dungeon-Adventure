@@ -35,6 +35,8 @@ public abstract class Hero extends DungeonCharacter {
 
     public abstract boolean specialAttack(final DungeonCharacter theMonsterToAttack);
 
+    // TODO write set method for chanceToAttack
+    // TODO change specialAttack to specialSkill
 
 
 }

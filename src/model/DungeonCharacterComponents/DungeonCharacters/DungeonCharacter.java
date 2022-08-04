@@ -137,14 +137,16 @@ public abstract class DungeonCharacter extends DungeonObject {
      */
     public boolean attack(final DungeonCharacter theCharacterToAttack) {
         // Randomly gets a number between the damage range.
-        final int damage = getTheDamageToBeDealt();
         if (myChanceToHit == theCharacterToAttack.getMyChanceToHit() || Math.random() < this.getMyChanceToHit()) {
+            final int damage = getTheDamageToBeDealt();
             theCharacterToAttack.setMyHealthPoints(theCharacterToAttack.getMyHealthPoints() - damage);
             return true;
         } else {
             return false;
         }
     }
+    // TODO write a method called applyDamage
+    // TODO override applyDamage in hero incorporating chance to defend
 
     /**
      * Gets the characters' name.
@@ -169,7 +171,7 @@ public abstract class DungeonCharacter extends DungeonObject {
     public int getMyHealthPoints() {
         return myHealthPoints;
     }
-
+    // TODO check data before assignment
     /**
      * Sets the characters' health points.
      * @param myHealthPoints The new health points

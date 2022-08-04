@@ -1,11 +1,9 @@
 package controller;
 
-import model.DataTypes.Coordinates;
 import model.DungeonComponents.Dungeon;
 import view.Window;
 
 import java.awt.*;
-import java.awt.image.ImageObserver;
 
 import static controller.Handler.getHandler;
 import static model.DungeonComponents.Dungeon.*;

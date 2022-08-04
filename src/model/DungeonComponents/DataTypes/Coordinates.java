@@ -1,4 +1,4 @@
-package model.DataTypes;
+package model.DungeonComponents.DataTypes;
 
 public class Coordinates {
 

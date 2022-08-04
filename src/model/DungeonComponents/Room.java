@@ -1,6 +1,6 @@
 package model.DungeonComponents;
 
-import model.DataTypes.Coordinates;
+import model.DungeonComponents.DataTypes.Coordinates;
 import model.RoomItemComponents.RoomItems.RoomItem;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
 import model.RoomItemComponents.RoomItems.RoomItems;
