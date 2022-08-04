@@ -26,7 +26,7 @@ public class MonsterFactory {
     /**
      * Inhibits external instantiation.
      */
-    private MonsterFactory() {
+    public MonsterFactory() {
         myMonsters = getMonsters();
     }
 

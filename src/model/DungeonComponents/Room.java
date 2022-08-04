@@ -1,7 +1,9 @@
 package model.DungeonComponents;
 
 import model.DataTypes.Coordinates;
+import model.RoomItemComponents.RoomItems.RoomItem;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Room {
@@ -11,6 +13,8 @@ public class Room {
     private LinkedList<Doors> roomDoors;
 
     private Coordinates myCoordinates;
+
+    private ArrayList<RoomItem> myRoomItems;
 
     Room(LinkedList<Doors> theRoomDoors) {
         roomDoors = theRoomDoors;
