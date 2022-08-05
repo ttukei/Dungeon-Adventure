@@ -1,4 +1,4 @@
-package tests.model.DungeonCharacterComponents;
+package tests.model.DungeonComponents;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HealingRangeTest {
+class RoomTest {
 
     @BeforeEach
     void setUp() {
@@ -17,18 +17,30 @@ class HealingRangeTest {
     }
 
     @Test
-    void getMyUpperBound() {
+    void getDoors() {
     }
 
     @Test
-    void setMyUpperBound() {
+    void hasNorthDoor() {
     }
 
     @Test
-    void setMyLowerBound() {
+    void hasEastDoor() {
     }
 
     @Test
-    void testToString() {
+    void hasSouthDoor() {
+    }
+
+    @Test
+    void hasWestDoor() {
+    }
+
+    @Test
+    void addItemsToRoom() {
+    }
+
+    @Test
+    void addMonstersToRoom() {
     }
 }

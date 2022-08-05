@@ -1,9 +1,9 @@
 package model.DungeonComponents;
 
 import model.DungeonComponents.DataTypes.Coordinates;
-import model.RoomItemComponents.RoomItems.RoomItem;
+import model.RoomItemComponents.RoomItem;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
-import model.RoomItemComponents.RoomItems.RoomItems;
+import model.RoomItemComponents.RoomItems;
 
 
 import java.util.ArrayList;

@@ -22,7 +22,7 @@ public class MonsterFactory {
      * Monsters
      */
     private ArrayList<Monster> myMonsters;
-    
+
     public MonsterFactory() {
         myMonsters = getMonsters();
     }

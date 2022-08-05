@@ -1,4 +1,4 @@
-package model.RoomItemComponents.RoomItems;
+package model.RoomItemComponents;
 
 import java.util.Random;
 

@@ -2,8 +2,6 @@ package model.DungeonCharacterComponents.DungeonCharacters.Heros;
 
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
-import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Gremlin;
-import model.RoomItemComponents.RoomItems.HealthPotion;
 
 import java.util.Random;
 

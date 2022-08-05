@@ -1,4 +1,4 @@
-package model.RoomItemComponents.RoomItems;
+package model.RoomItemComponents;
 
 public class VisionPotion extends RoomItem{
 

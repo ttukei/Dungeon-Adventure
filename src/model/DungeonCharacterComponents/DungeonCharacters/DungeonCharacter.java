@@ -2,10 +2,7 @@ package model.DungeonCharacterComponents.DungeonCharacters;
 
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonObject;
-import model.RoomItemComponents.RoomItems.HealthPotion;
-import model.RoomItemComponents.RoomItems.Pit;
-import model.RoomItemComponents.RoomItems.RoomItem;
-import model.RoomItemComponents.RoomItems.VisionPotion;
+import model.RoomItemComponents.RoomItem;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -76,61 +73,8 @@ public abstract class DungeonCharacter extends DungeonObject {
         isDeceased();
     }
 
-    public boolean useHealthPotion() {
-        for (int index = 0; index < this.myInventory.size(); index++) {
-            if (this.myInventory.get(index).getClass().equals(HealthPotion.class)) {
-                HealthPotion healthPotion = (HealthPotion) this.myInventory.remove(index);
-                this.setMyHealthPoints(this.getMyHealthPoints() + healthPotion.getMyHealthToBeRegained());
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean useVisionPotion() {
-        for (int index = 0; index < this.myInventory.size(); index++) {
-            if (this.myInventory.get(index).getClass().equals(VisionPotion.class)) {
-                VisionPotion visionPotion = (VisionPotion) this.myInventory.remove(index);
-                // TODO implement code to activate vision
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean doPitDamage() {
-        for (int index = 0; index < this.myInventory.size(); index++) {
-            if (this.myInventory.get(index).getClass().equals(Pit.class)) {
-                Pit pit = (Pit) this.myInventory.remove(index);
-                this.setMyHealthPoints(this.getMyHealthPoints() + pit.getMyHealthToBeDamaged());
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Picks up and places a room item in the heroes inventory.
-     * @param theItemToPickUp The room item to pick up.
-     * @return True if the item was successfully placed in the inventory and false otherwise.
-     */
-    public boolean pickUpRoomItem(RoomItem theItemToPickUp) {
-        return this.myInventory.add(theItemToPickUp);
-    }
-
-    public String displayInventory() {
-        StringBuilder result = new StringBuilder("[");
-        for (int i = 0; i < myInventory.size() - 1; i++) {
-            result.append(myInventory.get(i).myName + ", ");
-        }
-        if (!myInventory.isEmpty()) {
-            result.append(myInventory.get(myInventory.size() - 1).myName + "]");
-        } else {
-            result.append("Empty]");
-        }
-        return result.toString();
-    }
-
+    // TODO write a method called applyDamage
+    // TODO override applyDamage in hero incorporating chance to defend
     /**
      * Attacks an opponent.
      * @return The success of the attack.
@@ -145,8 +89,13 @@ public abstract class DungeonCharacter extends DungeonObject {
             return false;
         }
     }
-    // TODO write a method called applyDamage
-    // TODO override applyDamage in hero incorporating chance to defend
+
+    public boolean isDeceased() {
+        if (this.myHealthPoints <= 0) {
+            setMarkedForDeath(true);
+        }
+        return isMarkedForDeath();
+    }
 
     /**
      * Gets the characters' name.
@@ -228,13 +177,6 @@ public abstract class DungeonCharacter extends DungeonObject {
         this.myChanceToHit = myChanceToHit;
     }
 
-    public boolean isDeceased() {
-        if (this.myHealthPoints <= 0) {
-            setMarkedForDeath(true);
-        }
-        return isMarkedForDeath();
-    }
-
     /**
      * Gets a number between the damage range randomly.
      * @return The damage to be dealt.
@@ -243,7 +185,6 @@ public abstract class DungeonCharacter extends DungeonObject {
         Random random = new Random();
         return random.nextInt(getMyDamageRange().getMyUpperBound() - getMyDamageRange().getMyLowerBound()) + getMyDamageRange().getMyLowerBound();
     }
-
 
     @Override
     public String toString() {

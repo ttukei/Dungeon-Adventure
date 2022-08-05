@@ -1,4 +1,4 @@
-package tests.model.DungeonCharacterComponents;
+package tests.model.DungeonCharacterComponents.DungeonCharacters.Monsters;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HealingRangeTest {
+class MonsterFactoryTest {
 
     @BeforeEach
     void setUp() {
@@ -17,18 +17,6 @@ class HealingRangeTest {
     }
 
     @Test
-    void getMyUpperBound() {
-    }
-
-    @Test
-    void setMyUpperBound() {
-    }
-
-    @Test
-    void setMyLowerBound() {
-    }
-
-    @Test
-    void testToString() {
+    void getMonster() {
     }
 }
