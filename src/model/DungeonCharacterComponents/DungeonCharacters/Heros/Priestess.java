@@ -36,7 +36,7 @@ final public class Priestess extends Hero {
     /**
      * Heals this priestess.
      */
-    public boolean specialAttack(final DungeonCharacter theMonsterToAttack) {
+    public boolean specialSkill(final DungeonCharacter theMonsterToAttack) {
         setMyHealthPoints(getMyHealthPoints() + getAmountOfHealthToBeRegained());
         return true;
     }

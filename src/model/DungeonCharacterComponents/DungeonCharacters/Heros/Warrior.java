@@ -45,7 +45,7 @@ final public class Warrior extends Hero {
      * @param theMonsterToAttack The opponent.
      * @return The success of the attack.
      */
-    public boolean specialAttack(final DungeonCharacter theMonsterToAttack) {
+    public boolean specialSkill(final DungeonCharacter theMonsterToAttack) {
         DamageRange dr = new DamageRange(75, 175);
         Random random = new Random();
         // Randomly gets a number between the damageToBeDealt range.

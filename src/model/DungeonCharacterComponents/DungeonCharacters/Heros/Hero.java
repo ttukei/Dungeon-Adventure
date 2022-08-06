@@ -93,7 +93,7 @@ public abstract class Hero extends DungeonCharacter {
         return result.toString();
     }
 
-    public abstract boolean specialAttack(final DungeonCharacter theMonsterToAttack);
+    public abstract boolean specialSkill(final DungeonCharacter theMonsterToAttack);
 
     // TODO write set method for chanceToAttack
     // TODO change specialAttack to specialSkill

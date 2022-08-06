@@ -33,7 +33,7 @@ final public class Thief extends Hero {
      * Surprise attacks an opponent.
      * @return The success of the surprise attack.
      */
-    public boolean specialAttack(final DungeonCharacter theMonsterToAttack) {
+    public boolean specialSkill(final DungeonCharacter theMonsterToAttack) {
         int damageToBeDealt = this.getTheDamageToBeDealt();
         if (Math.random() < mySurpriseAttackSuccessProb) {
             theMonsterToAttack.setMyHealthPoints(theMonsterToAttack.getMyHealthPoints() - damageToBeDealt);
