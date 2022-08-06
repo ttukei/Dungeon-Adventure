@@ -57,7 +57,7 @@ public class MonsterFactory {
                 Monsters monster = Monsters.values()[monsterData.getInt("Monster Type") - 1];
                 switch(monster) {
                     case GREMLIN -> {
-                        monsters.add(new Gremlin(monsterData.getString("Name"),
+                        monsters.add(new Monster(Monsters.GREMLIN, monsterData.getString("Name"),
                                 monsterData.getInt("Health"),
                                 new DamageRange(monsterData.getInt("Minimum Damage"),
                                         monsterData.getInt("Maximum Damage")),
@@ -68,7 +68,7 @@ public class MonsterFactory {
                                         monsterData.getInt("Maximum Healing Points"))));
                     }
                     case SKELETON -> {
-                        monsters.add(new Skeleton(monsterData.getString("Name"),
+                        monsters.add(new Monster(Monsters.SKELETON , monsterData.getString("Name"),
                                 monsterData.getInt("Health"),
                                 new DamageRange(monsterData.getInt("Minimum Damage"),
                                         monsterData.getInt("Maximum Damage")),
@@ -79,7 +79,7 @@ public class MonsterFactory {
                                         monsterData.getInt("Maximum Healing Points"))));
                     }
                     case OGRE -> {
-                        monsters.add(new Ogre(monsterData.getString("Name"),
+                        monsters.add(new Monster(Monsters.OGRE, monsterData.getString("Name"),
                                 monsterData.getInt("Health"),
                                 new DamageRange(monsterData.getInt("Minimum Damage"),
                                         monsterData.getInt("Maximum Damage")),
@@ -107,10 +107,10 @@ public class MonsterFactory {
      * @param theMonsterToGet To get a monster of type Ogre for example: getMonster(Oger.class).
      * @return One of the monster of type specified in the parameter from the set in the database./
      */
-    public Monster getMonster(Class theMonsterToGet) {
+    public Monster getMonster(Monsters theMonsterToGet) {
         ArrayList<Monster> monsters = getMyMonsters();
         for (Monster monster : monsters) {
-            if (monster.getClass() == theMonsterToGet) {
+            if (monster.getMyMonsterType() == theMonsterToGet) {
                 myMonsters.remove(monster);
                 return monster;
             }
@@ -128,9 +128,9 @@ public class MonsterFactory {
 //            System.out.println(monster);
 //        }
         MonsterFactory monsterFactory = new MonsterFactory();
-        Monster ogre = monsterFactory.getMonster(Ogre.class);
+        Monster ogre = monsterFactory.getMonster(Monsters.OGRE);
         System.out.println(ogre);
-        Monster ogre1 = monsterFactory.getMonster(Ogre.class);
+        Monster ogre1 = monsterFactory.getMonster(Monsters.OGRE);
         System.out.println(ogre1);
     }
 }

@@ -7,21 +7,27 @@ import model.DungeonCharacterComponents.HealingRange;
 /**
  * @author Timon Tukei
  */
-public abstract class Monster extends DungeonCharacter {
+public class Monster extends DungeonCharacter {
 
+    // TODO refactor monster inheritance hierarchy so that there is only one monster class with enum
+    // TODO create enum to represent the type of monster
+    // TODO create interface Healable and make priestess and monster implement interface
+
+    private Monsters myMonsterType;
     /**
      * The probability of the monster healing.
      */
     private double myChanceToHeal;
 
     // TODO decide on a healing range for the Monsters with team
+
     /**
      * The healing range of the monster.
      */
     private HealingRange myHealingRange;
 
     /**
-     *
+     * Instantiates a monster of type <code>Monsters</code> specified in the first parameter.
      * @param theCharacterName
      * @param theHealthPoints
      * @param theDamageRange
@@ -29,12 +35,13 @@ public abstract class Monster extends DungeonCharacter {
      * @param theChanceToHit
      * @param theChanceToHeal
      */
-    protected Monster(final String theCharacterName, final int theHealthPoints, final DamageRange theDamageRange,
-                      final int theAttackSpeed, final double theChanceToHit, final double theChanceToHeal,
-                      final HealingRange theHealingRange) {
+    protected Monster(final Monsters theTypeOfMonster, final String theCharacterName, final int theHealthPoints,
+                      final DamageRange theDamageRange, final int theAttackSpeed, final double theChanceToHit,
+                      final double theChanceToHeal, final HealingRange theHealingRange) {
         super(theCharacterName, theHealthPoints, theDamageRange, theAttackSpeed, theChanceToHit);
-        this.myChanceToHeal = theChanceToHeal;
-        this.myHealingRange = theHealingRange;
+        setMonsterType(theTypeOfMonster);
+        setTheChanceToHeal(theChanceToHeal);
+        setTheHealingRange(theHealingRange);
     }
 
     /**
@@ -48,5 +55,29 @@ public abstract class Monster extends DungeonCharacter {
             return true;
         }
         return false;
+    }
+
+    private void setTheHealingRange(HealingRange theHealingRange) {
+        this.myHealingRange = theHealingRange;
+    }
+
+    private void setTheChanceToHeal(double theChanceToHeal) {
+        this.myChanceToHeal = theChanceToHeal;
+    }
+
+    private void setMonsterType(Monsters theTypeOfMonster) {
+        this.myMonsterType = theTypeOfMonster;
+    }
+
+    public Monsters getMyMonsterType() {
+        return myMonsterType;
+    }
+
+    public double getMyChanceToHeal() {
+        return myChanceToHeal;
+    }
+
+    public HealingRange getMyHealingRange() {
+        return myHealingRange;
     }
 }
