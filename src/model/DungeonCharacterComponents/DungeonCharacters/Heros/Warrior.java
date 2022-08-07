@@ -57,4 +57,11 @@ final public class Warrior extends Hero {
             return false;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Warrior{" +
+                "myCrushingBlowSuccessProb=" + myCrushingBlowSuccessProb +
+                super.toString() + '}';
+    }
 }

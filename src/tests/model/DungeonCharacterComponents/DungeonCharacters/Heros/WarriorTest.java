@@ -1,22 +1,58 @@
 package tests.model.DungeonCharacterComponents.DungeonCharacters.Heros;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import model.DungeonCharacterComponents.DungeonCharacters.Heros.Hero;
+import model.DungeonCharacterComponents.DungeonCharacters.Heros.HeroFactory;
+import model.DungeonCharacterComponents.DungeonCharacters.Heros.Heroes;
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monster;
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactory;
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
+import org.junit.jupiter.api.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WarriorTest {
 
-    @BeforeEach
+    /**
+     * The hero to test.
+     */
+    Hero myHero;
+
+    /**
+     * The test dummy.
+     */
+    Monster myMonster;
+
+    /**
+     * Instantiate a hero with the hero factory. Note that you can test other monsters
+     * by simply changing the enum on line 27.
+     */
+    @BeforeAll
     void setUp() {
+        myHero = HeroFactory.instantiateHero(Heroes.WARRIOR, "Jake");
+        MonsterFactory monsterFactory = new MonsterFactory();
+        myMonster = monsterFactory.getMonster(Monsters.GREMLIN);
     }
 
-    @AfterEach
+    /**
+     * Destruct monster.
+     */
+    @AfterAll
     void tearDown() {
+        myHero = null;
+        myMonster = null;
     }
 
+    /**
+     * Test the special attack.
+     */
     @Test
-    void specialAttack() {
+    void specialSkillTest() {
+        int monstersStartingHealth = myMonster.getMyHealthPoints();
+        int monstersHealthNow = myMonster.getMyHealthPoints();
+        for (int count = 0; count < 10; count++) {
+            myHero.specialSkill(myMonster);
+            monstersHealthNow = myMonster.getMyHealthPoints();
+        }
+        assert(monstersStartingHealth > monstersHealthNow);
     }
 }

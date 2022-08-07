@@ -42,8 +42,8 @@ final public class Priestess extends Hero {
     }
 
     /**
-     * Randomly generates an amount of health to be regained within <code>myHealingRange</code>
-     * @return
+     * Randomly generates an amount of health to be regained within <code>myHealingRange</code>.
+     * @return the amount of health to be regained.
      */
     private int getAmountOfHealthToBeRegained() {
         Random random = new Random();

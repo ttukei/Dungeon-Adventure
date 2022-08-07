@@ -42,4 +42,11 @@ final public class Thief extends Hero {
             return false;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Thief{" +
+                "mySurpriseAttackSuccessProb=" + mySurpriseAttackSuccessProb +
+                super.toString() + '}';
+    }
 }
