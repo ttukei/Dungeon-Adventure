@@ -1,13 +1,17 @@
 package model.DungeonComponents.DataTypes;
 
+import model.DungeonComponents.Dungeon;
+
+import static controller.DungeonAdventure.*;
+
 public class Coordinates {
 
-    private int myX;
-    private int myY;
+    private final int myX;
+    private final int myY;
 
     public Coordinates(int theX, int theY){
-        myX = theX;
-        myY = theY;
+        myX = clamp(theX, 0, Dungeon.getMAX_X());
+        myY = clamp(theY, 0, Dungeon.getMAX_Y());
     }
 
     public int getX() {

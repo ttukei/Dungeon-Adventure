@@ -69,6 +69,14 @@ public class Monster extends DungeonCharacter {
         this.myMonsterType = theTypeOfMonster;
     }
 
+    public String getMyAnnouncement(){
+        String n = "";
+        if (myMonsterType == Monsters.OGRE){
+            n = "n";
+        }
+        return "There is a" + n + " " + myMonsterType;
+    }
+
     public Monsters getMyMonsterType() {
         return myMonsterType;
     }
@@ -79,5 +87,10 @@ public class Monster extends DungeonCharacter {
 
     public HealingRange getMyHealingRange() {
         return myHealingRange;
+    }
+
+    @Override
+    public String getMyName() {
+        return "" + myMonsterType;
     }
 }

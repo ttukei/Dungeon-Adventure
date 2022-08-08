@@ -20,7 +20,8 @@ public class Window  extends Canvas {
         frame.setLocationRelativeTo(null);                          // Opens window in the middle of the monitor
 
         frame.setVisible(true);                                     // Show the window
-
+        frame.add(theDungeonAdventure);
+        theDungeonAdventure.start();
 
         /////////Philips testing///////
         MainPanel mainPanel = new MainPanel();

@@ -1,5 +1,7 @@
 package model.DungeonComponents;
 
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monster;
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactory;
 import model.DungeonComponents.DataTypes.Coordinates;
 import model.RoomItemComponents.RoomItem;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
@@ -15,52 +17,65 @@ public class Room {
 
     private LinkedList<Doors> roomDoors;
 
-    private LinkedList<RoomItems> roomInventory;
+    private LinkedList<RoomItem> roomInventory;
 
-    private LinkedList<Monsters> roomMonsters;
+    private LinkedList<Monster> roomMonsters;
 
     private Coordinates myCoordinates;
 
     private ArrayList<RoomItem> myRoomItems;
 
     Room(LinkedList<Doors> theRoomDoors) {
-        roomDoors = theRoomDoors;
+        initializeFields(theRoomDoors);
     }
 
-    Room(RoomsOfInterest TYPE_OF_ROOM, LinkedList<Doors> doorsToBuild) {
+    Room(RoomsOfInterest TYPE_OF_ROOM, LinkedList<Doors> theRoomDoors) {
 
+        initializeFields(theRoomDoors);
+    }
+
+    private void initializeFields(LinkedList<Doors> theRoomDoors){
+        roomDoors = new LinkedList<>();
+        roomDoors.addAll(theRoomDoors);
+        roomInventory = new LinkedList<>();
+        roomMonsters = new LinkedList<>();
     }
 
     public String getDoors(){
         return roomDoors.toString();
     }
 
-    public boolean hasNorthDoor() {
-        return roomDoors.contains(Doors.NORTHDOOR);
+    public boolean hasDoor(Doors door){
+        return roomDoors.contains(door);
     }
 
-    public boolean hasEastDoor() {
-        return roomDoors.contains(Doors.EASTDOOR);
-    }
-
-    public boolean hasSouthDoor() {
-        return roomDoors.contains(Doors.SOUTHDOOR);
-    }
-
-    public boolean hasWestDoor() {
-        return roomDoors.contains(Doors.WESTDOOR);
-    }
-
-    public void addItemsToRoom(LinkedList<RoomItems> theItemsToAdd){
-        for (RoomItems item : theItemsToAdd){
-            roomInventory.add(item);
-        }
+    public void addItemsToRoom(LinkedList<RoomItem> theItemsToAdd){
+        roomInventory.addAll(theItemsToAdd);
     }
 
     public void addMonstersToRoom(LinkedList<Monsters> theMonstersToAdd){
+        MonsterFactory factory = new MonsterFactory();
         for (Monsters monster : theMonstersToAdd){
-            roomMonsters.add(monster);
+            roomMonsters.add(factory.getMonster(monster));
         }
+    }
+
+    public void addItemsToRoom(RoomItem theItemToAdd){
+        roomInventory.add(theItemToAdd);
+    }
+
+    public void addMonstersToRoom(Monsters theMonstersToAdd){
+        MonsterFactory factory = new MonsterFactory();
+        roomMonsters.add(factory.getMonster(theMonstersToAdd));
+    }
+
+    public String toString(){
+        StringBuilder roomStringBuilder = new StringBuilder();
+        roomStringBuilder.append("You are in a room with four stone walls and a dirt floor\n");
+        for (Monster monster : roomMonsters){
+            roomStringBuilder.append(monster.getMyAnnouncement());
+        }
+        return roomStringBuilder.toString();
     }
 
 }
