@@ -35,4 +35,13 @@ public class Handler {
         myDungeonObjects.remove(theObject);
     }
 
+    @Override
+    public String toString(){
+        StringBuilder objectsInHandler = new StringBuilder();
+        for (DungeonObject obj : myDungeonObjects){
+            objectsInHandler.append(obj).append("\n");
+        }
+        return objectsInHandler.toString();
+    }
+
 }

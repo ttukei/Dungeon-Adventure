@@ -51,7 +51,7 @@ public class Dungeon {
                 null
             }
         };
-//        myDungeonGrid[0][1].addMonstersToRoom(Monsters.SKELETON);
+        myDungeonGrid[0][1].addMonstersToRoom(Monsters.SKELETON);
         MIN_X = 0;
         MAX_X = myDungeonGrid.length - 1;
         MIN_Y = 0;

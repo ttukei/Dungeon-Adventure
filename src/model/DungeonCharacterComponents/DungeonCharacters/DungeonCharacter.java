@@ -47,6 +47,8 @@ public abstract class DungeonCharacter extends DungeonObject {
      */
     private ArrayList<RoomItem> myInventory;
 
+    protected DungeonCharacter myTarget;
+
     /**
      *
      * @param theCharacterName
@@ -71,6 +73,13 @@ public abstract class DungeonCharacter extends DungeonObject {
     public void tick() {
         super.tick();
         isDeceased();
+        // getTarget() uses some methodology determined at a lower inheritance level to
+                    // select targets by testing that methodology against the objects of the
+                    // type determined that are in the handler
+        // inCombat() checks if in combat
+            // combatActions()
+                // attackTarget() overloads a target or checks for null to not attack
+
     }
 
     // TODO write a method called applyDamage

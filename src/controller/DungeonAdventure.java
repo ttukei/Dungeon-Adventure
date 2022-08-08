@@ -1,5 +1,9 @@
 package controller;
 
+import model.DungeonCharacterComponents.DungeonCharacters.Heroes.HeroFactory;
+import model.DungeonCharacterComponents.DungeonCharacters.Heroes.Heroes;
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactory;
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
 import model.DungeonComponents.DataTypes.Coordinates;
 import model.DungeonComponents.Doors;
 import model.DungeonComponents.Dungeon;
@@ -42,6 +46,11 @@ public class DungeonAdventure extends Canvas implements Runnable {
         myDungeon.printDungeonMap();
         System.out.println(getPlayersCurrentRoom());
 
+        myHandler.addObject(HeroFactory.instantiateHero(Heroes.WARRIOR, "War"));
+        myHandler.addObject(new MonsterFactory().getMonster(Monsters.SKELETON));
+
+        System.out.println(myHandler);
+
     }
 
     public synchronized void start(){
@@ -50,7 +59,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
         myRunning = true;
     }
 
-    private synchronized void stop(){
+    synchronized void stop(){
         try {
             myThread.join(); // kills myThread
             myRunning = false;
@@ -60,29 +69,27 @@ public class DungeonAdventure extends Canvas implements Runnable {
     }
 
     public void run(){
-        this.requestFocus(); // Used if DungeonAdventures ever extends window
-        long lastTime = System.nanoTime();
-        double amountOfTicks = 2.0;
-        double ns = 1000000000 / amountOfTicks;
+        this.requestFocus();
+        long lastTime = System.nanoTime();          // starting Time
+        final double amountOfTicks = 2.0;           // How many ticks do we want per second?
+        double ns = 1000000000 / amountOfTicks;     // Nanoseconds per tick
         double delta = 0;
-        long timer = System.currentTimeMillis();
         while (myRunning){
-            long now = System.nanoTime();
-            delta += (now - lastTime) / ns;
+            long now = System.nanoTime();           // current Loop Time
+            delta += (now - lastTime) / ns;         // changeBetween reported times in nanoseconds
             lastTime = now;
             while (delta >= 1) {
                 tick();
                 delta--;
             }
-            if (System.currentTimeMillis() - timer > 1000) {
-                timer += 1000;
-            }
         }
         stop();
+        System.out.println("Thread dead");
     }
 
     private void tick(){
         myHandler.tick();
+        System.out.println("tick");
     }
 
     // Public Static Methods
@@ -115,6 +122,10 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     static void setWaitingForTurn(final boolean theWaiting){
         myWaitingForTurn = theWaiting;
+    }
+
+    static void setRunning(boolean theRunning) {
+        myRunning = theRunning;
     }
 
     public static void main(String[] args){

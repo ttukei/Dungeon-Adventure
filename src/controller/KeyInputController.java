@@ -29,6 +29,10 @@ public class KeyInputController extends KeyAdapter {
             RoomController.moveWest();
             setWaitingForTurn(false);
         }
+        if (key == KeyEvent.VK_ESCAPE){
+            DungeonAdventure.setRunning(false);
+            System.out.println("Esc Pressed");
+        }
 
     }
 

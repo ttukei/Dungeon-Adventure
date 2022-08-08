@@ -1,8 +1,8 @@
 package model.RoomItemComponents;
 
-import model.DungeonCharacterComponents.DungeonCharacters.Heros.Hero;
-import model.DungeonCharacterComponents.DungeonCharacters.Heros.HeroFactory;
-import model.DungeonCharacterComponents.DungeonCharacters.Heros.Heroes;
+import model.DungeonCharacterComponents.DungeonCharacters.Heroes.Hero;
+import model.DungeonCharacterComponents.DungeonCharacters.Heroes.HeroFactory;
+import model.DungeonCharacterComponents.DungeonCharacters.Heroes.Heroes;
 
 public class InteractionTest {
 
