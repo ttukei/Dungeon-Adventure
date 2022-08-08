@@ -1,4 +1,4 @@
-package tests.model.DungeonCharacterComponents.DungeonCharacters.Heros;
+package model.DungeonCharacterComponents.DungeonCharacters.Heroes;
 
 
 import model.DungeonCharacterComponents.DungeonCharacters.Heroes.Hero;

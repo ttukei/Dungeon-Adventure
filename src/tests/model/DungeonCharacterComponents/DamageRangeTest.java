@@ -1,4 +1,4 @@
-package tests.model.DungeonCharacterComponents;
+package model.DungeonCharacterComponents;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
