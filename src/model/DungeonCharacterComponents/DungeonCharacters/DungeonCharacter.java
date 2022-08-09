@@ -135,6 +135,9 @@ public abstract class DungeonCharacter extends DungeonObject {
      * @param myHealthPoints The new health points
      */
     public void setMyHealthPoints(int myHealthPoints) {
+        if (myHealthPoints < 0) {
+            throw new IllegalArgumentException("Health points cannot be negative");
+        }
         this.myHealthPoints = myHealthPoints;
     }
 
@@ -167,6 +170,9 @@ public abstract class DungeonCharacter extends DungeonObject {
      * @param myAttackSpeed The new attack speed.
      */
     public void setMyAttackSpeed(int myAttackSpeed) {
+        if (myAttackSpeed < 0) {
+            throw new IllegalArgumentException("Attack speed cannot be negative");
+        }
         this.myAttackSpeed = myAttackSpeed;
     }
 
