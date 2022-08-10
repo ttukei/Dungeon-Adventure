@@ -44,7 +44,6 @@ public class Monster extends DungeonCharacter {
         setTheChanceToHeal(theChanceToHeal);
         setTheHealingRange(theHealingRange);
         setMyTarget(getMyHero());
-        System.out.println(getMyTarget());
     }
 
     /**

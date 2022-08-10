@@ -40,9 +40,9 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     private DungeonAdventure(Heroes myTypeOfHero, String theName){
 
+        myHero = getMyHero(myTypeOfHero, theName);
         myHandler = getHandler();
         myDungeon = getDungeon();
-        myHero = getMyHero(myTypeOfHero, theName);
         this.addKeyListener(new KeyInputController());
 
         playerCoordinates = new Coordinates(0,0);
@@ -201,6 +201,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
                     if (monsterToBattle != null) {
                         getMyHero().setMyTarget(monsterToBattle);
                         System.out.println(getMyHero().getMyTarget());
+                        System.out.println(monsterToBattle.getMyTarget());
                         monsterToBattle.setCombatFlag(true);
                         getMyHero().setCombatFlag(true);
                     }
