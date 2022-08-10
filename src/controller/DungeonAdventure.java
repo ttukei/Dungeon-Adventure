@@ -1,7 +1,10 @@
 package controller;
 
+import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
+import model.DungeonCharacterComponents.DungeonCharacters.Heroes.Hero;
 import model.DungeonCharacterComponents.DungeonCharacters.Heroes.HeroFactory;
 import model.DungeonCharacterComponents.DungeonCharacters.Heroes.Heroes;
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monster;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactory;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
 import model.DungeonComponents.DataTypes.Coordinates;
@@ -10,6 +13,7 @@ import model.DungeonComponents.Dungeon;
 import view.Window;
 
 import java.awt.*;
+import java.util.Scanner;
 
 import static controller.Handler.getHandler;
 import static model.DungeonComponents.Dungeon.*;
@@ -29,14 +33,16 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private final Dungeon myDungeon;
 
     // Global Constants
-    private static final int MY_WIDTH = 1024;
-    private static final int MY_HEIGHT = 640;
+    private static final int MY_WIDTH = 300;//1024;
+    private static final int MY_HEIGHT = 10;//640;
     private static final Dimension MY_DIMENSIONS = new Dimension(MY_WIDTH, MY_HEIGHT);
+    private static DungeonCharacter myHero;
 
-    private DungeonAdventure(){
+    private DungeonAdventure(Heroes myTypeOfHero, String theName){
 
         myHandler = getHandler();
         myDungeon = getDungeon();
+        myHero = getMyHero(myTypeOfHero, theName);
         this.addKeyListener(new KeyInputController());
 
         playerCoordinates = new Coordinates(0,0);
@@ -46,10 +52,10 @@ public class DungeonAdventure extends Canvas implements Runnable {
         myDungeon.printDungeonMap();
         System.out.println(getPlayersCurrentRoom());
 
-        myHandler.addObject(HeroFactory.instantiateHero(Heroes.WARRIOR, "War"));
-        myHandler.addObject(new MonsterFactory().getMonster(Monsters.SKELETON));
+//        myHandler.addObject(HeroFactory.instantiateHero(Heroes.WARRIOR, "War"));
+//        myHandler.addObject(new MonsterFactory().getMonster(Monsters.SKELETON));
 
-        System.out.println(myHandler);
+//        System.out.println(myHandler);
 
     }
 
@@ -89,7 +95,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     private void tick(){
         myHandler.tick();
-        System.out.println("tick");
+//        System.out.println("tick");
     }
 
     // Public Static Methods
@@ -112,6 +118,22 @@ public class DungeonAdventure extends Canvas implements Runnable {
         return theDouble;
     }
 
+    public static DungeonCharacter getMyHero(){
+        try{
+            return myHero;
+        } catch (NullPointerException e){
+            System.out.println("Hero must be created first!");
+            return null;
+        }
+    }
+
+    public static DungeonCharacter getMyHero(final Heroes theTypeOfHero, final String theName) {
+        if (myHero == null){
+            myHero = HeroFactory.instantiateHero(theTypeOfHero, theName);
+        }
+        return myHero;
+    }
+
     public static Coordinates getPlayerCoordinates(){
         return playerCoordinates;
     }
@@ -130,7 +152,17 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     public static void main(String[] args){
 
-        new DungeonAdventure();
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Please enter your name: ");
+//        String name = sc.nextLine();
+//        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
+//        String heroType = sc.nextLine();
+//        switch (heroType.toLowerCase()) {
+//            case "w" -> {
+//
+//            }
+//        }
+        new DungeonAdventure(Heroes.WARRIOR, "War");
 
     }
 
@@ -155,9 +187,31 @@ public class DungeonAdventure extends Canvas implements Runnable {
                 setPlayerCoordinates(newPlayerCoordinates);
                 //            System.out.println(playerCoordinates.toString());
 
+                // Other methods that happen when rooms are checked
+                // Dungeon adds monsters to handler
+                    // Updates Room.hasMonster
+                    // calls Room's addMonster Method to add the reference
+                    //      to the monster added to the handler into the room
+                // if the next room to move to has a monster
+                    // Room.hasMonster
+                        // returns monster if true
+                //
+                if (getPlayersCurrentRoom().getMyMonsterFlag()) {
+                    Monster monsterToBattle = getPlayersCurrentRoom().getMonsterFromRoom();
+                    if (monsterToBattle != null) {
+                        getMyHero().setMyTarget(monsterToBattle);
+                        System.out.println(getMyHero().getMyTarget());
+                        monsterToBattle.setCombatFlag(true);
+                        getMyHero().setCombatFlag(true);
+                    }
+                        // Add reporting if monsterFlag was true but getMonsterFromRoom() returns null
+                }
+
                 getDungeon().printDungeonMap();
+
+                System.out.println(getPlayersCurrentRoom());
             } else {
-                System.out.println("You cannot go that way, there is no " + door);
+
             }
 
         }

@@ -38,9 +38,15 @@ public abstract class DungeonCharacter extends DungeonObject {
     private double myChanceToHit;
 
     /**
+     * Indicates whether they are in combat or not.
+     */
+    private boolean myCombatFlag;
+
+    /**
      * Indicates whether the character is alive or not.
      */
     private boolean myDeceased;
+
 
     /**
      * The items the dungeon character has collected.
@@ -72,7 +78,15 @@ public abstract class DungeonCharacter extends DungeonObject {
     @Override
     public void tick() {
         super.tick();
-        isDeceased();
+        if (isInCombat()){
+            String combatMessage = attack(getMyTarget());
+            System.out.println("You attacked the monster! " + combatMessage);
+            myTarget.didIDie();
+            if (myTarget.isMarkedForDeath()){
+                myTarget.killMe();
+            }
+        }
+        didIDie();
         // getTarget() uses some methodology determined at a lower inheritance level to
                     // select targets by testing that methodology against the objects of the
                     // type determined that are in the handler
@@ -88,22 +102,26 @@ public abstract class DungeonCharacter extends DungeonObject {
      * Attacks an opponent.
      * @return The success of the attack.
      */
-    public boolean attack(final DungeonCharacter theCharacterToAttack) {
+    public String attack(final DungeonCharacter theCharacterToAttack) {
         // Randomly gets a number between the damage range.
         if (myChanceToHit == theCharacterToAttack.getMyChanceToHit() || Math.random() < this.getMyChanceToHit()) {
             final int damage = getTheDamageToBeDealt();
             theCharacterToAttack.setMyHealthPoints(theCharacterToAttack.getMyHealthPoints() - damage);
-            return true;
+            return "The damage done = " + damage;
         } else {
-            return false;
+            return "The damage done = 0";
         }
     }
 
-    public boolean isDeceased() {
+    public boolean didIDie() {
         if (this.myHealthPoints <= 0) {
             setMarkedForDeath(true);
         }
         return isMarkedForDeath();
+    }
+
+    private void killMe(){
+        controller.Handler.getHandler().removeObject(this);
     }
 
     /**
@@ -197,6 +215,26 @@ public abstract class DungeonCharacter extends DungeonObject {
         Random random = new Random();
         return random.nextInt(getMyDamageRange().getMyUpperBound() - getMyDamageRange().getMyLowerBound()) + getMyDamageRange().getMyLowerBound();
     }
+
+    public boolean isInCombat(){
+        return myCombatFlag;
+    }
+
+    public void setCombatFlag(boolean theCombatFlag){
+        this.myCombatFlag = theCombatFlag;
+    }
+
+    public DungeonCharacter getMyTarget(){
+        if (myTarget == null){
+            System.out.println(getMyCharacterName() + "'s target is null");
+        }
+        return myTarget;
+    }
+
+    public void setMyTarget(DungeonCharacter theTarget){
+        this.myTarget = theTarget;
+    }
+
 
     @Override
     public String toString() {

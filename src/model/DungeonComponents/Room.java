@@ -5,7 +5,6 @@ import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactor
 import model.DungeonComponents.DataTypes.Coordinates;
 import model.RoomItemComponents.RoomItem;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
-import model.RoomItemComponents.RoomItems;
 
 
 import java.util.ArrayList;
@@ -13,67 +12,91 @@ import java.util.LinkedList;
 
 public class Room {
 
+    private RoomsOfInterest myRoomType;
+
     private int myNumberOfDoors;
 
-    private LinkedList<Doors> roomDoors;
+    private LinkedList<Doors> myRoomDoors;
 
-    private LinkedList<RoomItem> roomInventory;
+    private LinkedList<RoomItem> myRoomItems;
 
-    private LinkedList<Monster> roomMonsters;
+    private LinkedList<Monster> myRoomMonsters;
 
     private Coordinates myCoordinates;
 
-    private ArrayList<RoomItem> myRoomItems;
+    private boolean myMonsterFlag;
 
     Room(LinkedList<Doors> theRoomDoors) {
+        myRoomType = null;
         initializeFields(theRoomDoors);
     }
 
     Room(RoomsOfInterest TYPE_OF_ROOM, LinkedList<Doors> theRoomDoors) {
-
+        myRoomType = TYPE_OF_ROOM;
         initializeFields(theRoomDoors);
     }
 
     private void initializeFields(LinkedList<Doors> theRoomDoors){
-        roomDoors = new LinkedList<>();
-        roomDoors.addAll(theRoomDoors);
-        roomInventory = new LinkedList<>();
-        roomMonsters = new LinkedList<>();
+        myRoomDoors = new LinkedList<>();
+        myRoomDoors.addAll(theRoomDoors);
+        myRoomItems = new LinkedList<>();
+        myRoomMonsters = new LinkedList<>();
+        setMyMonsterFlag(false);
+    }
+
+    public boolean getMyMonsterFlag() {
+        return myMonsterFlag;
+    }
+
+    public void setMyMonsterFlag(boolean myMonsterFlag) {
+        this.myMonsterFlag = myMonsterFlag;
     }
 
     public String getDoors(){
-        return roomDoors.toString();
+        return myRoomDoors.toString();
     }
 
     public boolean hasDoor(Doors door){
-        return roomDoors.contains(door);
+        return myRoomDoors.contains(door);
     }
 
-    public void addItemsToRoom(LinkedList<RoomItem> theItemsToAdd){
-        roomInventory.addAll(theItemsToAdd);
+//    public void addItemsToRoom(LinkedList<RoomItem> theItemsToAdd){
+//        myRoomItems.addAll(theItemsToAdd);
+//    }
+//
+//    public void addMonstersToRoom(LinkedList<Monsters> theMonstersToAdd){
+//        MonsterFactory factory = new MonsterFactory();
+//        for (Monsters monster : theMonstersToAdd){
+//            roomMonsters.add(factory.getMonster(monster));
+//        }
+//        setMyMonsterFlag(true);
+//    }
+
+    public void addItemToRoom(RoomItem theItemToAdd){
+        myRoomItems.add(theItemToAdd);
     }
 
-    public void addMonstersToRoom(LinkedList<Monsters> theMonstersToAdd){
+    public void addMonsterToRoom(Monsters theMonsterToAdd){
         MonsterFactory factory = new MonsterFactory();
-        for (Monsters monster : theMonstersToAdd){
-            roomMonsters.add(factory.getMonster(monster));
-        }
+        Monster newMonster = factory.getMonster(theMonsterToAdd);
+        myRoomMonsters.add(newMonster);
+        controller.Handler.getHandler().addObject(newMonster);
+
+        setMyMonsterFlag(true);
     }
 
-    public void addItemsToRoom(RoomItem theItemToAdd){
-        roomInventory.add(theItemToAdd);
+    public Monster getMonsterFromRoom() {
+        return myRoomMonsters.getFirst();
     }
 
-    public void addMonstersToRoom(Monsters theMonstersToAdd){
-        MonsterFactory factory = new MonsterFactory();
-        roomMonsters.add(factory.getMonster(theMonstersToAdd));
-    }
 
     public String toString(){
         StringBuilder roomStringBuilder = new StringBuilder();
         roomStringBuilder.append("You are in a room with four stone walls and a dirt floor\n");
-        for (Monster monster : roomMonsters){
+        for (Monster monster : myRoomMonsters){
             roomStringBuilder.append(monster.getMyAnnouncement());
+        }
+        for (RoomItem item : myRoomItems) {
         }
         return roomStringBuilder.toString();
     }

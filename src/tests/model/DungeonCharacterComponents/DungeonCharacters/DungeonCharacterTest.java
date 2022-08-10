@@ -58,9 +58,9 @@ class DungeonCharacterTest {
     @Test
     void isDeceased() {
         myHero.setMyHealthPoints(0);
-        assertTrue(myHero.isDeceased());
+        assertTrue(myHero.didIDie());
         myMonster.setMyHealthPoints(0);
-        assertTrue(myMonster.isDeceased());
+        assertTrue(myMonster.didIDie());
 
         myMonster.setMyHealthPoints(100);
         myHero.setMyHealthPoints(100);

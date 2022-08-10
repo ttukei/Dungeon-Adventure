@@ -3,6 +3,7 @@ package model.DungeonCharacterComponents.DungeonCharacters.Monsters;
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
 import model.DungeonCharacterComponents.HealingRange;
+import static controller.DungeonAdventure.*;
 
 /**
  * @author Timon Tukei
@@ -42,6 +43,8 @@ public class Monster extends DungeonCharacter {
         setMonsterType(theTypeOfMonster);
         setTheChanceToHeal(theChanceToHeal);
         setTheHealingRange(theHealingRange);
+        setMyTarget(getMyHero());
+        System.out.println(getMyTarget());
     }
 
     /**
