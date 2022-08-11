@@ -80,10 +80,11 @@ public abstract class DungeonCharacter extends DungeonObject {
         super.tick();
         if (isInCombat()){
             String combatMessage = attack(getMyTarget());
-            System.out.println("You attacked the monster! " + combatMessage);
+            System.out.println("You attacked the " + getMyTarget().getClass().getSimpleName() + " " + getMyTarget().getMyCharacterName()+ "! " + combatMessage);
             myTarget.didIDie();
             if (myTarget.isMarkedForDeath()){
                 myTarget.killMe();
+                setCombatFlag(false);
             }
         }
         didIDie();
@@ -104,7 +105,7 @@ public abstract class DungeonCharacter extends DungeonObject {
      */
     public String attack(final DungeonCharacter theCharacterToAttack) {
         // Randomly gets a number between the damage range.
-        if (myChanceToHit == theCharacterToAttack.getMyChanceToHit() || Math.random() < this.getMyChanceToHit()) {
+        if ((myChanceToHit == theCharacterToAttack.getMyChanceToHit() || Math.random() < this.getMyChanceToHit()) && !theCharacterToAttack.isMarkedForDeath()) {
             final int damage = getTheDamageToBeDealt();
             theCharacterToAttack.setMyHealthPoints(theCharacterToAttack.getMyHealthPoints() - damage);
             return "The damage done = " + damage;
