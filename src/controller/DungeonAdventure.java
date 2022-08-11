@@ -40,8 +40,8 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     private DungeonAdventure(Heroes myTypeOfHero, String theName){
 
-        myHero = getMyHero(myTypeOfHero, theName);
         myHandler = getHandler();
+        myHero = getMyHero(myTypeOfHero, theName);
         myDungeon = getDungeon();
         this.addKeyListener(new KeyInputController());
 
@@ -49,14 +49,23 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
         new Window(MY_DIMENSIONS, "Dungeon Adventure", this);
 
+//        System.out.println(myDungeon.toString());
         myDungeon.printDungeonMap();
         System.out.println(getPlayersCurrentRoom());
+
+        setWaitingForTurn(true);
 
 //        myHandler.addObject(HeroFactory.instantiateHero(Heroes.WARRIOR, "War"));
 //        myHandler.addObject(new MonsterFactory().getMonster(Monsters.SKELETON));
 
 //        System.out.println(myHandler);
 
+        ///
+
+
+        ///
+
+        // run() method does the game loop
     }
 
     public synchronized void start(){
@@ -76,21 +85,22 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     public void run(){
         this.requestFocus();
-        long lastTime = System.nanoTime();          // starting Time
-        final double amountOfTicks = 2.0;           // How many ticks do we want per second?
-        double ns = 1000000000 / amountOfTicks;     // Nanoseconds per tick
-        double delta = 0;
+//        long lastTime = System.nanoTime();          // starting Time
+//        final double amountOfTicks = 1.0;           // How many ticks do we want per second?
+//        double ns = 1000000000 / amountOfTicks;     // Nanoseconds per tick
+//        double delta = 0;
         while (myRunning){
-            long now = System.nanoTime();           // current Loop Time
-            delta += (now - lastTime) / ns;         // changeBetween reported times in nanoseconds
-            lastTime = now;
-            while (delta >= 1) {
+//            long now = System.nanoTime();           // current Loop Time
+//            delta += (now - lastTime) / ns;         // changeBetween reported times in nanoseconds
+//            lastTime = now;
+            while (!myWaitingForTurn) {
                 tick();
-                delta--;
+//                delta--;
             }
+            setWaitingForTurn(true);
         }
         stop();
-        System.out.println("Thread dead");
+//        System.out.println("Thread dead");
     }
 
     private void tick(){
@@ -185,7 +195,6 @@ public class DungeonAdventure extends Canvas implements Runnable {
                 );
 
                 setPlayerCoordinates(newPlayerCoordinates);
-                //            System.out.println(playerCoordinates.toString());
 
                 // Other methods that happen when rooms are checked
                 // Dungeon adds monsters to handler
@@ -209,7 +218,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
                 }
 
                 getDungeon().printDungeonMap();
-
+                System.out.println(getPlayerCoordinates());
                 System.out.println(getPlayersCurrentRoom());
             } else {
 

@@ -76,17 +76,24 @@ public abstract class DungeonCharacter extends DungeonObject {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void objectBehavior() {
+        super.objectBehavior();
         if (isInCombat()){
             String combatMessage = attack(getMyTarget());
-            System.out.println("You attacked the monster! " + combatMessage);
+            System.out.println(getMyCharacterName() + " attacks " + getMyTarget().getMyCharacterName() + " " + combatMessage);
             myTarget.didIDie();
             if (myTarget.isMarkedForDeath()){
                 myTarget.killMe();
+                System.out.println(getMyCharacterName());
+                System.out.println(getMyTarget());
+                System.out.println(this.getMyTarget().getMyCharacterName() + " dies");
             }
+            if (myTarget == null){
+                setCombatFlag(false);
+            }
+        } else {
+            outOfCombatBehavior();
         }
-        didIDie();
         // getTarget() uses some methodology determined at a lower inheritance level to
                     // select targets by testing that methodology against the objects of the
                     // type determined that are in the handler
@@ -95,6 +102,8 @@ public abstract class DungeonCharacter extends DungeonObject {
                 // attackTarget() overloads a target or checks for null to not attack
 
     }
+
+    protected void outOfCombatBehavior(){}
 
     // TODO write a method called applyDamage
     // TODO override applyDamage in hero incorporating chance to defend

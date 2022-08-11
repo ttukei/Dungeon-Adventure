@@ -15,7 +15,7 @@ public class DungeonObject {
         setMarkedForDeath(false);
     }
 
-    public void tick(){}
+    public void objectBehavior(){}
 
     public boolean isMarkedForDeath() {
         return myMarkedForDeath;

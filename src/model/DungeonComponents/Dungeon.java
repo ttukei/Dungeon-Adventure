@@ -40,18 +40,23 @@ public class Dungeon {
         myDungeonGrid = new Room[][]{
             {   new Room(RoomsOfInterest.ENTRANCE, new LinkedList<>(List.of(Doors.EASTDOOR))),
                 new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR, Doors.WESTDOOR))),
-                new Room(new LinkedList<>(List.of(Doors.WESTDOOR)))
+                new Room(new LinkedList<>(List.of(Doors.WESTDOOR))),
+                null
             },
             {   null,
                 new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.SOUTHDOOR))),
-                null
+                null,
+                new Room(new LinkedList<>(List.of(Doors.SOUTHDOOR)))
             },
-            {   null,
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR))),
-                null
+            {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR))),
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR))),
+                new Room(new LinkedList<>(List.of(Doors.WESTDOOR, Doors.EASTDOOR))),
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR)))
             }
         };
         myDungeonGrid[0][1].addMonsterToRoom(Monsters.SKELETON);
+        myDungeonGrid[0][2].addMonsterToRoom(Monsters.SKELETON);
+        myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
         MIN_X = 0;
         MAX_X = myDungeonGrid.length - 1;
         MIN_Y = 0;
