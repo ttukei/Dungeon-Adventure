@@ -10,6 +10,8 @@ public class KeyInputController extends KeyAdapter {
 
 //        System.out.println("Key Pressed!");
 
+        DungeonAdventure.setWaitingForTurn(false);
+
         int key = e.getKeyCode();
 
         // Moving Rooms
@@ -31,7 +33,8 @@ public class KeyInputController extends KeyAdapter {
         }
         if (key == KeyEvent.VK_ESCAPE){
             DungeonAdventure.setRunning(false);
-            System.out.println("Esc Pressed");
+            System.exit(1);
+//            System.out.println("Esc Pressed");
         }
 
     }

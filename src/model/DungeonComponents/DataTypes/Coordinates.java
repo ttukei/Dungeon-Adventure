@@ -23,7 +23,7 @@ public class Coordinates {
     }
 
     public String toString(){
-        return "(" + myX + ", " + myY + ")";
+        return "(" + getY() + ", " + getX() + ")";
     }
 
     public boolean isLocatedAtTheCoordinate(Coordinates theCoordinateToCompare){

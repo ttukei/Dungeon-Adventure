@@ -39,8 +39,8 @@ public abstract class Hero extends DungeonCharacter {
     }
 
     @Override
-    public void tick(){
-        super.tick();
+    public void objectBehavior(){
+        super.objectBehavior();
     }
 
     public boolean useHealthPotion() {

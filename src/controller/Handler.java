@@ -20,10 +20,10 @@ public class Handler {
 
     public void tick(){
         for(DungeonObject obj : myDungeonObjects){
-            obj.tick();
             if (obj.isMarkedForDeath()){
                 removeObject(obj);
             }
+            obj.objectBehavior();
         }
     }
 
