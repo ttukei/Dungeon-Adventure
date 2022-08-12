@@ -35,7 +35,7 @@ public class Dungeon {
         createMaze();
     }
 
-    private Dungeon() {
+    public Dungeon() {
         System.out.println("Building New Dungeon");
         myDungeonGrid = new Room[][]{
             {   new Room(RoomsOfInterest.ENTRANCE, new LinkedList<>(List.of(Doors.EASTDOOR))),

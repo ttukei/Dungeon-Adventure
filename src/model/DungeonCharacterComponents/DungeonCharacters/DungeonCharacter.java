@@ -125,6 +125,9 @@ public abstract class DungeonCharacter extends DungeonObject {
         controller.Handler.getHandler().removeObject(this);
     }
 
+    public boolean isDeceased() {
+        return this.myHealthPoints <= 0;
+    }
     /**
      * Gets the characters' name.
      * @return the characters' name.
