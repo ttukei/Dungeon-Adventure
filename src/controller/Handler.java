@@ -1,8 +1,10 @@
 package controller;
 
+import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
 import model.DungeonObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Handler {
 
@@ -19,11 +21,15 @@ public class Handler {
     }
 
     public void tick(){
+        LinkedList<DungeonObject> objectsMarkedForDeath = new LinkedList<>();
         for(DungeonObject obj : myDungeonObjects){
-            if (obj.isMarkedForDeath()){
-                removeObject(obj);
-            }
             obj.objectBehavior();
+            if (obj.isMarkedForDeath()){
+                objectsMarkedForDeath.add(obj);
+            }
+        }
+        for(DungeonObject objMarkedForDeath : objectsMarkedForDeath){
+            myDungeonObjects.remove(objMarkedForDeath);
         }
     }
 

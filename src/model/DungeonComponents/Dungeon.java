@@ -48,7 +48,7 @@ public class Dungeon {
                 null,
                 new Room(new LinkedList<>(List.of(Doors.SOUTHDOOR)))
             },
-            {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR))),
+            {   new Room(RoomsOfInterest.EXIT, new LinkedList<>(List.of(Doors.EASTDOOR))),
                 new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR))),
                 new Room(new LinkedList<>(List.of(Doors.WESTDOOR, Doors.EASTDOOR))),
                 new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.SOUTHDOOR)))

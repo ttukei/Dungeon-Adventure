@@ -1,5 +1,7 @@
 package controller;
 
+import model.DungeonComponents.Doors;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import static controller.DungeonAdventure.*;
@@ -10,25 +12,27 @@ public class KeyInputController extends KeyAdapter {
 
 //        System.out.println("Key Pressed!");
 
-        DungeonAdventure.setWaitingForTurn(false);
-
         int key = e.getKeyCode();
 
         // Moving Rooms
         if (key == KeyEvent.VK_W){
-            RoomController.moveNorth();
+            RoomController.setDirectionToMove(Doors.NORTHDOOR);
+            RoomController.setMyMoving(true);
             setWaitingForTurn(false);
         }
         if (key == KeyEvent.VK_D) {
-            RoomController.moveEast();
+            RoomController.setDirectionToMove(Doors.EASTDOOR);
+            RoomController.setMyMoving(true);
             setWaitingForTurn(false);
         }
         if (key == KeyEvent.VK_S){
-            RoomController.moveSouth();
+            RoomController.setDirectionToMove(Doors.SOUTHDOOR);
+            RoomController.setMyMoving(true);
             setWaitingForTurn(false);
         }
         if (key == KeyEvent.VK_A){
-            RoomController.moveWest();
+            RoomController.setDirectionToMove(Doors.WESTDOOR);
+            RoomController.setMyMoving(true);
             setWaitingForTurn(false);
         }
         if (key == KeyEvent.VK_ESCAPE){
@@ -36,6 +40,8 @@ public class KeyInputController extends KeyAdapter {
             System.exit(1);
 //            System.out.println("Esc Pressed");
         }
+
+        DungeonAdventure.setWaitingForTurn(false);
 
     }
 

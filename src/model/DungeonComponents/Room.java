@@ -3,6 +3,7 @@ package model.DungeonComponents;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monster;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactory;
 import model.DungeonComponents.DataTypes.Coordinates;
+import model.RoomItemComponents.PillarOO;
 import model.RoomItemComponents.RoomItem;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
 
@@ -101,4 +102,16 @@ public class Room {
         return roomStringBuilder.toString();
     }
 
+    public boolean containsPillar() {
+        for (RoomItem roomItem : myRoomItems) {
+            if (roomItem.getClass() == PillarOO.class) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public LinkedList<RoomItem> getMyRoomItems() {
+        return this.myRoomItems;
+    }
 }
