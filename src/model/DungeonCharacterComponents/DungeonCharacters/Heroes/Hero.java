@@ -46,7 +46,7 @@ public abstract class Hero extends DungeonCharacter {
     @Override
     protected void outOfCombatBehavior(){
         Room playersCurrentRoom = Dungeon.getDungeon().getPlayersCurrentRoom();
-        System.out.println("Your inventory: " + this.displayInventory());
+        System.out.println(this.displayInventory());
         PillarOO pillarOO = null;
         if (playersCurrentRoom.contiansRoomItem()) {
             LinkedList<RoomItem> roomItems = playersCurrentRoom.getMyRoomItems();
@@ -118,7 +118,7 @@ public abstract class Hero extends DungeonCharacter {
     }
 
     public String displayInventory() {
-        StringBuilder result = new StringBuilder("[");
+        StringBuilder result = new StringBuilder("Inventory [");
         for (int i = 0; i < myInventory.size() - 1; i++) {
             result.append(myInventory.get(i).myName + ", ");
         }
