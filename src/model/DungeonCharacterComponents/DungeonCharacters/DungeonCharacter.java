@@ -84,12 +84,11 @@ public abstract class DungeonCharacter extends DungeonObject {
             if (myTarget.isMarkedForDeath()){
                 myTarget.killMe();
                 System.out.println(getMyCharacterName() + " attacks " + getMyTarget().getMyCharacterName() + " " + combatMessage);
-                System.out.println(getMyCharacterName());
-                System.out.println(getMyTarget());
                 System.out.println(this.getMyTarget().getMyCharacterName() + " dies");
             }
             if (myTarget == null){
                 setCombatFlag(false);
+                System.out.println(getMyCharacterName() + " combat status: " + isInCombat());
             }
         } else {
             outOfCombatBehavior();
