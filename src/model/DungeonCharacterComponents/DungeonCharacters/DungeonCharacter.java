@@ -78,16 +78,16 @@ public abstract class DungeonCharacter extends DungeonObject {
     @Override
     public void objectBehavior() {
         super.objectBehavior();
-        System.out.println(getMyCharacterName() + " checks their behavior");
+//        System.out.println(getMyCharacterName() + " checks their behavior");
         if (isInCombat()){
             String combatMessage = attack(getMyTarget());
-            myTarget.didIDie();
-            if (myTarget.isMarkedForDeath()){
-                myTarget.killMe();
-                System.out.println(getMyCharacterName() + " attacks " + getMyTarget().getMyCharacterName() + " " + combatMessage);
-                System.out.println(this.getMyTarget().getMyCharacterName() + " dies");
-            }
-            if (myTarget == null){
+            System.out.println(getMyCharacterName() + " attacks " + getMyTarget().getMyCharacterName() + " " + combatMessage);
+            boolean died = myTarget.didIDie();
+//            System.out.println("Did " + this.getMyTarget().getMyCharacterName() + " die?: " + died);
+//            if (myTarget.isMarkedForDeath()){
+////                myTarget.killMe();
+//            }
+            if (died){
                 setCombatFlag(false);
                 System.out.println(getMyCharacterName() + " combat status: " + isInCombat());
             }
@@ -103,7 +103,9 @@ public abstract class DungeonCharacter extends DungeonObject {
 
     }
 
-    protected void outOfCombatBehavior(){}
+    protected void outOfCombatBehavior() {
+
+    }
 
     // TODO write a method called applyDamage
     // TODO override applyDamage in hero incorporating chance to defend

@@ -2,10 +2,9 @@ package model.DungeonCharacterComponents.DungeonCharacters.Heroes;
 
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
-import model.RoomItemComponents.HealthPotion;
-import model.RoomItemComponents.Pit;
-import model.RoomItemComponents.RoomItem;
-import model.RoomItemComponents.VisionPotion;
+import model.DungeonComponents.Dungeon;
+import model.DungeonComponents.Room;
+import model.RoomItemComponents.*;
 
 import java.util.ArrayList;
 
@@ -41,6 +40,20 @@ public abstract class Hero extends DungeonCharacter {
     @Override
     public void objectBehavior(){
         super.objectBehavior();
+    }
+
+    @Override
+    protected void outOfCombatBehavior(){
+        Room playersCurrentRoom = Dungeon.getDungeon().getPlayersCurrentRoom();
+        PillarOO pillarOO = null;
+        if (playersCurrentRoom.containsPillar()) {
+            for (RoomItem roomItem : playersCurrentRoom.getMyRoomItems()) {
+                if (roomItem.getClass() == PillarOO.class) {
+                    pillarOO = (PillarOO) roomItem;
+                }
+            }
+            System.out.println("You have found " + pillarOO);
+        }
     }
 
     public boolean useHealthPotion() {
@@ -95,7 +108,7 @@ public abstract class Hero extends DungeonCharacter {
         } else {
             result.append("Empty]");
         }
-        return result.toString();
+        return result + "\n";
     }
 
     public abstract boolean specialSkill(final DungeonCharacter theMonsterToAttack);

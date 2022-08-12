@@ -1,20 +1,17 @@
 package controller;
 
+import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
 import model.DungeonCharacterComponents.DungeonCharacters.Heroes.Hero;
 import model.DungeonCharacterComponents.DungeonCharacters.Heroes.HeroFactory;
 import model.DungeonCharacterComponents.DungeonCharacters.Heroes.Heroes;
-import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monster;
-import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactory;
-import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
 import model.DungeonComponents.DataTypes.Coordinates;
 import model.DungeonComponents.Doors;
 import model.DungeonComponents.Dungeon;
+import model.DungeonComponents.Room;
 import view.Window;
 
 import java.awt.*;
-import java.io.Serializable;
-import java.util.Scanner;
 
 import static controller.Handler.getHandler;
 import static model.DungeonComponents.Dungeon.*;
@@ -29,7 +26,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private static boolean myWaitingForTurn;
     private static Coordinates playerCoordinates;
 
-    private static DungeonCharacter myHero;
+    private static Hero myHero;
 
     private static DungeonCharacter myMonsterToBattle;
     // Final Instance Fields
@@ -46,7 +43,10 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private DungeonAdventure(Heroes myTypeOfHero, String theName){
 
         myHandler = getHandler();
-        myHero = getMyHero(myTypeOfHero, theName);
+        myHero = (Hero) getMyHero(myTypeOfHero, theName);
+        godMode();
+//        mouseMode();
+        myHandler.addObject(myHero);
         myDungeon = getDungeon();
         this.addKeyListener(new KeyInputController());
 
@@ -56,7 +56,9 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
 //        System.out.println(myDungeon.toString());
         myDungeon.printDungeonMap();
+
         System.out.println(getPlayersCurrentRoom());
+        System.out.println(myHero.displayInventory());
 
         setWaitingForTurn(true);
 
@@ -102,6 +104,25 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private void tick(){
         myHandler.tick();
 //        System.out.println("tick");
+        if(RoomController.isMoving()){
+            switch (RoomController.getDirectionToMove()){
+                case NORTHDOOR -> RoomController.moveNorth();
+                case EASTDOOR -> RoomController.moveEast();
+                case SOUTHDOOR -> RoomController.moveSouth();
+                case WESTDOOR -> RoomController.moveWest();
+            }
+        }
+        RoomController.setMyMoving(false);
+    }
+
+    private void godMode(){
+        getMyHero().setMyHealthPoints(9999);
+        getMyHero().setMyDamageRange(new DamageRange(98, 99));
+    }
+
+    private void mouseMode(){
+        getMyHero().setMyHealthPoints(1);
+        getMyHero().setMyDamageRange(new DamageRange(1, 2));
     }
 
     // Public Static Methods
@@ -181,15 +202,15 @@ public class DungeonAdventure extends Canvas implements Runnable {
     }
 
     public static void setMyRunning(boolean myRunning) {
-        DungeonAdventure.myRunning = myRunning;
+        myRunning = myRunning;
     }
 
     public static void setMyWaitingForTurn(boolean myWaitingForTurn) {
-        DungeonAdventure.myWaitingForTurn = myWaitingForTurn;
+        myWaitingForTurn = myWaitingForTurn;
     }
 
-    public static void setMyHero(DungeonCharacter myHero) {
-        DungeonAdventure.myHero = myHero;
+    public static void setMyHero(Hero myHero) {
+        myHero = myHero;
     }
 
     public void setMyHandler(Handler myHandler) {
@@ -221,7 +242,10 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     static class RoomController {
 
-        static void moveRooms(int theChangeInX, int theChangeInY, Doors door){
+        private static boolean myMoving;
+        private static Doors myDirectionToMove;
+
+        static synchronized void moveRooms(int theChangeInX, int theChangeInY, Doors door){
 
 //            System.out.println(getPlayersCurrentRoom());
 
@@ -251,6 +275,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
                     myMonsterToBattle.setCombatFlag(false);
                 }
 
+
                 if (getPlayersCurrentRoom().getMyMonsterFlag()) {
                     myMonsterToBattle = getPlayersCurrentRoom().getMonsterFromRoom();
                     if (myMonsterToBattle != null) {
@@ -260,18 +285,20 @@ public class DungeonAdventure extends Canvas implements Runnable {
                         myMonsterToBattle.setCombatFlag(true);
                         getMyHero().setCombatFlag(true);
                     }
+
                         // Add reporting if monsterFlag was true but getMonsterFromRoom() returns null
                 } else {
-                     getMyHero().setMyTarget(null);
+                    getMyHero().setCombatFlag(false);
+                    getMyHero().setMyTarget(null);
                 }
 
                 getDungeon().printDungeonMap();
-                System.out.println(getPlayerCoordinates());
+//                System.out.println(getPlayerCoordinates());
                 System.out.println(getPlayersCurrentRoom());
+                System.out.println(myHero.displayInventory());
             } else {
-
+                System.out.println("You cannot go that way, there is no " + door);
             }
-
         }
 
         static void moveNorth(){
@@ -298,6 +325,21 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
         }
 
+        public static Doors getDirectionToMove() {
+            return myDirectionToMove;
+        }
+
+        public static void setDirectionToMove(Doors theDirectionToMove) {
+            myDirectionToMove = theDirectionToMove;
+        }
+
+        public static boolean isMoving() {
+            return myMoving;
+        }
+
+        public static void setMyMoving(boolean theMoving) {
+            myMoving = theMoving;
+        }
     }
 
 }
