@@ -2,20 +2,15 @@ package model.RoomItemComponents;
 
 public class PillarOO extends RoomItem{
 
-    //TODO implement the pillars when have more things
+    private PillarsOO myPillarType;
 
-    public static final int ABSTRACTION = 1;
-
-    public static final int ENCAPSULATION = 2;
-
-    public static final int INHERITANCE = 3;
-
-    public static final int POLYMORPHISM = 4;
-
-    public PillarOO() {
+    public PillarOO(PillarsOO theTypeOfPillar) {
         super("Pillar");
+        this.myPillarType = theTypeOfPillar;
     }
 
-    public void placePillar() {
+    @Override
+    public String toString() {
+        return myPillarType.toString();
     }
 }

@@ -7,6 +7,7 @@ import model.DungeonComponents.Room;
 import model.RoomItemComponents.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * @author Timon Tukei
@@ -45,15 +46,33 @@ public abstract class Hero extends DungeonCharacter {
     @Override
     protected void outOfCombatBehavior(){
         Room playersCurrentRoom = Dungeon.getDungeon().getPlayersCurrentRoom();
+        System.out.println("Your inventory: " + this.displayInventory());
         PillarOO pillarOO = null;
-        if (playersCurrentRoom.containsPillar()) {
-            for (RoomItem roomItem : playersCurrentRoom.getMyRoomItems()) {
-                if (roomItem.getClass() == PillarOO.class) {
-                    pillarOO = (PillarOO) roomItem;
+        if (playersCurrentRoom.contiansRoomItem()) {
+            LinkedList<RoomItem> roomItems = playersCurrentRoom.getMyRoomItems();
+            if (playersCurrentRoom.containsPillar()) {
+                for (RoomItem roomItem : roomItems) {
+                    if (roomItem.getClass() == PillarOO.class) {
+                        pillarOO = (PillarOO) roomItem;
+                        roomItems.remove(roomItem);
+                        this.myInventory.add(pillarOO);
+                    }
+                }
+                System.out.println("You have found the pillar of OO, " + pillarOO + "\n");
+            } else if (playersCurrentRoom.containsPotition()) {
+                for (RoomItem roomItem: roomItems) {
+                    if (roomItem.getClass() == HealthPotion.class) {
+                        HealthPotion healthPotion = (HealthPotion) roomItem;
+                        roomItems.remove(roomItem);
+                        this.setMyHealthPoints(getMyHealthPoints() + healthPotion.getMyHealthToBeRegained());
+                        System.out.println("You have found a health potion!");
+                        System.out.println("Health before potion = " + (this.getMyHealthPoints() - healthPotion.getMyHealthToBeRegained()));
+                        System.out.println("Health after potion = " + this.getMyHealthPoints());
+                    }
                 }
             }
-            System.out.println("You have found " + pillarOO);
         }
+
     }
 
     public boolean useHealthPotion() {

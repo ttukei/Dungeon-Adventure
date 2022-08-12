@@ -3,9 +3,11 @@ package model.DungeonComponents;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monster;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactory;
 import model.DungeonComponents.DataTypes.Coordinates;
+import model.RoomItemComponents.HealthPotion;
 import model.RoomItemComponents.PillarOO;
 import model.RoomItemComponents.RoomItem;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
+import model.RoomItemComponents.VisionPotion;
 
 
 import java.util.ArrayList;
@@ -113,5 +115,18 @@ public class Room {
 
     public LinkedList<RoomItem> getMyRoomItems() {
         return this.myRoomItems;
+    }
+
+    public boolean contiansRoomItem() {
+        return myRoomItems.size() > 0;
+    }
+
+    public boolean containsPotition() {
+        for (RoomItem roomItem: myRoomItems) {
+            if (roomItem.getClass() == HealthPotion.class || roomItem.getClass() == VisionPotion.class) {
+                return true;
+            }
+        }
+        return false;
     }
 }

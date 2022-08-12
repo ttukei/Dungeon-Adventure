@@ -4,6 +4,11 @@ import static controller.DungeonAdventure.*;
 
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
 import model.DungeonComponents.DataTypes.Coordinates;
+import model.RoomItemComponents.HealthPotion;
+import model.RoomItemComponents.PillarOO;
+import model.RoomItemComponents.PillarsOO;
+import model.RoomItemComponents.RoomItem;
+import org.w3c.dom.html.HTMLBRElement;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -60,8 +65,10 @@ public class Dungeon {
             }
         };
         myDungeonGrid[0][1].addMonsterToRoom(Monsters.SKELETON);
-        myDungeonGrid[0][2].addMonsterToRoom(Monsters.SKELETON);
-        myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
+        myDungeonGrid[1][1].addItemToRoom((RoomItem) new PillarOO(PillarsOO.ABSTRACTION));
+        myDungeonGrid[0][2].addItemToRoom((HealthPotion) new HealthPotion());
+//        myDungeonGrid[0][2].addMonsterToRoom(Monsters.SKELETON);
+//        myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
         MIN_X = 0;
         MAX_X = myDungeonGrid.length - 1;
         MIN_Y = 0;
