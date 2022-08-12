@@ -36,6 +36,7 @@ public abstract class Hero extends DungeonCharacter {
         super(theCharacterName, theHealthPoints, theDamageRange, theAttackSpeed, theChanceToHit);
         this.myChanceToDefend = theChanceToDefend;
         myInventory = new ArrayList<>();
+//        System.out.println("Hero is created");
     }
 
     @Override

@@ -47,7 +47,7 @@ public class Handler {
         for (DungeonObject obj : myDungeonObjects){
             objectsInHandler.append(obj).append("\n");
         }
-        return objectsInHandler.toString();
+        return objectsInHandler + "\n";
     }
 
 }
