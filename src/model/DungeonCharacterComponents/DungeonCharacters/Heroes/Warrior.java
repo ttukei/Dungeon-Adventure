@@ -31,14 +31,6 @@ final public class Warrior extends Hero {
         this.myCrushingBlowSuccessProb = theCrushingBlowSuccessProb;
     }
 
-    public void objectBehavior(){
-        // Put something that the warrior checks every round here
-
-        if (getMyHealthPoints() <= 0){
-            setMarkedForDeath(true);
-        }
-    }
-
 
     /**
      * The warrior has a special skill (crushing blow) that is similar to attack but does more damage.

@@ -47,6 +47,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
         myHandler = getHandler();
         myHero = getMyHero(myTypeOfHero, theName);
+        myHandler.addObject(myHero);
         myDungeon = getDungeon();
         this.addKeyListener(new KeyInputController());
 
@@ -102,6 +103,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private void tick(){
         myHandler.tick();
 //        System.out.println("tick");
+//        System.out.println(myHandler.toString());
     }
 
     // Public Static Methods
@@ -262,6 +264,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
                     }
                         // Add reporting if monsterFlag was true but getMonsterFromRoom() returns null
                 } else {
+                     getMyHero().setCombatFlag(false);
                      getMyHero().setMyTarget(null);
                 }
 
@@ -269,7 +272,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
                 System.out.println(getPlayerCoordinates());
                 System.out.println(getPlayersCurrentRoom());
             } else {
-
+                System.out.println("You cannot go that way, there is no " + door);
             }
 
         }

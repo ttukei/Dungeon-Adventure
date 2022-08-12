@@ -78,12 +78,12 @@ public abstract class DungeonCharacter extends DungeonObject {
     @Override
     public void objectBehavior() {
         super.objectBehavior();
-        System.out.println(getMyCharacterName() + " checks their behavior");
+//        System.out.println(getMyCharacterName() + " checks their behavior\n");
         if (isInCombat()){
             String combatMessage = attack(getMyTarget());
             myTarget.didIDie();
             if (myTarget.isMarkedForDeath()){
-                myTarget.killMe();
+//                myTarget.killMe();
                 System.out.println(getMyCharacterName() + " attacks " + getMyTarget().getMyCharacterName() + " " + combatMessage);
                 System.out.println(this.getMyTarget().getMyCharacterName() + " dies");
             }
