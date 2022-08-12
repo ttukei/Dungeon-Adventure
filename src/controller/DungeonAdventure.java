@@ -30,6 +30,8 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private static Coordinates playerCoordinates;
 
     private static DungeonCharacter myHero;
+
+    private static DungeonCharacter myMonsterToBattle;
     // Final Instance Fields
     private Handler myHandler;
 
@@ -87,23 +89,14 @@ public class DungeonAdventure extends Canvas implements Runnable {
     }
 
     public void run(){
-        this.requestFocus();
-//        long lastTime = System.nanoTime();          // starting Time
-//        final double amountOfTicks = 1.0;           // How many ticks do we want per second?
-//        double ns = 1000000000 / amountOfTicks;     // Nanoseconds per tick
-//        double delta = 0;
-        while (myRunning){
-//            long now = System.nanoTime();           // current Loop Time
-//            delta += (now - lastTime) / ns;         // changeBetween reported times in nanoseconds
-//            lastTime = now;
-            while (!myWaitingForTurn) {
-                tick();
-//                delta--;
+        this.requestFocus();                // set OS to focus on game window
+        while (myRunning){                  // check if game is running
+            if (!myWaitingForTurn) {        // don't tick if waiting for turn (trigger on key input)
+                tick();                     // run behaviors
+                setWaitingForTurn(true);    // wait for turn again
             }
-            setWaitingForTurn(true);
         }
         stop();
-//        System.out.println("Thread dead");
     }
 
     private void tick(){
@@ -207,21 +200,6 @@ public class DungeonAdventure extends Canvas implements Runnable {
         this.myDungeon = myDungeon;
     }
 
-    public Memento saveToMemento() {
-        return new Memento(getMyThread(), getMyRunning(), getMyWaitingForTurn(),
-                getPlayerCoordinates(), getMyHero(), getMyHandler(), getMyDungeon());
-    }
-
-    public void restoreFromMemento(Memento theMementoToRestore) {
-        setMyThread(theMementoToRestore.myThread);
-        setMyRunning(theMementoToRestore.myRunning);
-        setMyWaitingForTurn(theMementoToRestore.myWaitingForTurn);
-        setPlayerCoordinates(theMementoToRestore.myPlayerCoordinates);
-        setMyHero(theMementoToRestore.myHero);
-        setMyHandler(theMementoToRestore.myHandler);
-        setMyDungeon(theMementoToRestore.myDungeon);
-    }
-
 
     public static void main(String[] args){
 
@@ -235,7 +213,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
 //
 //            }
 //        }
-        new DungeonAdventure(Heroes.WARRIOR, "War");
+        new DungeonAdventure(Heroes.WARRIOR, "The Player");
 
     }
 
@@ -268,16 +246,23 @@ public class DungeonAdventure extends Canvas implements Runnable {
                     // Room.hasMonster
                         // returns monster if true
                 //
+
+                if (myMonsterToBattle != null){
+                    myMonsterToBattle.setCombatFlag(false);
+                }
+
                 if (getPlayersCurrentRoom().getMyMonsterFlag()) {
-                    Monster monsterToBattle = getPlayersCurrentRoom().getMonsterFromRoom();
-                    if (monsterToBattle != null) {
-                        getMyHero().setMyTarget(monsterToBattle);
-                        System.out.println(getMyHero().getMyTarget());
-                        System.out.println(monsterToBattle.getMyTarget());
-                        monsterToBattle.setCombatFlag(true);
+                    myMonsterToBattle = getPlayersCurrentRoom().getMonsterFromRoom();
+                    if (myMonsterToBattle != null) {
+                        getMyHero().setMyTarget(myMonsterToBattle);
+//                        System.out.println("Hero targets " + getMyHero().getMyTarget().getMyCharacterName());
+//                        System.out.println("Monster targets " + myMonsterToBattle.getMyTarget().getMyCharacterName());
+                        myMonsterToBattle.setCombatFlag(true);
                         getMyHero().setCombatFlag(true);
                     }
                         // Add reporting if monsterFlag was true but getMonsterFromRoom() returns null
+                } else {
+                     getMyHero().setMyTarget(null);
                 }
 
                 getDungeon().printDungeonMap();
@@ -315,36 +300,4 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     }
 
-    static class Memento implements Serializable {
-
-        private Thread myThread;
-
-        private boolean myRunning;
-
-        private boolean myWaitingForTurn;
-
-        private Coordinates myPlayerCoordinates;
-
-        private DungeonCharacter myHero;
-
-        private Handler myHandler;
-
-        private Dungeon myDungeon;
-        private final int MY_WIDTH = 300;
-        private final int MY_HEIGHT = 10;
-
-        private final Dimension MY_DIMENSIONS = new Dimension(MY_WIDTH, MY_HEIGHT);
-
-        private Memento(final Thread theThread, final boolean theRunning, final boolean theWaitingForTurn,
-                        final Coordinates thePlayerCoordinates, final DungeonCharacter theHero, final Handler theHandler,
-                        final Dungeon theDungeon) {
-            this.myThread = theThread;
-            this.myRunning = theRunning;
-            this.myWaitingForTurn = theWaitingForTurn;
-            this.myPlayerCoordinates = thePlayerCoordinates;
-            this.myHero = theHero;
-            this.myHandler = theHandler;
-        }
-
-    }
 }

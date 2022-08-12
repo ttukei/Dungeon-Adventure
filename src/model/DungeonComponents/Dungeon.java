@@ -35,7 +35,7 @@ public class Dungeon {
         createMaze();
     }
 
-    private Dungeon() {
+    public Dungeon() {
         System.out.println("Building New Dungeon");
         myDungeonGrid = new Room[][]{
             {   new Room(RoomsOfInterest.ENTRANCE, new LinkedList<>(List.of(Doors.EASTDOOR))),
@@ -51,11 +51,11 @@ public class Dungeon {
             {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR))),
                 new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR))),
                 new Room(new LinkedList<>(List.of(Doors.WESTDOOR, Doors.EASTDOOR))),
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR)))
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.SOUTHDOOR)))
             },
-            {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR))),
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR))),
-                new Room(new LinkedList<>(List.of(Doors.WESTDOOR, Doors.EASTDOOR))),
+            {   null,
+                null,
+                new Room(new LinkedList<>(List.of(Doors.EASTDOOR))),
                 new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR)))
             }
         };

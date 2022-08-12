@@ -78,6 +78,7 @@ public abstract class DungeonCharacter extends DungeonObject {
     @Override
     public void objectBehavior() {
         super.objectBehavior();
+        System.out.println(getMyCharacterName() + " checks their behavior");
         if (isInCombat()){
             String combatMessage = attack(getMyTarget());
             myTarget.didIDie();
@@ -132,6 +133,9 @@ public abstract class DungeonCharacter extends DungeonObject {
         controller.Handler.getHandler().removeObject(this);
     }
 
+    public boolean isDeceased() {
+        return this.myHealthPoints <= 0;
+    }
     /**
      * Gets the characters' name.
      * @return the characters' name.
@@ -225,6 +229,7 @@ public abstract class DungeonCharacter extends DungeonObject {
     }
 
     public boolean isInCombat(){
+//        System.out.println("Is " + getMyCharacterName() + " in combat?: " + myCombatFlag);
         return myCombatFlag;
     }
 
