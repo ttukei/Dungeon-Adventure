@@ -113,7 +113,7 @@ public abstract class DungeonCharacter extends DungeonObject {
      */
     public String attack(final DungeonCharacter theCharacterToAttack) {
         // Randomly gets a number between the damage range.
-        if (myChanceToHit == theCharacterToAttack.getMyChanceToHit() || Math.random() < this.getMyChanceToHit()) {
+        if ((myChanceToHit == theCharacterToAttack.getMyChanceToHit() || Math.random() < this.getMyChanceToHit()) && !theCharacterToAttack.isMarkedForDeath()) {
             final int damage = getTheDamageToBeDealt();
             theCharacterToAttack.setMyHealthPoints(theCharacterToAttack.getMyHealthPoints() - damage);
             return "The damage done = " + damage;

@@ -13,6 +13,7 @@ import model.DungeonComponents.Dungeon;
 import view.Window;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Scanner;
 
 import static controller.Handler.getHandler;
@@ -28,15 +29,17 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private static boolean myWaitingForTurn;
     private static Coordinates playerCoordinates;
 
+    private static DungeonCharacter myHero;
     // Final Instance Fields
-    private final Handler myHandler;
-    private final Dungeon myDungeon;
+    private Handler myHandler;
+
+    private Dungeon myDungeon;
 
     // Global Constants
     private static final int MY_WIDTH = 300;//1024;
     private static final int MY_HEIGHT = 10;//640;
     private static final Dimension MY_DIMENSIONS = new Dimension(MY_WIDTH, MY_HEIGHT);
-    private static DungeonCharacter myHero;
+
 
     private DungeonAdventure(Heroes myTypeOfHero, String theName){
 
@@ -160,6 +163,66 @@ public class DungeonAdventure extends Canvas implements Runnable {
         myRunning = theRunning;
     }
 
+    public Thread getMyThread() {
+        return myThread;
+    }
+
+    public void setMyThread(Thread myThread) {
+        this.myThread = myThread;
+    }
+
+    public static boolean getMyRunning() {
+        return myRunning;
+    }
+
+    public static boolean getMyWaitingForTurn() {
+        return myWaitingForTurn;
+    }
+
+    public Handler getMyHandler() {
+        return myHandler;
+    }
+
+    public Dungeon getMyDungeon() {
+        return myDungeon;
+    }
+
+    public static void setMyRunning(boolean myRunning) {
+        DungeonAdventure.myRunning = myRunning;
+    }
+
+    public static void setMyWaitingForTurn(boolean myWaitingForTurn) {
+        DungeonAdventure.myWaitingForTurn = myWaitingForTurn;
+    }
+
+    public static void setMyHero(DungeonCharacter myHero) {
+        DungeonAdventure.myHero = myHero;
+    }
+
+    public void setMyHandler(Handler myHandler) {
+        this.myHandler = myHandler;
+    }
+
+    public void setMyDungeon(Dungeon myDungeon) {
+        this.myDungeon = myDungeon;
+    }
+
+    public Memento saveToMemento() {
+        return new Memento(getMyThread(), getMyRunning(), getMyWaitingForTurn(),
+                getPlayerCoordinates(), getMyHero(), getMyHandler(), getMyDungeon());
+    }
+
+    public void restoreFromMemento(Memento theMementoToRestore) {
+        setMyThread(theMementoToRestore.myThread);
+        setMyRunning(theMementoToRestore.myRunning);
+        setMyWaitingForTurn(theMementoToRestore.myWaitingForTurn);
+        setPlayerCoordinates(theMementoToRestore.myPlayerCoordinates);
+        setMyHero(theMementoToRestore.myHero);
+        setMyHandler(theMementoToRestore.myHandler);
+        setMyDungeon(theMementoToRestore.myDungeon);
+    }
+
+
     public static void main(String[] args){
 
 //        Scanner sc = new Scanner(System.in);
@@ -248,6 +311,39 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
             moveRooms(-1, 0, Doors.WESTDOOR);
 
+        }
+
+    }
+
+    static class Memento implements Serializable {
+
+        private Thread myThread;
+
+        private boolean myRunning;
+
+        private boolean myWaitingForTurn;
+
+        private Coordinates myPlayerCoordinates;
+
+        private DungeonCharacter myHero;
+
+        private Handler myHandler;
+
+        private Dungeon myDungeon;
+        private final int MY_WIDTH = 300;
+        private final int MY_HEIGHT = 10;
+
+        private final Dimension MY_DIMENSIONS = new Dimension(MY_WIDTH, MY_HEIGHT);
+
+        private Memento(final Thread theThread, final boolean theRunning, final boolean theWaitingForTurn,
+                        final Coordinates thePlayerCoordinates, final DungeonCharacter theHero, final Handler theHandler,
+                        final Dungeon theDungeon) {
+            this.myThread = theThread;
+            this.myRunning = theRunning;
+            this.myWaitingForTurn = theWaitingForTurn;
+            this.myPlayerCoordinates = thePlayerCoordinates;
+            this.myHero = theHero;
+            this.myHandler = theHandler;
         }
 
     }
