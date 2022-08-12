@@ -52,6 +52,11 @@ public class Dungeon {
                 new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR))),
                 new Room(new LinkedList<>(List.of(Doors.WESTDOOR, Doors.EASTDOOR))),
                 new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR)))
+            },
+            {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR))),
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR))),
+                new Room(new LinkedList<>(List.of(Doors.WESTDOOR, Doors.EASTDOOR))),
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR)))
             }
         };
         myDungeonGrid[0][1].addMonsterToRoom(Monsters.SKELETON);
