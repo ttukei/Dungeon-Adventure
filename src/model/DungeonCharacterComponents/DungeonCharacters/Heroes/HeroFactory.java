@@ -8,7 +8,7 @@ public class HeroFactory {
     /**
      * Warrior Stats
      */
-    private static final int WARRIOR_HEALTH_POINTS = 125;
+    private static final int WARRIOR_HEALTH_POINTS = 1000;
     private static final DamageRange WARRIOR_DAMAGE_RANGE = new DamageRange(35, 60);
     private static final int WARRIOR_ATTACK_SPEED = 4;
     private static final double WARRIOR_CHANCE_TO_HIT = 0.8;
