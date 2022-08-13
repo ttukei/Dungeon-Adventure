@@ -54,7 +54,7 @@ public class Room {
         this.myMonsterFlag = myMonsterFlag;
     }
 
-    public String getDoors(){
+    public String getRoomDoorsAsString(){
         return myRoomDoors.toString();
     }
 
@@ -91,16 +91,54 @@ public class Room {
         return myRoomMonsters.getFirst();
     }
 
+    public String getUserFriendlyStringOfDoors(){
+        if (myRoomDoors.isEmpty()){
+            return "";
+        }
+        StringBuilder stringOfDoors = new StringBuilder();
+        for(Doors door : myRoomDoors) {
+            if (!stringOfDoors.isEmpty()) {
+                stringOfDoors.append(", ");
+            }
+            switch(door){
+                case NORTHDOOR -> stringOfDoors.append("north");
+                case EASTDOOR -> stringOfDoors.append("east");
+                case SOUTHDOOR -> stringOfDoors.append("south");
+                case WESTDOOR -> stringOfDoors.append("west");
+            }
+        }
+        return stringOfDoors.toString();
+    }
 
-    public String toString(){
-        StringBuilder roomStringBuilder = new StringBuilder();
-        roomStringBuilder.append("You are in a room with four stone walls and a dirt floor\n");
+
+    public String getAnnouncement(){
+        StringBuilder roomAnnouncement = new StringBuilder();
+        roomAnnouncement.append("You are in a room with four stone walls and a dirt floor");
+
+        /* ANNOUNCE MONSTERS */
+
         for (Monster monster : myRoomMonsters){
-            roomStringBuilder.append(monster.getMyAnnouncement());
+            roomAnnouncement.append(monster.getMyAnnouncement());
         }
-        for (RoomItem item : myRoomItems) {
+
+        /* ANNOUNCE DOORS */
+
+        if (myRoomDoors.isEmpty()){
+            roomAnnouncement.append("\nThere are no doors! How did this happen?");
+        } else if (myRoomDoors.size() > 1){
+            roomAnnouncement.append("\nThere are doors to the ");
+        } else {
+            roomAnnouncement.append("\nThere is a door to the ");
         }
-        return roomStringBuilder + "\n";
+        roomAnnouncement.append(getUserFriendlyStringOfDoors());
+
+        /* ANNOUNCE ITEMS */
+
+        if (!myRoomItems.isEmpty()){
+            roomAnnouncement.append("\nYou see a glint of something valuable!");
+        }
+
+        return roomAnnouncement.toString();
     }
 
     public boolean containsPillar() {

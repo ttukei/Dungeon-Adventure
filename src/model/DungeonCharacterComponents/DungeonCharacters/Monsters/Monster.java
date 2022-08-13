@@ -10,8 +10,6 @@ import static controller.DungeonAdventure.*;
  */
 public class Monster extends DungeonCharacter {
 
-    // TODO refactor monster inheritance hierarchy so that there is only one monster class with enum
-    // TODO create enum to represent the type of monster
     // TODO create interface Healable and make priestess and monster implement interface
 
     private Monsters myMonsterType;
@@ -79,7 +77,7 @@ public class Monster extends DungeonCharacter {
         if (myMonsterType == Monsters.OGRE){
             n = "n";
         }
-        return "There is a" + n + " " + myMonsterType + "\n";
+        return "\nThere is a" + n + " " + myMonsterType;
     }
 
     public Monsters getMyMonsterType() {

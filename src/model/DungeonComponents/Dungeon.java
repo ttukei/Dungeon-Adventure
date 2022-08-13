@@ -8,7 +8,6 @@ import model.RoomItemComponents.HealthPotion;
 import model.RoomItemComponents.PillarOO;
 import model.RoomItemComponents.PillarsOO;
 import model.RoomItemComponents.RoomItem;
-import org.w3c.dom.html.HTMLBRElement;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +46,7 @@ public class Dungeon {
         MAX_Y = 4;
 
         myDungeonGrid = new Room[][]{
-            {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0, 0)),
+            {   new Room(RoomsOfInterest.ENTRANCE, new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0, 0)),
                 new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR, Doors.WESTDOOR)), new Coordinates(1, 0)),
                 new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(2, 0)),
                 null,
@@ -71,7 +70,7 @@ public class Dungeon {
                 new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.EASTDOOR, Doors.WESTDOOR)), new Coordinates(3,3)),
                 new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(4,3))
             },
-            {   new Room(RoomsOfInterest.ENTRANCE, new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0,4)),
+            {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0,4)),
                 new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.WESTDOOR)), new Coordinates(1,4)),
                 new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR)), new Coordinates(2,4)),
                 null,
@@ -134,10 +133,10 @@ public class Dungeon {
                 for (int j = 0; j < roomRow.length; j++){
                     Room currentRoom = myDungeonGrid[i][j];
                     if (currentRoom != null) {
-                        dungeonToString.append("Room ").append(roomNumber++             // Room Number
-                        ).append(", at (").append(i).append(", ").append(j              // Coordinates
-                        ).append(") has doors: ").append(currentRoom.getDoors()         // Doors
-                        ).append("\n");                                                 // New Line
+                        dungeonToString.append("Room ").append(roomNumber++                 // Room Number
+                        ).append(", at (").append(i).append(", ").append(j                  // Coordinates
+                        ).append(") has doors: ").append(currentRoom.getRoomDoorsAsString() // Doors
+                        ).append("\n");                                                     // New Line
                     } else{
                         dungeonToString.append("Empty Room at (").append(i).append(", ").append(j).append(")\n");
                     }
@@ -189,9 +188,9 @@ public class Dungeon {
         try {
             int y = getPlayerCoordinates().getY();
             int x = getPlayerCoordinates().getX();
-            return uniqueInstanceOfDungeon.myDungeonGrid[y][x];
+            return myDungeonGrid[y][x];
         } catch (NullPointerException e){
-            System.out.println("Dungeon must be created before getting Players Current Room");
+            System.out.println("Player's coordinates are not in a valid room");
             return null;
         }
     }

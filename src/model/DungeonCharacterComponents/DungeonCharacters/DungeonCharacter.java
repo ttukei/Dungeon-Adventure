@@ -82,19 +82,26 @@ public abstract class DungeonCharacter extends DungeonObject {
         super.objectBehavior();
 //        System.out.println(getMyCharacterName() + " checks their behavior");
         if (isInCombat()){
-            String combatMessage = attack(getMyTarget());
-            System.out.println(getMyCharacterName() + " attacks " + getMyTarget().getMyCharacterName() + " " + combatMessage);
-            boolean died = myTarget.didIDie();
-//            System.out.println("Did " + this.getMyTarget().getMyCharacterName() + " die?: " + died);
+            String combatMessage =  getMyCharacterName() +
+                                    " attacks " +
+                                    getMyTarget().getMyCharacterName() +
+                                    " and deals " +
+                                    attack(getMyTarget()) +
+                                    " damage";
+            System.out.println(combatMessage);
+            boolean myTargetDied = myTarget.didIDie();
+//            System.out.println("Did " + this.getMyTarget().getMyCharacterName() + " die?: " + myTargetDied);
 //            if (myTarget.isMarkedForDeath()){
 ////                myTarget.killMe();
 //            }
-            if (died){
+            if (myTargetDied){
                 DungeonAdventure.addToKillCount();
                 setCombatFlag(false);
-                System.out.println(getMyCharacterName() + " combat status: " + isInCombat());
+//                System.out.println(getMyCharacterName() + " combat status: " + isInCombat());
+                System.out.println(getMyCharacterName() + " defeated " + getMyTarget().getMyCharacterName());
             }
-        } else {
+        }
+        if (!isInCombat()){
             outOfCombatBehavior();
         }
         // getTarget() uses some methodology determined at a lower inheritance level to
@@ -121,9 +128,9 @@ public abstract class DungeonCharacter extends DungeonObject {
         if ((myChanceToHit == theCharacterToAttack.getMyChanceToHit() || Math.random() < this.getMyChanceToHit()) && !theCharacterToAttack.isMarkedForDeath()) {
             final int damage = getTheDamageToBeDealt();
             theCharacterToAttack.setMyHealthPoints(theCharacterToAttack.getMyHealthPoints() - damage);
-            return "The damage done = " + damage;
+            return "" + damage;
         } else {
-            return "The damage done = 0";
+            return "0";
         }
     }
 

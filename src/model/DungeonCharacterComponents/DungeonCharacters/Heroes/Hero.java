@@ -52,7 +52,7 @@ public abstract class Hero extends DungeonCharacter {
     //@Override
     protected void outOfCombatBehavior(){
         Room playersCurrentRoom = Dungeon.getDungeon().getPlayersCurrentRoom();
-        System.out.println(this.displayInventory());
+//        System.out.println(this.displayInventory());
         PillarOO pillarOO = null;
         if (playersCurrentRoom.contiansRoomItem()) {
             LinkedList<RoomItem> roomItems = playersCurrentRoom.getMyRoomItems();
@@ -64,7 +64,7 @@ public abstract class Hero extends DungeonCharacter {
                         this.myInventory.add(pillarOO);
                     }
                 }
-                System.out.println("You have found the pillar of OO, " + pillarOO + "\n");
+                System.out.println("You have found the pillar of OO, " + pillarOO);
             } else if (playersCurrentRoom.containsPotition()) {
                 for (RoomItem roomItem: roomItems) {
                     if (roomItem.getClass() == HealthPotion.class) {

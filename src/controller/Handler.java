@@ -8,9 +8,9 @@ import java.util.LinkedList;
 
 public class Handler {
 
-    private static Handler uniqueInstanceOfHandler = new Handler();
+    private static final Handler uniqueInstanceOfHandler = new Handler();
 
-    private ArrayList<DungeonObject> myDungeonObjects;
+    private final ArrayList<DungeonObject> myDungeonObjects;
 
     private Handler(){
         myDungeonObjects = new ArrayList<>();
@@ -30,12 +30,14 @@ public class Handler {
             }
         }
         for(DungeonObject objMarkedForDeath : objectsMarkedForDeath){
+//            objMarkedForDeath.killMe();
             myDungeonObjects.remove(objMarkedForDeath);
         }
     }
 
-    public void addObject(DungeonObject theObject){
+    public int addObject(DungeonObject theObject){
         myDungeonObjects.add(theObject);
+        return myDungeonObjects.indexOf(theObject);
     }
 
     public void removeObject(DungeonObject theObject){

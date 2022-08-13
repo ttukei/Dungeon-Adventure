@@ -65,11 +65,11 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
 //        System.out.println(DUNGEON.toString());
         DUNGEON.printDungeonMap();
+        System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
-        System.out.print(getPlayersCurrentRoom());
 //        System.out.print(myHero.displayInventory());
 
-        setWaitingForTurn(true);
+        setWaitingForTurn(false);
 
 //        HANDLER.addObject(HeroFactory.instantiateHero(Heroes.WARRIOR, "War"));
 //        HANDLER.addObject(new MonsterFactory().getMonster(Monsters.SKELETON));
@@ -118,10 +118,10 @@ public class DungeonAdventure extends Canvas implements Runnable {
                 case SOUTHDOOR -> RoomController.moveSouth();
                 case WESTDOOR -> RoomController.moveWest();
             }
+            RoomController.setMyMoving(false);
         }
         HANDLER.tick();
-//        System.out.println("tick");
-        RoomController.setMyMoving(false);
+        System.out.println("...");
     }
 
     private void godMode(){
@@ -263,7 +263,10 @@ public class DungeonAdventure extends Canvas implements Runnable {
                         currentY + theChangeInY
                 );
 
+
                 setPlayerCoordinates(newPlayerCoordinates);
+                getDungeon().printDungeonMap();
+                System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
                 // Other methods that happen when rooms are checked
                 // Dungeon adds monsters to handler
@@ -294,11 +297,8 @@ public class DungeonAdventure extends Canvas implements Runnable {
                     getMyHero().setCombatFlag(false);
                     getMyHero().setMyTarget(null);
                 }
-
-                getDungeon().printDungeonMap();
 //                System.out.println(getPlayerCoordinates());
-                System.out.println(getPlayersCurrentRoom());
-                System.out.println(myHero.displayInventory());
+//                System.out.println(myHero.displayInventory());
             } else {
                 System.out.println("You cannot go that way, there is no " + door);
             }
