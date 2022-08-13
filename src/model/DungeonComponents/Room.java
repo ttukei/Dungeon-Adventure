@@ -3,11 +3,9 @@ package model.DungeonComponents;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monster;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactory;
 import model.DungeonComponents.DataTypes.Coordinates;
-import model.RoomItemComponents.HealthPotion;
-import model.RoomItemComponents.PillarOO;
-import model.RoomItemComponents.RoomItem;
+import model.RoomItemComponents.*;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
-import model.RoomItemComponents.VisionPotion;
+import org.sqlite.core.CoreDatabaseMetaData;
 
 
 import java.util.ArrayList;
@@ -25,25 +23,26 @@ public class Room {
 
     private LinkedList<Monster> myRoomMonsters;
 
-    private Coordinates myCoordinates;
+    private Coordinates myRoomCoordinates;
 
     private boolean myMonsterFlag;
 
-    Room(LinkedList<Doors> theRoomDoors) {
+    Room(LinkedList<Doors> theRoomDoors, Coordinates theCords) {
         myRoomType = null;
-        initializeFields(theRoomDoors);
+        initializeFields(theRoomDoors, theCords);
     }
 
-    Room(RoomsOfInterest TYPE_OF_ROOM, LinkedList<Doors> theRoomDoors) {
+    Room(RoomsOfInterest TYPE_OF_ROOM, LinkedList<Doors> theRoomDoors, Coordinates theCords) {
         myRoomType = TYPE_OF_ROOM;
-        initializeFields(theRoomDoors);
+        initializeFields(theRoomDoors, theCords);
     }
 
-    private void initializeFields(LinkedList<Doors> theRoomDoors){
+    private void initializeFields(LinkedList<Doors> theRoomDoors, Coordinates theCords){
         myRoomDoors = new LinkedList<>();
         myRoomDoors.addAll(theRoomDoors);
         myRoomItems = new LinkedList<>();
         myRoomMonsters = new LinkedList<>();
+        myRoomCoordinates = theCords;
         setMyMonsterFlag(false);
     }
 
@@ -101,7 +100,7 @@ public class Room {
         }
         for (RoomItem item : myRoomItems) {
         }
-        return roomStringBuilder.toString();
+        return roomStringBuilder + "\n";
     }
 
     public boolean containsPillar() {
@@ -129,4 +128,25 @@ public class Room {
         }
         return false;
     }
+
+    public boolean containsPit() {
+        for (RoomItem roomItem: myRoomItems) {
+            if (roomItem.getClass() == Pit.class) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public RoomsOfInterest getRoomType() {
+        if(myRoomType == null){
+//            System.out.println("This is a normal room!");
+        }
+        return myRoomType;
+    }
+
+    public Coordinates getRoomCords(){
+        return myRoomCoordinates;
+    }
+
 }

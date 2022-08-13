@@ -5,7 +5,7 @@ public class PillarOO extends RoomItem{
     private PillarsOO myPillarType;
 
     public PillarOO(PillarsOO theTypeOfPillar) {
-        super("Pillar");
+        super(theTypeOfPillar.name());
         this.myPillarType = theTypeOfPillar;
     }
 

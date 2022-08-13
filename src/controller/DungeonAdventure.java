@@ -9,6 +9,7 @@ import model.DungeonComponents.DataTypes.Coordinates;
 import model.DungeonComponents.Doors;
 import model.DungeonComponents.Dungeon;
 import model.DungeonComponents.Room;
+import model.DungeonComponents.RoomsOfInterest;
 import view.Window;
 
 import java.awt.*;
@@ -24,15 +25,20 @@ public class DungeonAdventure extends Canvas implements Runnable {
     // Static fields
     private static boolean myRunning;
     private static boolean myWaitingForTurn;
-    private static Coordinates playerCoordinates;
+    private static Heroes myTypeOfHero;
+    private static String myHeroName;
+    private static Coordinates myHeroCoordinates;
+
+    private static long myTimeStart;
+    private static int myKillCount;
 
     private static Hero myHero;
 
     private static DungeonCharacter myMonsterToBattle;
     // Final Instance Fields
-    private Handler myHandler;
+    private final Handler HANDLER;
 
-    private Dungeon myDungeon;
+    private final Dungeon DUNGEON;
 
     // Global Constants
     private static final int MY_WIDTH = 300;//1024;
@@ -40,32 +46,35 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private static final Dimension MY_DIMENSIONS = new Dimension(MY_WIDTH, MY_HEIGHT);
 
 
-    private DungeonAdventure(Heroes myTypeOfHero, String theName){
+    private DungeonAdventure(){
+        myTimeStart = System.currentTimeMillis();
 
-        myHandler = getHandler();
-        myHero = (Hero) getMyHero(myTypeOfHero, theName);
-        godMode();
+        HANDLER = getHandler();
+        myHero = getMyHero();
 //        mouseMode();
-        myHandler.addObject(myHero);
-        myDungeon = getDungeon();
-        this.addKeyListener(new KeyInputController());
+        HANDLER.addObject(myHero);
+        DUNGEON = getDungeon();
 
-        playerCoordinates = new Coordinates(0,0);
+        this.addKeyListener(new KeyInputController());
+        godMode();
+        Room entrance = getRoomOfInterest(RoomsOfInterest.ENTRANCE);
+        myHeroCoordinates = entrance == null ? new Coordinates(0,0) : entrance.getRoomCords();
+
 
         new Window(MY_DIMENSIONS, "Dungeon Adventure", this);
 
-//        System.out.println(myDungeon.toString());
-        myDungeon.printDungeonMap();
+//        System.out.println(DUNGEON.toString());
+        DUNGEON.printDungeonMap();
 
-        System.out.println(getPlayersCurrentRoom());
-        System.out.println(myHero.displayInventory());
+        System.out.print(getPlayersCurrentRoom());
+//        System.out.print(myHero.displayInventory());
 
         setWaitingForTurn(true);
 
-//        myHandler.addObject(HeroFactory.instantiateHero(Heroes.WARRIOR, "War"));
-//        myHandler.addObject(new MonsterFactory().getMonster(Monsters.SKELETON));
+//        HANDLER.addObject(HeroFactory.instantiateHero(Heroes.WARRIOR, "War"));
+//        HANDLER.addObject(new MonsterFactory().getMonster(Monsters.SKELETON));
 
-//        System.out.println(myHandler);
+//        System.out.println(HANDLER);
 
         ///
 
@@ -102,8 +111,6 @@ public class DungeonAdventure extends Canvas implements Runnable {
     }
 
     private void tick(){
-        myHandler.tick();
-//        System.out.println("tick");
         if(RoomController.isMoving()){
             switch (RoomController.getDirectionToMove()){
                 case NORTHDOOR -> RoomController.moveNorth();
@@ -112,6 +119,8 @@ public class DungeonAdventure extends Canvas implements Runnable {
                 case WESTDOOR -> RoomController.moveWest();
             }
         }
+        HANDLER.tick();
+//        System.out.println("tick");
         RoomController.setMyMoving(false);
     }
 
@@ -145,28 +154,20 @@ public class DungeonAdventure extends Canvas implements Runnable {
         return theDouble;
     }
 
-    public static DungeonCharacter getMyHero(){
-        try{
-            return myHero;
-        } catch (NullPointerException e){
-            System.out.println("Hero must be created first!");
-            return null;
-        }
-    }
-
-    public static DungeonCharacter getMyHero(final Heroes theTypeOfHero, final String theName) {
+    public static Hero getMyHero(){
         if (myHero == null){
-            myHero = HeroFactory.instantiateHero(theTypeOfHero, theName);
+            myHero = HeroFactory.instantiateHero(myTypeOfHero, myHeroName);
         }
         return myHero;
     }
 
     public static Coordinates getPlayerCoordinates(){
-        return playerCoordinates;
+        if (getMyHero().getMyCords() == null) return myHeroCoordinates;
+        return getMyHero().getMyCords();
     }
 
     static void setPlayerCoordinates(final Coordinates theCords){
-        playerCoordinates = theCords;
+        getMyHero().setMyCords(theCords);
     }
 
     static void setWaitingForTurn(final boolean theWaiting){
@@ -175,6 +176,18 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     static void setRunning(boolean theRunning) {
         myRunning = theRunning;
+    }
+
+    public static long getMyTimeStart() {
+        return myTimeStart;
+    }
+
+    public static void addToKillCount() {
+        myKillCount++;
+    }
+
+    public static int getKillCount() {
+        return myKillCount;
     }
 
     public Thread getMyThread() {
@@ -194,35 +207,26 @@ public class DungeonAdventure extends Canvas implements Runnable {
     }
 
     public Handler getMyHandler() {
-        return myHandler;
+        return HANDLER;
     }
 
     public Dungeon getMyDungeon() {
-        return myDungeon;
+        return DUNGEON;
     }
 
-    public static void setMyRunning(boolean myRunning) {
-        myRunning = myRunning;
+    public static void setMyRunning(boolean theRunning) {
+        myRunning = theRunning;
     }
 
-    public static void setMyWaitingForTurn(boolean myWaitingForTurn) {
-        myWaitingForTurn = myWaitingForTurn;
-    }
-
-    public static void setMyHero(Hero myHero) {
-        myHero = myHero;
-    }
-
-    public void setMyHandler(Handler myHandler) {
-        this.myHandler = myHandler;
-    }
-
-    public void setMyDungeon(Dungeon myDungeon) {
-        this.myDungeon = myDungeon;
+    public static void setMyWaitingForTurn(boolean theWaitingForTurn) {
+        myWaitingForTurn = theWaitingForTurn;
     }
 
 
     public static void main(String[] args){
+
+        myTypeOfHero = Heroes.WARRIOR;
+        myHeroName = "The Hero";
 
 //        Scanner sc = new Scanner(System.in);
 //        System.out.println("Please enter your name: ");
@@ -234,7 +238,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
 //
 //            }
 //        }
-        new DungeonAdventure(Heroes.WARRIOR, "The Player");
+        new DungeonAdventure();
 
     }
 
@@ -251,8 +255,8 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
             if (getPlayersCurrentRoom().hasDoor(door)) {
 
-                int currentX = getPlayerCoordinates().getX();
                 int currentY = getPlayerCoordinates().getY();
+                int currentX = getPlayerCoordinates().getX();
 
                 Coordinates newPlayerCoordinates = new Coordinates(
                         currentX + theChangeInX,
@@ -274,7 +278,6 @@ public class DungeonAdventure extends Canvas implements Runnable {
                 if (myMonsterToBattle != null){
                     myMonsterToBattle.setCombatFlag(false);
                 }
-
 
                 if (getPlayersCurrentRoom().getMyMonsterFlag()) {
                     myMonsterToBattle = getPlayersCurrentRoom().getMonsterFromRoom();

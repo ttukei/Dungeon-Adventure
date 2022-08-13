@@ -1,6 +1,8 @@
 package model.DungeonCharacterComponents.DungeonCharacters;
 
+import controller.DungeonAdventure;
 import model.DungeonCharacterComponents.DamageRange;
+import model.DungeonCharacterComponents.DungeonCharacters.Heroes.Hero;
 import model.DungeonObject;
 import model.RoomItemComponents.RoomItem;
 
@@ -88,6 +90,7 @@ public abstract class DungeonCharacter extends DungeonObject {
 ////                myTarget.killMe();
 //            }
             if (died){
+                DungeonAdventure.addToKillCount();
                 setCombatFlag(false);
                 System.out.println(getMyCharacterName() + " combat status: " + isInCombat());
             }

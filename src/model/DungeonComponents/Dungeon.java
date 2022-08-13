@@ -22,57 +22,73 @@ public class Dungeon {
      * Holds a 2D Array. Each element is one of the Rooms of the dungeon. Array location
      * corresponds to the coordinate of the room.
      */
-    private final Room[][] myDungeonGrid;
-    private final int MIN_X;
-    private final int MAX_X;
-    private final int MIN_Y; // TODO: 8/8/2022 Adjust parameters for Y values to check MIN_Y instead of MIN_X
-    private final int MAX_Y;
+    private static Room[][] myDungeonGrid;
+    private static final int MIN_X = 0;
+    private static int MAX_X;
+    private final int MIN_Y = 0;
+    private static int MAX_Y;
 
     /* CONSTRUCTORS */
 
     private Dungeon(int theWidth, int theHeight) {
         System.out.println("Building New Dungeon");
         myDungeonGrid = new Room[theHeight][theWidth];
-        MIN_X = 0;
         MAX_X = myDungeonGrid.length - 1;
-        MIN_Y = 0;
         MAX_Y = myDungeonGrid[0].length - 1;
         createMaze();
     }
 
     public Dungeon() {
         System.out.println("Building New Dungeon");
+
+        /* MIN AND MAX X, Y */
+
+        MAX_X = 4;
+        MAX_Y = 4;
+
         myDungeonGrid = new Room[][]{
-            {   new Room(RoomsOfInterest.ENTRANCE, new LinkedList<>(List.of(Doors.EASTDOOR))),
-                new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR, Doors.WESTDOOR))),
-                new Room(new LinkedList<>(List.of(Doors.WESTDOOR))),
+            {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0, 0)),
+                new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR, Doors.WESTDOOR)), new Coordinates(1, 0)),
+                new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(2, 0)),
+                null,
                 null
             },
             {   null,
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.SOUTHDOOR))),
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.SOUTHDOOR)), new Coordinates(1, 1)),
                 null,
-                new Room(new LinkedList<>(List.of(Doors.SOUTHDOOR)))
+                new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR)), new Coordinates(3,1)),
+                new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(4,1))
             },
-            {   new Room(RoomsOfInterest.EXIT, new LinkedList<>(List.of(Doors.EASTDOOR))),
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR))),
-                new Room(new LinkedList<>(List.of(Doors.WESTDOOR, Doors.EASTDOOR))),
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.SOUTHDOOR)))
+            {   new Room(RoomsOfInterest.EXIT, new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0,2)),
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR)), new Coordinates(1,2)),
+                new Room(new LinkedList<>(List.of(Doors.WESTDOOR, Doors.EASTDOOR)), new Coordinates(2,2)),
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.SOUTHDOOR)), new Coordinates(3,2)),
+                null
             },
             {   null,
                 null,
-                new Room(new LinkedList<>(List.of(Doors.EASTDOOR))),
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR)))
+                new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR)), new Coordinates(2,3)),
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.EASTDOOR, Doors.WESTDOOR)), new Coordinates(3,3)),
+                new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(4,3))
+            },
+            {   new Room(RoomsOfInterest.ENTRANCE, new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0,4)),
+                new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.WESTDOOR)), new Coordinates(1,4)),
+                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR)), new Coordinates(2,4)),
+                null,
+                null
             }
         };
-        myDungeonGrid[0][1].addMonsterToRoom(Monsters.SKELETON);
+
+//        myDungeonGrid[0][1].addMonsterToRoom(Monsters.SKELETON);
         myDungeonGrid[1][1].addItemToRoom((RoomItem) new PillarOO(PillarsOO.ABSTRACTION));
+        myDungeonGrid[1][1].addItemToRoom((RoomItem) new HealthPotion());
+        myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
         myDungeonGrid[0][2].addItemToRoom((HealthPotion) new HealthPotion());
+        myDungeonGrid[1][3].addItemToRoom((RoomItem) new PillarOO(PillarsOO.POLYMORPHISIM));
+        myDungeonGrid[3][3].addItemToRoom((RoomItem) new PillarOO(PillarsOO.INHERITANCE));
+        myDungeonGrid[2][0].addItemToRoom((RoomItem) new PillarOO(PillarsOO.ENCAPSULATION));
 //        myDungeonGrid[0][2].addMonsterToRoom(Monsters.SKELETON);
 //        myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
-        MIN_X = 0;
-        MAX_X = myDungeonGrid.length - 1;
-        MIN_Y = 0;
-        MAX_Y = myDungeonGrid[0].length - 1;
 //        System.out.println(this);
     }
 
@@ -162,22 +178,33 @@ public class Dungeon {
     }
 
     public static int getMAX_X(){
-        return getDungeon().MAX_X;
+        return MAX_X;
     }
 
     public static int getMAX_Y(){
-        return getDungeon().MAX_Y;
+        return MAX_Y;
     }
 
     public static Room getPlayersCurrentRoom(){
         try {
-            int x = getPlayerCoordinates().getX();
             int y = getPlayerCoordinates().getY();
+            int x = getPlayerCoordinates().getX();
             return uniqueInstanceOfDungeon.myDungeonGrid[y][x];
         } catch (NullPointerException e){
             System.out.println("Dungeon must be created before getting Players Current Room");
             return null;
         }
+    }
+
+    public static Room getRoomOfInterest(RoomsOfInterest theRoomOfInterest){
+        for (int i = 0; i < myDungeonGrid.length; i++) {
+            for (int j = 0; j < myDungeonGrid[i].length; j++) {
+                if (myDungeonGrid[i][j] != null && myDungeonGrid[i][j].getRoomType() == theRoomOfInterest) {
+                    return myDungeonGrid[i][j];
+                }
+            }
+        }
+        return null;
     }
 
     /* PRIVATE METHODS */
@@ -318,7 +345,7 @@ public class Dungeon {
                 }
             }
             System.out.println("Added Rooms To Build: ");
-            myDungeonGrid[NEW_ROOM_Y][NEW_ROOM_X] = new Room(newRoomDoors);
+            myDungeonGrid[NEW_ROOM_Y][NEW_ROOM_X] = new Room(newRoomDoors, newRoomCoordinates);
 
         }
 

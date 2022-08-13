@@ -23,9 +23,10 @@ public class Handler {
     public void tick(){
         LinkedList<DungeonObject> objectsMarkedForDeath = new LinkedList<>();
         for(DungeonObject obj : myDungeonObjects){
-            obj.objectBehavior();
             if (obj.isMarkedForDeath()){
                 objectsMarkedForDeath.add(obj);
+            } else {
+                obj.objectBehavior();
             }
         }
         for(DungeonObject objMarkedForDeath : objectsMarkedForDeath){

@@ -1,9 +1,12 @@
 package model.DungeonCharacterComponents.DungeonCharacters.Heroes;
 
+import controller.DungeonAdventure;
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
+import model.DungeonComponents.DataTypes.Coordinates;
 import model.DungeonComponents.Dungeon;
 import model.DungeonComponents.Room;
+import model.DungeonComponents.RoomsOfInterest;
 import model.RoomItemComponents.*;
 
 import java.util.ArrayList;
@@ -20,6 +23,8 @@ public abstract class Hero extends DungeonCharacter {
     private final double myChanceToDefend;
 
     private final ArrayList<RoomItem> myInventory;
+
+    private Coordinates myCords;
 
 
     /**
@@ -44,7 +49,7 @@ public abstract class Hero extends DungeonCharacter {
         super.objectBehavior();
     }
 
-    @Override
+    //@Override
     protected void outOfCombatBehavior(){
         Room playersCurrentRoom = Dungeon.getDungeon().getPlayersCurrentRoom();
         System.out.println(this.displayInventory());
@@ -74,7 +79,39 @@ public abstract class Hero extends DungeonCharacter {
             }
         }
 
+
+        if (this.hasAllPillarsOfOO() && (playersCurrentRoom.getRoomType() == RoomsOfInterest.EXIT)) {
+            endScreenReadOut();
+        }
+        if (!this.hasAllPillarsOfOO() && (playersCurrentRoom.getRoomType() == RoomsOfInterest.EXIT)) {
+            // is in exit but doesnt have all the pillars
+            System.out.println("You found the EXIT but don't have all the Pillars");
+        }
+
     }
+
+    private void endScreenReadOut() {
+        long totalDuration = System.currentTimeMillis() - DungeonAdventure.getMyTimeStart();
+        long minutes = (totalDuration / 1000) / 60;
+        long seconds = (totalDuration / 1000) % 60;
+        //System.out.println(getMyName() + " " + getMyCharacterName() + ": Time took " + minutes + ":" + seconds);
+        System.out.printf("\n%s %s \nTime: %d:%d", getMyCharacterName(), getMyName(), minutes, seconds);
+        System.out.printf("\nHealth remaining: %d", getMyHealthPoints());
+        System.out.printf("\nMonsters Killed: %d", DungeonAdventure.getKillCount());
+        System.exit(1);
+    }
+
+
+    private boolean hasAllPillarsOfOO() {
+        int pillarsCounter = 0;
+        for (RoomItem roomItem : this.myInventory) {
+            if (roomItem.getClass() == PillarOO.class) {
+                pillarsCounter++;
+            }
+        }
+        return pillarsCounter == 4;
+    }
+
 
     public boolean useHealthPotion() {
         for (int index = 0; index < this.myInventory.size(); index++) {
@@ -136,5 +173,14 @@ public abstract class Hero extends DungeonCharacter {
     // TODO write set method for chanceToAttack
     // TODO change specialAttack to specialSkill
 
+    /* GETTERS AND SETTERS */
+
+    public Coordinates getMyCords(){
+        return myCords;
+    }
+
+    public void setMyCords(final Coordinates theCords){
+        myCords = theCords;
+    }
 
 }

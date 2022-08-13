@@ -72,11 +72,14 @@ public class Monster extends DungeonCharacter {
     }
 
     public String getMyAnnouncement(){
+        if (isMarkedForDeath()){
+            return "";
+        }
         String n = "";
         if (myMonsterType == Monsters.OGRE){
             n = "n";
         }
-        return "There is a" + n + " " + myMonsterType;
+        return "There is a" + n + " " + myMonsterType + "\n";
     }
 
     public Monsters getMyMonsterType() {
