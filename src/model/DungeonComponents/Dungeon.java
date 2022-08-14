@@ -4,10 +4,7 @@ import static controller.DungeonAdventure.*;
 
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
 import model.DungeonComponents.DataTypes.Coordinates;
-import model.RoomItemComponents.HealthPotion;
-import model.RoomItemComponents.PillarOO;
-import model.RoomItemComponents.PillarsOO;
-import model.RoomItemComponents.RoomItem;
+import model.RoomItemComponents.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -83,6 +80,7 @@ public class Dungeon {
         myDungeonGrid[1][1].addItemToRoom((RoomItem) new HealthPotion());
         myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
         myDungeonGrid[0][2].addItemToRoom((HealthPotion) new HealthPotion());
+        myDungeonGrid[2][1].addItemToRoom((Pit) new Pit());
         myDungeonGrid[1][3].addItemToRoom((RoomItem) new PillarOO(PillarsOO.POLYMORPHISIM));
         myDungeonGrid[3][3].addItemToRoom((RoomItem) new PillarOO(PillarsOO.INHERITANCE));
         myDungeonGrid[2][0].addItemToRoom((RoomItem) new PillarOO(PillarsOO.ENCAPSULATION));

@@ -13,6 +13,7 @@ import model.DungeonComponents.RoomsOfInterest;
 import view.Window;
 
 import java.awt.*;
+import java.util.Scanner;
 
 import static controller.Handler.getHandler;
 import static model.DungeonComponents.Dungeon.*;
@@ -223,23 +224,71 @@ public class DungeonAdventure extends Canvas implements Runnable {
     }
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
 
-        myTypeOfHero = Heroes.WARRIOR;
-        myHeroName = "The Hero";
-
-//        Scanner sc = new Scanner(System.in);
-//        System.out.println("Please enter your name: ");
-//        String name = sc.nextLine();
-//        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
-//        String heroType = sc.nextLine();
-//        switch (heroType.toLowerCase()) {
-//            case "w" -> {
-//
-//            }
-//        }
+//        myTypeOfHero = Heroes.WARRIOR;
+//        myHeroName = "The Hero";
+        showIntroScreen();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please enter your name: ");
+        String name = sc.nextLine();
+        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
+        String heroType = sc.nextLine();
+        switch (heroType.toLowerCase()) {
+            case "w" -> {
+                myTypeOfHero = Heroes.WARRIOR;
+                myHeroName = name;
+            }
+            case "t" -> {
+                myTypeOfHero = Heroes.THIEF;
+                myHeroName = name;
+            }
+            case "p" -> {
+                myTypeOfHero = Heroes.PRIESTESS;
+                myHeroName = name;
+            }
+        }
         new DungeonAdventure();
 
+    }
+
+    private static void showIntroScreen() throws InterruptedException {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        Thread.sleep(1000);
+        System.out.println("    oooooooooo.                                                                      ");
+        Thread.sleep(400);
+        System.out.println("    `888'   `Y8b                                                                    ");
+        Thread.sleep(400);
+        System.out.println("     888      888 oooo  oooo  ooo. .oo.    .oooooooo  .ooooo.   .ooooo.  ooo. .oo.  ");
+        Thread.sleep(400);
+        System.out.println("     888      888 `888  `888  `888P\"Y88b  888' `88b  d88' `88b d88' `88b `888P\"Y88b ");
+        Thread.sleep(400);
+        System.out.println("     888      888  888   888   888   888  888   888  888ooo888 888   888  888   888 ");
+        Thread.sleep(400);
+        System.out.println("     888      888  888   888   888   888  888   888  888ooo888 888   888  888   888 ");
+        Thread.sleep(400);
+        System.out.println("     888     d88'  888   888   888   888  `88bod8P'  888    .o 888   888  888   888 ");
+        Thread.sleep(400);
+        System.out.println("    o888bood8P'    `V88V\"V8P' o888o o888o `8oooooo.  `Y8bod8P' `Y8bod8P' o888o o888o");
+        Thread.sleep(400);
+        System.out.println("                                          d\"     YD                                 ");
+        Thread.sleep(400);
+        System.out.println("                                          \"Y88888P'                                 ");
+        System.out.println("      .o.             .o8                                        .                                  ");
+        Thread.sleep(400);
+        System.out.println("     .888.           \"888                                      .o8                                  ");
+        Thread.sleep(400);
+        System.out.println("    .8\"888.      .oooo888  oooo    ooo  .ooooo.  ooo. .oo.   .o888oo oooo  oooo  oooo d8b  .ooooo.  ");
+        Thread.sleep(400);
+        System.out.println("   .8' `888.    d88' `888   `88.  .8'  d88' `88b `888P\"Y88b    888   `888  `888  `888\"\"8P d88' `88b ");
+        Thread.sleep(400);
+        System.out.println("  .88ooo8888.   888   888    `88..8'   888ooo888  888   888    888    888   888   888     888ooo888 ");
+        Thread.sleep(400);
+        System.out.println(" .8'     `888.  888   888     `888'    888    .o  888   888    888 .  888   888   888     888    .o ");
+        Thread.sleep(400);
+        System.out.println("o88o     o8888o `Y8bod88P\"     `8'     `Y8bod8P' o888o o888o   \"888\"  `V88V\"V8P' d888b    `Y8bod8P' ");
+        Thread.sleep(400);
+        System.out.println();
     }
 
     /* INNER CLASSES */

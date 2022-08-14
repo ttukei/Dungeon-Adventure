@@ -154,11 +154,11 @@ public class Room {
         return this.myRoomItems;
     }
 
-    public boolean contiansRoomItem() {
+    public boolean containsRoomItem() {
         return myRoomItems.size() > 0;
     }
 
-    public boolean containsPotition() {
+    public boolean containsPotion() {
         for (RoomItem roomItem: myRoomItems) {
             if (roomItem.getClass() == HealthPotion.class || roomItem.getClass() == VisionPotion.class) {
                 return true;
