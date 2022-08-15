@@ -32,12 +32,18 @@ public class Room {
         initializeFields(theRoomDoors, theCords);
     }
 
-    Room(RoomsOfInterest TYPE_OF_ROOM, LinkedList<Doors> theRoomDoors, Coordinates theCords) {
+    Room(final RoomsOfInterest TYPE_OF_ROOM, final LinkedList<Doors> theRoomDoors, final Coordinates theCords) {
         myRoomType = TYPE_OF_ROOM;
         initializeFields(theRoomDoors, theCords);
+        switch (myRoomType){
+            case ABSTRACTION -> addPillarToRoom(PillarsOO.ABSTRACTION);
+            case ENCAPSULATION -> addPillarToRoom(PillarsOO.ENCAPSULATION);
+            case INHERITANCE -> addPillarToRoom(PillarsOO.INHERITANCE);
+            case POLYMORPHISM -> addPillarToRoom(PillarsOO.POLYMORPHISM);
+        }
     }
 
-    private void initializeFields(LinkedList<Doors> theRoomDoors, Coordinates theCords){
+    private void initializeFields(final LinkedList<Doors> theRoomDoors, final Coordinates theCords){
         myRoomDoors = new LinkedList<>();
         myRoomDoors.addAll(theRoomDoors);
         myRoomItems = new LinkedList<>();
@@ -74,11 +80,25 @@ public class Room {
 //        setMyMonsterFlag(true);
 //    }
 
-    public void addItemToRoom(RoomItem theItemToAdd){
-        myRoomItems.add(theItemToAdd);
+    public void addItemToRoom(final RoomItems theItemToAdd){
+        switch(theItemToAdd){
+            case HEALTH_POTION -> myRoomItems.add(new HealthPotion());
+            case VISION_POTION -> myRoomItems.add(new VisionPotion());
+            case PIT -> myRoomItems.add(new Pit());
+        }
     }
 
-    public void addMonsterToRoom(Monsters theMonsterToAdd){
+    public void addPillarToRoom(final PillarsOO thePillarToAdd){
+        switch(thePillarToAdd){
+            case ABSTRACTION -> myRoomItems.add(new PillarOO(PillarsOO.ABSTRACTION));
+            case ENCAPSULATION -> myRoomItems.add(new PillarOO(PillarsOO.ENCAPSULATION));
+            case INHERITANCE -> myRoomItems.add(new PillarOO(PillarsOO.INHERITANCE));
+            case POLYMORPHISM -> myRoomItems.add(new PillarOO(PillarsOO.POLYMORPHISM));
+
+        }
+    }
+
+    public void addMonsterToRoom(final Monsters theMonsterToAdd){
         MonsterFactory factory = new MonsterFactory();
         Monster newMonster = factory.getMonster(theMonsterToAdd);
         myRoomMonsters.add(newMonster);

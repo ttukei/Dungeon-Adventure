@@ -54,11 +54,12 @@ public class DungeonAdventure extends Canvas implements Runnable {
         myHero = getMyHero();
 //        mouseMode();
         HANDLER.addObject(myHero);
-        DUNGEON = getDungeon();
+        DUNGEON = getDungeon(8,8);
 
         this.addKeyListener(new KeyInputController());
         godMode();
         Room entrance = getRoomOfInterest(RoomsOfInterest.ENTRANCE);
+        System.out.println("Entrance: " + entrance);
         myHeroCoordinates = entrance == null ? new Coordinates(0,0) : entrance.getRoomCords();
 
 
@@ -226,28 +227,28 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     public static void main(String[] args) throws InterruptedException {
 
-//        myTypeOfHero = Heroes.WARRIOR;
-//        myHeroName = "The Hero";
-        showIntroScreen();
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Please enter your name: ");
-        String name = sc.nextLine();
-        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
-        String heroType = sc.nextLine();
-        switch (heroType.toLowerCase()) {
-            case "w" -> {
-                myTypeOfHero = Heroes.WARRIOR;
-                myHeroName = name;
-            }
-            case "t" -> {
-                myTypeOfHero = Heroes.THIEF;
-                myHeroName = name;
-            }
-            case "p" -> {
-                myTypeOfHero = Heroes.PRIESTESS;
-                myHeroName = name;
-            }
-        }
+        myTypeOfHero = Heroes.WARRIOR;
+        myHeroName = "The Hero";
+//        showIntroScreen();
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Please enter your name: ");
+//        String name = sc.nextLine();
+//        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
+//        String heroType = sc.nextLine();
+//        switch (heroType.toLowerCase()) {
+//            case "w" -> {
+//                myTypeOfHero = Heroes.WARRIOR;
+//                myHeroName = name;
+//            }
+//            case "t" -> {
+//                myTypeOfHero = Heroes.THIEF;
+//                myHeroName = name;
+//            }
+//            case "p" -> {
+//                myTypeOfHero = Heroes.PRIESTESS;
+//                myHeroName = name;
+//            }
+//        }
         new DungeonAdventure();
 
     }

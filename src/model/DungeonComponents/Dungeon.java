@@ -2,10 +2,12 @@ package model.DungeonComponents;
 
 import static controller.DungeonAdventure.*;
 
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactory;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
 import model.DungeonComponents.DataTypes.Coordinates;
 import model.RoomItemComponents.*;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -21,8 +23,10 @@ public class Dungeon {
     private static Room[][] myDungeonGrid;
     private static final int MIN_X = 0;
     private static int MAX_X;
-    private final int MIN_Y = 0;
+    private static final int MIN_Y = 0;
     private static int MAX_Y;
+    private final double CHANCE_FOR_MONSTER = 0.5;
+    private final double CHANCE_FOR_ITEM = 0.2;
 
     /* CONSTRUCTORS */
 
@@ -50,13 +54,13 @@ public class Dungeon {
                 null
             },
             {   null,
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.SOUTHDOOR)), new Coordinates(1, 1)),
+                new Room(RoomsOfInterest.ABSTRACTION, new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.SOUTHDOOR)), new Coordinates(1, 1)),
                 null,
-                new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR)), new Coordinates(3,1)),
+                new Room(RoomsOfInterest.POLYMORPHISM, new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR)), new Coordinates(3,1)),
                 new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(4,1))
             },
             {   new Room(RoomsOfInterest.EXIT, new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0,2)),
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR)), new Coordinates(1,2)),
+                new Room(RoomsOfInterest.ENCAPSULATION, new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR)), new Coordinates(1,2)),
                 new Room(new LinkedList<>(List.of(Doors.WESTDOOR, Doors.EASTDOOR)), new Coordinates(2,2)),
                 new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.SOUTHDOOR)), new Coordinates(3,2)),
                 null
@@ -64,7 +68,7 @@ public class Dungeon {
             {   null,
                 null,
                 new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR)), new Coordinates(2,3)),
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.EASTDOOR, Doors.WESTDOOR)), new Coordinates(3,3)),
+                new Room(RoomsOfInterest.INHERITANCE, new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.EASTDOOR, Doors.WESTDOOR)), new Coordinates(3,3)),
                 new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(4,3))
             },
             {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0,4)),
@@ -76,14 +80,10 @@ public class Dungeon {
         };
 
 //        myDungeonGrid[0][1].addMonsterToRoom(Monsters.SKELETON);
-        myDungeonGrid[1][1].addItemToRoom((RoomItem) new PillarOO(PillarsOO.ABSTRACTION));
-        myDungeonGrid[1][1].addItemToRoom((RoomItem) new HealthPotion());
+        myDungeonGrid[1][1].addItemToRoom(RoomItems.HEALTH_POTION);
         myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
-        myDungeonGrid[0][2].addItemToRoom((HealthPotion) new HealthPotion());
-        myDungeonGrid[2][1].addItemToRoom((Pit) new Pit());
-        myDungeonGrid[1][3].addItemToRoom((RoomItem) new PillarOO(PillarsOO.POLYMORPHISIM));
-        myDungeonGrid[3][3].addItemToRoom((RoomItem) new PillarOO(PillarsOO.INHERITANCE));
-        myDungeonGrid[2][0].addItemToRoom((RoomItem) new PillarOO(PillarsOO.ENCAPSULATION));
+        myDungeonGrid[0][2].addItemToRoom(RoomItems.HEALTH_POTION);
+        myDungeonGrid[2][1].addItemToRoom(RoomItems.PIT);
 //        myDungeonGrid[0][2].addMonsterToRoom(Monsters.SKELETON);
 //        myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
 //        System.out.println(this);
@@ -219,7 +219,7 @@ public class Dungeon {
         LinkedList<Coordinates> roomsToAdd = new LinkedList();
 
         int startX = ThreadLocalRandom.current().nextInt(MIN_X, MAX_X);
-        int startY = ThreadLocalRandom.current().nextInt(MIN_X, MAX_X);
+        int startY = ThreadLocalRandom.current().nextInt(MIN_Y, MAX_Y);
         double chanceForSpecialRoom = 0.4;
 
         // Linked List holding the RoomsOfInterest to add and then remove (checking it off) from list
@@ -233,7 +233,7 @@ public class Dungeon {
         while (!roomsToAdd.isEmpty()){
 
             Coordinates newRoomCoordinates = roomsToAdd.poll();
-            System.out.println("New Room at: " + newRoomCoordinates);
+            System.out.println("\nNew Room at: " + newRoomCoordinates);
             final int NEW_ROOM_X = newRoomCoordinates.getX();
             final int NEW_ROOM_Y = newRoomCoordinates.getY();
             final double roomRoll = ThreadLocalRandom.current().nextDouble();
@@ -252,13 +252,9 @@ public class Dungeon {
             roomsAvailable.add(southCord);
             roomsAvailable.add(westCord);
             for (Coordinates neighbor : newRoomNeighbors){
-                roomsAvailable.removeIf(new Predicate<Coordinates>() {
-                    @Override
-                    public boolean test(Coordinates coordinates) {
-                        return coordinates.isLocatedAtTheCoordinate(neighbor);
-                    }
-                });
+                roomsAvailable.removeIf(cord -> cord.isLocatedAtTheCoordinate(neighbor));
             }
+            roomsAvailable.removeIf(cord -> cord.isLocatedAtTheCoordinate(newRoomCoordinates));
             System.out.println("Potential rooms at: " + roomsAvailable);
 
             // Get potential doors per four cardinal direction, add them to a list
@@ -267,18 +263,21 @@ public class Dungeon {
                 doorsAvailable.add(door);
             }
 
-            // Remove doors that lead to non-existent tiles
+            // Remove potential doors that lead to non-existent tiles
 //            System.out.println(doorsAvailable);
-            if (NEW_ROOM_Y == MIN_X){
+            if (NEW_ROOM_Y == MIN_Y){
                 doorsAvailable.remove(Doors.NORTHDOOR);
             } else if (NEW_ROOM_X == MAX_X){
                 doorsAvailable.remove(Doors.EASTDOOR);
-            } else if (NEW_ROOM_Y == MAX_X){
+            } else if (NEW_ROOM_Y == MAX_Y){
                 doorsAvailable.remove(Doors.SOUTHDOOR);
             } else if (NEW_ROOM_X == MIN_X){
                 doorsAvailable.remove(Doors.WESTDOOR);
             }
-//            System.out.println(doorsAvailable);
+            System.out.println("Doors available: " + doorsAvailable);
+
+            /* ADD DOORS IF THERE'S ALREADY A DOOR ON THE OTHER SIDE */
+
             LinkedList<Doors> newRoomDoors = new LinkedList<>();
             for (Coordinates neighbor : newRoomNeighbors){
                 if(NEW_ROOM_X - neighbor.getX() > 0){
@@ -308,6 +307,7 @@ public class Dungeon {
                add or no more RoomsOfInterest needed. Pick from doorsAvailable at random to keep it
                organic.
              */
+
             final int MINIMUM_DOORS = !roomsNeeded.isEmpty() && roomsToAdd.isEmpty() ? 1 : 0;
 //            final int MINIMUM_DOORS = 0;
             final int MAXIMUM_DOORS = doorsAvailable.size();
@@ -318,31 +318,67 @@ public class Dungeon {
                 numDoors = MAXIMUM_DOORS;
             }
             System.out.println("number of doors: " + numDoors);
+            StringBuilder stringOfNewRooms = new StringBuilder();
             for (int i = 0; i < numDoors; i++){
-                int doorPicked = ThreadLocalRandom.current().nextInt(0, doorsAvailable.size());
+                int doorPicked = doorsAvailable.size() > 1 ?
+                        ThreadLocalRandom.current().nextInt(0, doorsAvailable.size() - 1) : 0;
                 Doors newDoor = doorsAvailable.remove(doorPicked);
                 newRoomDoors.add(newDoor);
+                System.out.println("new door: " + newDoor);
                 switch (newDoor){
                     case NORTHDOOR :
                         if (roomsAvailable.contains(northCord)) {
+                            System.out.println("case: " + newDoor);
                             roomsToAdd.add(northCord);
+                            stringOfNewRooms.append(northCord + ", ");
+                            break;
                         }
                     case EASTDOOR :
                         if (roomsAvailable.contains(eastCord)){
+                            System.out.println("case: " + newDoor);
                             roomsToAdd.add(eastCord);
+                            stringOfNewRooms.append(eastCord + ", ");
+                            break;
                         }
                     case SOUTHDOOR :
                         if (roomsAvailable.contains(southCord)){
+                            System.out.println("case: " + newDoor);
                             roomsToAdd.add(southCord);
+                            stringOfNewRooms.append(southCord + ", ");
+                            break;
                         }
                     case WESTDOOR :
                         if (roomsAvailable.contains(westCord)){
+                            System.out.println("case: " + newDoor);
                             roomsToAdd.add(westCord);
+                            stringOfNewRooms.append(westCord + ", ");
+                            break;
                         }
                 }
             }
-            System.out.println("Added Rooms To Build: ");
-            myDungeonGrid[NEW_ROOM_Y][NEW_ROOM_X] = new Room(newRoomDoors, newRoomCoordinates);
+            System.out.println("Added Rooms To Build: " + stringOfNewRooms);
+
+            /* ADD NEW ROOM, CHANCE TO BE SPECIAL ROOM */
+
+            Room newRoom;
+            if (roomRoll < chanceForSpecialRoom && !roomsNeeded.isEmpty()) {
+                RoomsOfInterest specialRoom = roomsNeeded.remove();
+                newRoom = new Room(specialRoom, newRoomDoors, newRoomCoordinates);
+                chanceForSpecialRoom -= 0.05;
+                if (specialRoom != RoomsOfInterest.ENTRANCE) {
+                    newRoom.addMonsterToRoom(getRandomMonster());
+                }
+            }
+            else {
+                newRoom = new Room(newRoomDoors, newRoomCoordinates);
+                chanceForSpecialRoom += 0.1;
+                if (roomRoll < CHANCE_FOR_MONSTER){
+                    newRoom.addMonsterToRoom(getRandomMonster());
+                }
+            }
+
+
+            myDungeonGrid[NEW_ROOM_Y][NEW_ROOM_X] = newRoom;
 
         }
 
@@ -381,6 +417,16 @@ public class Dungeon {
 
         return neighbors;
 
+    }
+
+    private Monsters getRandomMonster (){
+        int choice = ThreadLocalRandom.current().nextInt(0, Monsters.values().length);
+        return Monsters.values()[choice];
+    }
+
+    private RoomItems getRandomItem (){
+        int choice = ThreadLocalRandom.current().nextInt(0, RoomItems.values().length);
+        return RoomItems.values()[choice];
     }
 
     public static void main(String... args) {
