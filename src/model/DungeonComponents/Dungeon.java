@@ -148,7 +148,7 @@ public class Dungeon {
 
     /* PUBLIC METHODS */
 
-    public void printDungeonMap(){
+    public void printDungeonMap2(){
         System.out.println("Dungeon Map:");
         for (int i = 0; i < myDungeonGrid.length; i++){
             for (int j = 0; j < myDungeonGrid[i].length; j++){
@@ -161,6 +161,22 @@ public class Dungeon {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public String printDungeonMap(){
+        StringBuilder result = new StringBuilder("Dungeon Map:\n");
+        for (int i = 0; i < myDungeonGrid.length; i++){
+            for (int j = 0; j < myDungeonGrid[i].length; j++){
+                if (myDungeonGrid[i][j] != null){
+                    result.append("[" + getRoomMarker(new Coordinates(j,i)) + "]");
+                } else{
+                    result.append("###");
+                }
+            }
+            result.append("\n");
+        }
+        result.append("\n");
+        return result.toString();
     }
 
     /* PUBLIC STATIC METHODS */
