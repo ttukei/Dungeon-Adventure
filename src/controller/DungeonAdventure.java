@@ -10,6 +10,7 @@ import model.DungeonComponents.Doors;
 import model.DungeonComponents.Dungeon;
 import model.DungeonComponents.Room;
 import model.DungeonComponents.RoomsOfInterest;
+import view.GUI;
 import view.Window;
 
 import java.awt.*;
@@ -32,6 +33,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     private static long myTimeStart;
     private static int myKillCount;
+    private static GUI myGUI;
 
     private static Hero myHero;
 
@@ -42,8 +44,8 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private final Dungeon DUNGEON;
 
     // Global Constants
-    private static final int MY_WIDTH = 300;//1024;
-    private static final int MY_HEIGHT = 10;//640;
+    private static final int MY_WIDTH = 600;//1024;
+    private static final int MY_HEIGHT = 400;//640;
     private static final Dimension MY_DIMENSIONS = new Dimension(MY_WIDTH, MY_HEIGHT);
 
 
@@ -62,10 +64,12 @@ public class DungeonAdventure extends Canvas implements Runnable {
         myHeroCoordinates = entrance == null ? new Coordinates(0,0) : entrance.getRoomCords();
 
 
-        new Window(MY_DIMENSIONS, "Dungeon Adventure", this);
+        //new Window(MY_DIMENSIONS, "Dungeon Adventure", this);
+        myGUI = new GUI("Dungeon Adventure", this);
 
 //        System.out.println(DUNGEON.toString());
-        DUNGEON.printDungeonMap();
+        System.out.println(DUNGEON.printDungeonMap());
+        myGUI.updateDungeonPanel(DUNGEON.printDungeonMap());
         System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
 //        System.out.print(myHero.displayInventory());
@@ -226,30 +230,30 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     public static void main(String[] args) throws InterruptedException {
 
-//        myTypeOfHero = Heroes.WARRIOR;
-//        myHeroName = "The Hero";
-        showIntroScreen();
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Please enter your name: ");
-        String name = sc.nextLine();
-        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
-        String heroType = sc.nextLine();
-        switch (heroType.toLowerCase()) {
-            case "w" -> {
-                myTypeOfHero = Heroes.WARRIOR;
-                myHeroName = name;
-            }
-            case "t" -> {
-                myTypeOfHero = Heroes.THIEF;
-                myHeroName = name;
-            }
-            case "p" -> {
-                myTypeOfHero = Heroes.PRIESTESS;
-                myHeroName = name;
-            }
-        }
-        new DungeonAdventure();
+        myTypeOfHero = Heroes.WARRIOR;
+        myHeroName = "The Hero";
 
+//        showIntroScreen();
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Please enter your name: ");
+//        String name = sc.nextLine();
+//        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
+//        String heroType = sc.nextLine();
+//        switch (heroType.toLowerCase()) {
+//            case "w" -> {
+//                myTypeOfHero = Heroes.WARRIOR;
+//                myHeroName = name;
+//            }
+//            case "t" -> {
+//                myTypeOfHero = Heroes.THIEF;
+//                myHeroName = name;
+//            }
+//            case "p" -> {
+//                myTypeOfHero = Heroes.PRIESTESS;
+//                myHeroName = name;
+//            }
+//        }
+        new DungeonAdventure();
     }
 
     private static void showIntroScreen() throws InterruptedException {
@@ -314,7 +318,8 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
 
                 setPlayerCoordinates(newPlayerCoordinates);
-                getDungeon().printDungeonMap();
+                System.out.println(getDungeon().printDungeonMap());
+                myGUI.updateDungeonPanel(getDungeon().printDungeonMap());
                 System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
                 // Other methods that happen when rooms are checked
