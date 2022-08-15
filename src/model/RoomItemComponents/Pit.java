@@ -13,6 +13,7 @@ public class Pit extends RoomItem{
     public Pit() {
         super("Pit");
         this.myHealthToBeDamaged = getRandomHitPoint();
+        setType(RoomItems.PIT);
     }
 
     /**

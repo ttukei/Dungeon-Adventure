@@ -69,8 +69,11 @@ public class DungeonAdventure extends Canvas implements Runnable {
         myGUI = new GUI("Dungeon Adventure", this);
 
 //        System.out.println(DUNGEON.toString());
+        getPlayersCurrentRoom().reveal();
+        revealRoomsOnOtherSideOfDoors(getPlayersCurrentRoom());
         System.out.println(DUNGEON.printDungeonMap());
         myGUI.updateDungeonPanel(DUNGEON.printDungeonMap());
+        System.out.println(getPlayersCurrentRoom().printRoom());
         System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
 //        System.out.print(myHero.displayInventory());
@@ -316,21 +319,12 @@ public class DungeonAdventure extends Canvas implements Runnable {
                         currentY + theChangeInY
                 );
 
-
                 setPlayerCoordinates(newPlayerCoordinates);
+                Dungeon.revealRoomsOnOtherSideOfDoors(getPlayersCurrentRoom());
                 System.out.println(getDungeon().printDungeonMap());
+                System.out.println(getPlayersCurrentRoom().printRoom());
                 myGUI.updateDungeonPanel(getDungeon().printDungeonMap());
                 System.out.println(getPlayersCurrentRoom().getAnnouncement());
-
-                // Other methods that happen when rooms are checked
-                // Dungeon adds monsters to handler
-                    // Updates Room.hasMonster
-                    // calls Room's addMonster Method to add the reference
-                    //      to the monster added to the handler into the room
-                // if the next room to move to has a monster
-                    // Room.hasMonster
-                        // returns monster if true
-                //
 
                 if (myMonsterToBattle != null){
                     myMonsterToBattle.setCombatFlag(false);

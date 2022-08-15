@@ -4,6 +4,7 @@ public class VisionPotion extends RoomItem{
 
     public VisionPotion() {
         super("Vision");
+        setType(RoomItems.VISION_POTION);
     }
 
     public void usePotion() {

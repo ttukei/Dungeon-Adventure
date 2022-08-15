@@ -31,7 +31,8 @@ public class Dungeon {
     /* CONSTRUCTORS */
 
     private Dungeon(int theWidth, int theHeight) {
-        System.out.println("Building New Dungeon");
+
+//        System.out.println("Building New Dungeon");
         myDungeonGrid = new Room[theHeight][theWidth];
         MAX_X = myDungeonGrid.length - 1;
         MAX_Y = myDungeonGrid[0].length - 1;
@@ -39,7 +40,8 @@ public class Dungeon {
     }
 
     public Dungeon() {
-        System.out.println("Building New Dungeon");
+
+//        System.out.println("Building New Dungeon");
 
         /* MIN AND MAX X, Y */
 
@@ -164,10 +166,11 @@ public class Dungeon {
     }
 
     public String printDungeonMap(){
-        StringBuilder result = new StringBuilder("Dungeon Map:\n");
+        StringBuilder result = new StringBuilder("\nDungeon Map:\n");
         for (int i = 0; i < myDungeonGrid.length; i++){
             for (int j = 0; j < myDungeonGrid[i].length; j++){
-                if (myDungeonGrid[i][j] != null){
+                Room currentRoom = myDungeonGrid[i][j];
+                if (currentRoom != null && currentRoom.isRevealed()){
                     result.append("[" + getRoomMarker(new Coordinates(j,i)) + "]");
                 } else{
                     result.append("###");
@@ -175,20 +178,10 @@ public class Dungeon {
             }
             result.append("\n");
         }
-        result.append("\n");
         return result.toString();
     }
 
     /* PUBLIC STATIC METHODS */
-
-    private static int getDungeonSize(){
-        try {
-            return uniqueInstanceOfDungeon.myDungeonGrid.length;
-        } catch (NullPointerException e){
-            System.out.println("Dungeon must be created before getting Dungeon Size");
-            return 0;
-        }
-    }
 
     public static int getMAX_X(){
         return MAX_X;
@@ -209,7 +202,7 @@ public class Dungeon {
         }
     }
 
-    public static Room getRoomOfInterest(RoomsOfInterest theRoomOfInterest){
+    public static Room getRoomOfInterest(final RoomsOfInterest theRoomOfInterest){
         for (int i = 0; i < myDungeonGrid.length; i++) {
             for (int j = 0; j < myDungeonGrid[i].length; j++) {
                 if (myDungeonGrid[i][j] != null && myDungeonGrid[i][j].getRoomType() == theRoomOfInterest) {
@@ -220,9 +213,25 @@ public class Dungeon {
         return null;
     }
 
+    public static void revealRoomsOnOtherSideOfDoors(final Room theRoom){
+        int roomY = theRoom.getRoomCords().getY();
+        int roomX = theRoom.getRoomCords().getX();
+        for(Doors door : Doors.values()){
+            if (theRoom.hasDoor(door)){
+                System.out.println("Rooms entered has " + door);
+                switch (door){
+                    case NORTHDOOR  ->  myDungeonGrid[roomY - 1][roomX].reveal();
+                    case EASTDOOR   ->  myDungeonGrid[roomY][roomX + 1].reveal();
+                    case SOUTHDOOR  ->  myDungeonGrid[roomY + 1][roomX].reveal();
+                    case WESTDOOR   ->  myDungeonGrid[roomY][roomX - 1].reveal();
+                }
+            }
+        }
+    }
+
     /* PRIVATE METHODS */
 
-    private String getRoomMarker(Coordinates cord){
+    private String getRoomMarker(final Coordinates cord){
         if (cord.isLocatedAtTheCoordinate(getPlayerCoordinates())){
             return "X";
         }
@@ -249,7 +258,7 @@ public class Dungeon {
         while (!roomsToAdd.isEmpty()){
 
             Coordinates newRoomCoordinates = roomsToAdd.poll();
-            System.out.println("\nNew Room at: " + newRoomCoordinates);
+//            System.out.println("\nNew Room at: " + newRoomCoordinates);
             final int NEW_ROOM_X = newRoomCoordinates.getX();
             final int NEW_ROOM_Y = newRoomCoordinates.getY();
             final double roomRoll = ThreadLocalRandom.current().nextDouble();
@@ -271,7 +280,7 @@ public class Dungeon {
                 roomsAvailable.removeIf(cord -> cord.isLocatedAtTheCoordinate(neighbor));
             }
             roomsAvailable.removeIf(cord -> cord.isLocatedAtTheCoordinate(newRoomCoordinates));
-            System.out.println("Potential rooms at: " + roomsAvailable);
+//            System.out.println("Potential rooms at: " + roomsAvailable);
 
             // Get potential doors per four cardinal direction, add them to a list
             LinkedList<Doors> doorsAvailable = new LinkedList<>();
@@ -290,7 +299,7 @@ public class Dungeon {
             } else if (NEW_ROOM_X == MIN_X){
                 doorsAvailable.remove(Doors.WESTDOOR);
             }
-            System.out.println("Doors available: " + doorsAvailable);
+//            System.out.println("Doors available: " + doorsAvailable);
 
             /* ADD DOORS IF THERE'S ALREADY A DOOR ON THE OTHER SIDE */
 
@@ -333,46 +342,46 @@ public class Dungeon {
             } else {
                 numDoors = MAXIMUM_DOORS;
             }
-            System.out.println("number of doors: " + numDoors);
+//            System.out.println("number of doors: " + numDoors);
             StringBuilder stringOfNewRooms = new StringBuilder();
             for (int i = 0; i < numDoors; i++){
                 int doorPicked = doorsAvailable.size() > 1 ?
                         ThreadLocalRandom.current().nextInt(0, doorsAvailable.size() - 1) : 0;
                 Doors newDoor = doorsAvailable.remove(doorPicked);
                 newRoomDoors.add(newDoor);
-                System.out.println("new door: " + newDoor);
+//                System.out.println("new door: " + newDoor);
                 switch (newDoor){
                     case NORTHDOOR :
                         if (roomsAvailable.contains(northCord)) {
-                            System.out.println("case: " + newDoor);
+//                            System.out.println("case: " + newDoor);
                             roomsToAdd.add(northCord);
                             stringOfNewRooms.append(northCord + ", ");
                             break;
                         }
                     case EASTDOOR :
                         if (roomsAvailable.contains(eastCord)){
-                            System.out.println("case: " + newDoor);
+//                            System.out.println("case: " + newDoor);
                             roomsToAdd.add(eastCord);
                             stringOfNewRooms.append(eastCord + ", ");
                             break;
                         }
                     case SOUTHDOOR :
                         if (roomsAvailable.contains(southCord)){
-                            System.out.println("case: " + newDoor);
+//                            System.out.println("case: " + newDoor);
                             roomsToAdd.add(southCord);
                             stringOfNewRooms.append(southCord + ", ");
                             break;
                         }
                     case WESTDOOR :
                         if (roomsAvailable.contains(westCord)){
-                            System.out.println("case: " + newDoor);
+//                            System.out.println("case: " + newDoor);
                             roomsToAdd.add(westCord);
                             stringOfNewRooms.append(westCord + ", ");
                             break;
                         }
                 }
             }
-            System.out.println("Added Rooms To Build: " + stringOfNewRooms);
+//            System.out.println("Added Rooms To Build: " + stringOfNewRooms);
 
             /* ADD NEW ROOM, CHANCE TO BE SPECIAL ROOM */
 
@@ -405,7 +414,7 @@ public class Dungeon {
      * @param theCoordinates Coordinates to check the neighbors of.
      * @return neighbors - a list of Coordinates containing rooms.
      */
-    private LinkedList<Coordinates> whoAreMyNeighbors(Coordinates theCoordinates){
+    private LinkedList<Coordinates> whoAreMyNeighbors(final Coordinates theCoordinates){
 
         LinkedList<Coordinates> neighbors = new LinkedList<>();
 
@@ -429,7 +438,7 @@ public class Dungeon {
             neighbors.add(new Coordinates(X-1, Y));
         }
 
-        System.out.println(theCoordinates + " neighbors are: " + neighbors);
+//        System.out.println(theCoordinates + " neighbors are: " + neighbors);
 
         return neighbors;
 
@@ -443,6 +452,15 @@ public class Dungeon {
     private RoomItems getRandomItem (){
         int choice = ThreadLocalRandom.current().nextInt(0, RoomItems.values().length);
         return RoomItems.values()[choice];
+    }
+
+    private static int getDungeonSize(){
+        try {
+            return uniqueInstanceOfDungeon.myDungeonGrid.length;
+        } catch (NullPointerException e){
+            System.out.println("Dungeon must be created before getting Dungeon Size");
+            return 0;
+        }
     }
 
     public static void main(String... args) {

@@ -27,6 +27,8 @@ public class Room {
 
     private boolean myMonsterFlag;
 
+    private boolean myRevealed;
+
     Room(LinkedList<Doors> theRoomDoors, Coordinates theCords) {
         myRoomType = null;
         initializeFields(theRoomDoors, theCords);
@@ -49,6 +51,7 @@ public class Room {
         myRoomItems = new LinkedList<>();
         myRoomMonsters = new LinkedList<>();
         myRoomCoordinates = theCords;
+        myRevealed = false;
         setMyMonsterFlag(false);
     }
 
@@ -56,7 +59,7 @@ public class Room {
         return myMonsterFlag;
     }
 
-    public void setMyMonsterFlag(boolean myMonsterFlag) {
+    public void setMyMonsterFlag(final boolean myMonsterFlag) {
         this.myMonsterFlag = myMonsterFlag;
     }
 
@@ -64,7 +67,7 @@ public class Room {
         return myRoomDoors.toString();
     }
 
-    public boolean hasDoor(Doors door){
+    public boolean hasDoor(final Doors door){
         return myRoomDoors.contains(door);
     }
 
@@ -82,18 +85,18 @@ public class Room {
 
     public void addItemToRoom(final RoomItems theItemToAdd){
         switch(theItemToAdd){
-            case HEALTH_POTION -> myRoomItems.add(new HealthPotion());
-            case VISION_POTION -> myRoomItems.add(new VisionPotion());
-            case PIT -> myRoomItems.add(new Pit());
+            case HEALTH_POTION  -> myRoomItems.add(new HealthPotion());
+            case VISION_POTION  -> myRoomItems.add(new VisionPotion());
+            case PIT            -> myRoomItems.add(new Pit());
         }
     }
 
     public void addPillarToRoom(final PillarsOO thePillarToAdd){
         switch(thePillarToAdd){
-            case ABSTRACTION -> myRoomItems.add(new PillarOO(PillarsOO.ABSTRACTION));
-            case ENCAPSULATION -> myRoomItems.add(new PillarOO(PillarsOO.ENCAPSULATION));
-            case INHERITANCE -> myRoomItems.add(new PillarOO(PillarsOO.INHERITANCE));
-            case POLYMORPHISM -> myRoomItems.add(new PillarOO(PillarsOO.POLYMORPHISM));
+            case ABSTRACTION    -> myRoomItems.add(new PillarOO(PillarsOO.ABSTRACTION));
+            case ENCAPSULATION  -> myRoomItems.add(new PillarOO(PillarsOO.ENCAPSULATION));
+            case INHERITANCE    -> myRoomItems.add(new PillarOO(PillarsOO.INHERITANCE));
+            case POLYMORPHISM   -> myRoomItems.add(new PillarOO(PillarsOO.POLYMORPHISM));
 
         }
     }
@@ -130,6 +133,47 @@ public class Room {
         return stringOfDoors.toString();
     }
 
+    public String printRoom(){
+        StringBuilder result = new StringBuilder("\nCurrent Room:\n");
+
+        /* DOOR ICONS */
+
+        String northDoorIcon = hasDoor(Doors.NORTHDOOR) ? "[-]" : "###";
+        String eastDoorIcon = hasDoor(Doors.EASTDOOR) ? "[|]" : "###";
+        String southDoorIcon = hasDoor(Doors.SOUTHDOOR) ? "[-]" : "###";
+        String westDoorIcon = hasDoor(Doors.WESTDOOR) ? "[|]" : "###";
+
+        /* CENTER ICON */
+
+        String centerIcon = "   ";
+        if (getRoomType() != null){
+            switch (getRoomType()){
+                case ENTRANCE       -> centerIcon = " e ";
+                case ABSTRACTION    -> centerIcon = " A ";
+                case ENCAPSULATION  -> centerIcon = " E ";
+                case INHERITANCE    -> centerIcon = " I ";
+                case POLYMORPHISM   -> centerIcon = " P ";
+                case EXIT           -> centerIcon = " ^ ";
+            }
+        } else if (myRoomItems.size() > 1){
+            centerIcon = " M ";
+        } else if (containsRoomItem(RoomItems.PIT)){
+            centerIcon = " X ";
+        } else if (containsRoomItem(RoomItems.HEALTH_POTION)){
+            centerIcon = " H ";
+        } else if (containsRoomItem(RoomItems.VISION_POTION)){
+            centerIcon = " V ";
+        }
+
+        /* BUILD STRING */
+
+        result.append("###" + northDoorIcon + "###\n");
+        result.append(westDoorIcon + centerIcon + eastDoorIcon + "\n");
+        result.append("###" + southDoorIcon + "###\n");
+
+        return result.toString();
+
+    }
 
     public String getAnnouncement(){
         StringBuilder roomAnnouncement = new StringBuilder();
@@ -178,6 +222,15 @@ public class Room {
         return myRoomItems.size() > 0;
     }
 
+    public boolean containsRoomItem(RoomItems theTypeOfItem) {
+        for (RoomItem item : getMyRoomItems()){
+            if (item.getType() == theTypeOfItem){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean containsPotion() {
         for (RoomItem roomItem: myRoomItems) {
             if (roomItem.getClass() == HealthPotion.class || roomItem.getClass() == VisionPotion.class) {
@@ -205,6 +258,14 @@ public class Room {
 
     public Coordinates getRoomCords(){
         return myRoomCoordinates;
+    }
+
+    public boolean isRevealed(){
+        return myRevealed;
+    }
+
+    public void reveal(){
+        myRevealed = true;
     }
 
 }

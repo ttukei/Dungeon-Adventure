@@ -12,6 +12,8 @@ public abstract class RoomItem extends DungeonObject {
     /** The name of the RoomItem. */
     public String myName;
 
+    private RoomItems myType;
+
     public RoomItem(String theName) {
         super();
         myName = theName;
@@ -24,6 +26,14 @@ public abstract class RoomItem extends DungeonObject {
         if (!checkDoor() && getChanceToPlace()) {
             //TODO figure out how to place item in dungeon
         }
+    }
+
+    public RoomItems getType(){
+        return myType;
+    }
+
+    protected void setType(final RoomItems theTypeOfItem){
+        myType = theTypeOfItem;
     }
 
     /**

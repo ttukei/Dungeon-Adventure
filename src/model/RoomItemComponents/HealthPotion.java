@@ -15,6 +15,7 @@ public class HealthPotion extends RoomItem{
     public HealthPotion() {
         super("Health");
         this.myHealthToBeRegained = getRandomHitPoint();
+        setType(RoomItems.HEALTH_POTION);
     }
 
     /**
