@@ -10,13 +10,12 @@ import model.DungeonComponents.Doors;
 import model.DungeonComponents.Dungeon;
 import model.DungeonComponents.Room;
 import model.DungeonComponents.RoomsOfInterest;
+import view.GamePanel;
 import view.GUI;
 import view.Window;
 
 import java.awt.*;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Scanner;
 
 import static controller.Handler.getHandler;
 import static model.DungeonComponents.Dungeon.*;
@@ -35,7 +34,9 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     private static long myTimeStart;
     private static int myKillCount;
-    private static GUI myGUI;
+    private static GUI myGUI2;
+    private static Window myGUI;
+
 
     private static Hero myHero;
 
@@ -67,14 +68,15 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         System.out.println("Entrance: " + entrance);
         myHeroCoordinates = entrance == null ? new Coordinates(0,0) : entrance.getRoomCords();
 
-        //new Window(MY_DIMENSIONS, "Dungeon Adventure", this);
-        myGUI = new GUI("Dungeon Adventure", this);
+        myGUI = new Window("Dungeon Adventure", this);
+        //myGUI = new GUI("Dungeon Adventure", this);
 
 //        System.out.println(DUNGEON.toString());
         getPlayersCurrentRoom().reveal();
         revealRoomsOnOtherSideOfDoors(getPlayersCurrentRoom());
         System.out.println(DUNGEON.printDungeonMap());
         myGUI.updateDungeonPanel(DUNGEON.printDungeonMap());
+        myGUI.updateReportPanel(getPlayersCurrentRoom().getAnnouncement());
         System.out.println(getPlayersCurrentRoom().printRoom());
         System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
@@ -236,28 +238,28 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     public static void main(String[] args) throws InterruptedException {
 
-//        myTypeOfHero = Heroes.WARRIOR;
-//        myHeroName = "The Hero";
-        showIntroScreen();
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Please enter your name: ");
-        String name = sc.nextLine();
-        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
-        String heroType = sc.nextLine();
-        switch (heroType.toLowerCase()) {
-            case "w" -> {
-                myTypeOfHero = Heroes.WARRIOR;
-                myHeroName = name;
-            }
-            case "t" -> {
-                myTypeOfHero = Heroes.THIEF;
-                myHeroName = name;
-            }
-            case "p" -> {
-                myTypeOfHero = Heroes.PRIESTESS;
-                myHeroName = name;
-            }
-        }
+        myTypeOfHero = Heroes.WARRIOR;
+        myHeroName = "The Hero";
+//        showIntroScreen();
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Please enter your name: ");
+//        String name = sc.nextLine();
+//        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
+//        String heroType = sc.nextLine();
+//        switch (heroType.toLowerCase()) {
+//            case "w" -> {
+//                myTypeOfHero = Heroes.WARRIOR;
+//                myHeroName = name;
+//            }
+//            case "t" -> {
+//                myTypeOfHero = Heroes.THIEF;
+//                myHeroName = name;
+//            }
+//            case "p" -> {
+//                myTypeOfHero = Heroes.PRIESTESS;
+//                myHeroName = name;
+//            }
+//        }
         new DungeonAdventure();
     }
 
@@ -326,6 +328,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
                 System.out.println(getDungeon().printDungeonMap());
                 System.out.println(getPlayersCurrentRoom().printRoom());
                 myGUI.updateDungeonPanel(getDungeon().printDungeonMap());
+                myGUI.updateReportPanel(getPlayersCurrentRoom().getAnnouncement());
                 System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
                 if (myMonsterToBattle != null){
@@ -351,6 +354,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 //                System.out.println(myHero.displayInventory());
             } else {
                 System.out.println("You cannot go that way, there is no " + door);
+                myGUI.updateReportPanel("You cannot go that way, there is no " + door);
             }
         }
 
