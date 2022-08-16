@@ -12,10 +12,13 @@ import model.DungeonComponents.Room;
 import model.DungeonComponents.RoomsOfInterest;
 import view.GamePanel;
 import view.GUI;
+import view.IntroPanel;
 import view.Window;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
+import java.util.Scanner;
 
 import static controller.Handler.getHandler;
 import static model.DungeonComponents.Dungeon.*;
@@ -238,28 +241,40 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     public static void main(String[] args) throws InterruptedException {
 
-        myTypeOfHero = Heroes.WARRIOR;
-        myHeroName = "The Hero";
+//        myTypeOfHero = Heroes.WARRIOR;
+//        myHeroName = "The Hero";
 //        showIntroScreen();
 //        Scanner sc = new Scanner(System.in);
 //        System.out.println("Please enter your name: ");
 //        String name = sc.nextLine();
 //        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
 //        String heroType = sc.nextLine();
-//        switch (heroType.toLowerCase()) {
-//            case "w" -> {
-//                myTypeOfHero = Heroes.WARRIOR;
-//                myHeroName = name;
-//            }
-//            case "t" -> {
-//                myTypeOfHero = Heroes.THIEF;
-//                myHeroName = name;
-//            }
-//            case "p" -> {
-//                myTypeOfHero = Heroes.PRIESTESS;
-//                myHeroName = name;
-//            }
-//        }
+
+        JFrame frame = new JFrame ("MyPanel");
+        frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(new IntroPanel());
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible (true);
+
+        Thread.sleep(1000);
+        String name = JOptionPane.showInputDialog("Please enter your name:");
+        String heroType = JOptionPane.showInputDialog("Please enter (W)arrior, (T)hief, or (P)riestess:");
+        frame.setVisible(false);
+        switch (heroType.toLowerCase()) {
+            case "w" -> {
+                myTypeOfHero = Heroes.WARRIOR;
+                myHeroName = name;
+            }
+            case "t" -> {
+                myTypeOfHero = Heroes.THIEF;
+                myHeroName = name;
+            }
+            case "p" -> {
+                myTypeOfHero = Heroes.PRIESTESS;
+                myHeroName = name;
+            }
+        }
         new DungeonAdventure();
     }
 
