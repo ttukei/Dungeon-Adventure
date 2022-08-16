@@ -14,12 +14,14 @@ import view.GUI;
 import view.Window;
 
 import java.awt.*;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Scanner;
 
 import static controller.Handler.getHandler;
 import static model.DungeonComponents.Dungeon.*;
 
-public class DungeonAdventure extends Canvas implements Runnable {
+public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     // Instance fields
     private Thread myThread;
@@ -38,6 +40,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private static Hero myHero;
 
     private static DungeonCharacter myMonsterToBattle;
+
     // Final Instance Fields
     private final Handler HANDLER;
 
@@ -48,22 +51,21 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private static final int MY_HEIGHT = 400;//640;
     private static final Dimension MY_DIMENSIONS = new Dimension(MY_WIDTH, MY_HEIGHT);
 
-
     private DungeonAdventure(){
+
         myTimeStart = System.currentTimeMillis();
 
         HANDLER = getHandler();
         myHero = getMyHero();
-//        mouseMode();
         HANDLER.addObject(myHero);
         DUNGEON = getDungeon(8,8);
 
         this.addKeyListener(new KeyInputController());
         godMode();
+//        mouseMode();
         Room entrance = getRoomOfInterest(RoomsOfInterest.ENTRANCE);
         System.out.println("Entrance: " + entrance);
         myHeroCoordinates = entrance == null ? new Coordinates(0,0) : entrance.getRoomCords();
-
 
         //new Window(MY_DIMENSIONS, "Dungeon Adventure", this);
         myGUI = new GUI("Dungeon Adventure", this);

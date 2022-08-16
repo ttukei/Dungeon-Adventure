@@ -5,13 +5,13 @@ import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactor
 import model.DungeonComponents.DataTypes.Coordinates;
 import model.RoomItemComponents.*;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
-import org.sqlite.core.CoreDatabaseMetaData;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Room {
+public class Room implements Serializable {
 
     private RoomsOfInterest myRoomType;
 
