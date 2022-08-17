@@ -10,16 +10,20 @@ import model.DungeonComponents.Doors;
 import model.DungeonComponents.Dungeon;
 import model.DungeonComponents.Room;
 import model.DungeonComponents.RoomsOfInterest;
+import view.GamePanel;
 import view.GUI;
+import view.IntroPanel;
 import view.Window;
 
+import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Scanner;
 
 import static controller.Handler.getHandler;
 import static model.DungeonComponents.Dungeon.*;
 
-public class DungeonAdventure extends Canvas implements Runnable {
+public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     // Instance fields
     private Thread myThread;
@@ -33,11 +37,14 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     private static long myTimeStart;
     private static int myKillCount;
-    private static GUI myGUI;
+    private static GUI myGUI2;
+    private static Window myGUI;
+
 
     private static Hero myHero;
 
     private static DungeonCharacter myMonsterToBattle;
+
     // Final Instance Fields
     private final Handler HANDLER;
 
@@ -51,8 +58,8 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     private DungeonAdventure() throws InterruptedException {
 
-//        showIntroScreen();
-//        selectHeroClass();
+        showIntroScreen();
+        selectHeroClass();
         HANDLER = getHandler();
         myHero = getMyHero();
         HANDLER.addObject(myHero);
@@ -62,19 +69,20 @@ public class DungeonAdventure extends Canvas implements Runnable {
         this.addKeyListener(new KeyInputController());
 //        mouseMode();
         godMode();
+//        mouseMode();
         Room entrance = getRoomOfInterest(RoomsOfInterest.ENTRANCE);
         System.out.println("Entrance: " + entrance);
         myHeroCoordinates = entrance == null ? new Coordinates(0,0) : entrance.getRoomCords();
 
-
-        //new Window(MY_DIMENSIONS, "Dungeon Adventure", this);
-        myGUI = new GUI("Dungeon Adventure", this);
+        myGUI = new Window("Dungeon Adventure", this);
+        //myGUI = new GUI("Dungeon Adventure", this);
 
 //        System.out.println(DUNGEON.toString());
         getPlayersCurrentRoom().reveal();
         revealRoomsOnOtherSideOfDoors(getPlayersCurrentRoom());
         System.out.println(DUNGEON.printDungeonMap());
         myGUI.updateDungeonPanel(DUNGEON.printDungeonMap());
+        myGUI.updateReportPanel(getPlayersCurrentRoom().getAnnouncement());
         System.out.println(getPlayersCurrentRoom().printRoom());
         System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
@@ -235,18 +243,36 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
 
     public static void main(String[] args) throws InterruptedException {
-
         myTypeOfHero = Heroes.WARRIOR;
         myHeroName = "The Hero";
         new DungeonAdventure();
+//        showIntroScreen();
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Please enter your name: ");
+//        String name = sc.nextLine();
+//        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
+//        String heroType = sc.nextLine();
     }
 
-    private static void selectHeroClass() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Please enter your name: ");
-        String name = sc.nextLine();
-        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
-        String heroType = sc.nextLine();
+    private static void selectHeroClass() throws InterruptedException {
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Please enter your name: ");
+//        String name = sc.nextLine();
+//        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
+//        String heroType = sc.nextLine();
+
+        JFrame frame = new JFrame ("MyPanel");
+        frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(new IntroPanel());
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible (true);
+
+        Thread.sleep(1000);
+        String name = JOptionPane.showInputDialog("Please enter your name:");
+        String heroType = JOptionPane.showInputDialog("Please enter (W)arrior, (T)hief, or (P)riestess:");
+
+        frame.setVisible(false);
         switch (heroType.toLowerCase()) {
             case "w" -> {
                 myTypeOfHero = Heroes.WARRIOR;
@@ -328,6 +354,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
                 System.out.println(getDungeon().printDungeonMap());
                 System.out.println(getPlayersCurrentRoom().printRoom());
                 myGUI.updateDungeonPanel(getDungeon().printDungeonMap());
+                myGUI.updateReportPanel(getPlayersCurrentRoom().getAnnouncement());
                 System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
                 if (myMonsterToBattle != null){
@@ -353,6 +380,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
 //                System.out.println(myHero.displayInventory());
             } else {
                 System.out.println("You cannot go that way, there is no " + Room.getUserFriendlyDoor(door));
+                myGUI.updateReportPanel("You cannot go that way, there is no " + Room.getUserFriendlyDoor(door));
             }
         }
 

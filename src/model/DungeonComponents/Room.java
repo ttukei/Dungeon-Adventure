@@ -7,9 +7,11 @@ import model.RoomItemComponents.*;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
 import static controller.Handler.*;
 
+
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Room {
+public class Room implements Serializable {
 
     private RoomsOfInterest myRoomType;
 

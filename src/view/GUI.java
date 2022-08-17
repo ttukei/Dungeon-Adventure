@@ -8,10 +8,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GUI extends JFrame implements ActionListener {
+public class GUI extends JFrame {
     private JTextArea myDungeonArea;
+
+    private JTextArea myReportArea;
+
     private JPanel myDungeonPanel;
-    private JButton button;
+
+    private JPanel myReportPanel;
 
     public GUI(String theTitle, DungeonAdventure theGame){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);       // Window closes when you press the 'x'
@@ -20,9 +24,9 @@ public class GUI extends JFrame implements ActionListener {
         setTitle(theTitle);
 
         dungeonPanel();
-        //reportPanel();
+        reportPanel();
 
-        setBounds(0, 0, 450, 400);
+        setBounds(0, 0, 750, 600);
         setLocationRelativeTo(null);                          // Opens window in the middle of the monitor
         setVisible(true);
         add(theGame);
@@ -36,21 +40,25 @@ public class GUI extends JFrame implements ActionListener {
         myDungeonArea.setEditable(false);
         myDungeonArea.setFont(font);
         myDungeonPanel = new JPanel();
-        myDungeonPanel.setBounds(10, 10, 400, 250);
-        myDungeonPanel.setLocation(-70, -3);
+        myDungeonPanel.setBounds(10, 10, 400, 350);
+        myDungeonPanel.setLocation(7, 0);
         myDungeonPanel.add(new JScrollPane(myDungeonArea));
         add(myDungeonPanel);
     }
 
     private void reportPanel() {
-        button = new JButton("test❤");
-        button.setBounds(10, 320, 100, 25);
-        add(button);
-        button.addActionListener(this);
-    }
-
-    public void actionPerformed(ActionEvent e){
-        myDungeonArea.append("hi\n");
+        Font font = new Font("Monospaced", Font.PLAIN, 2);
+        myReportArea = new JTextArea(11, 100);
+        myReportArea.setBackground(Color.CYAN);
+        myReportArea.setEditable(false);
+        myReportArea.setFont(font);
+        myReportPanel = new JPanel();
+        myReportPanel.setBounds(10, 10, 400, 500);
+        myReportPanel.setLocation(7, 360);
+        myReportPanel.add(myReportArea);
+        add(myReportPanel);
+        myReportPanel.add(new JScrollPane(myReportArea));
+        add(myReportPanel);
     }
 
     public void updateDungeonPanel(String theOutput) {

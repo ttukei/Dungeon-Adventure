@@ -166,7 +166,7 @@ public class Dungeon {
     }
 
     public String printDungeonMap(){
-        StringBuilder result = new StringBuilder("\nDungeon Map:\n");
+        StringBuilder result = new StringBuilder("Dungeon Map:\n");
         for (int i = 0; i < myDungeonGrid.length; i++){
             for (int j = 0; j < myDungeonGrid[i].length; j++){
                 Room currentRoom = myDungeonGrid[i][j];

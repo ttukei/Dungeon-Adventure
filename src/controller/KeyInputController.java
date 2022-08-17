@@ -4,6 +4,8 @@ import model.DungeonComponents.Doors;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
+
 import static controller.DungeonAdventure.*;
 
 public class KeyInputController extends KeyAdapter {
@@ -39,6 +41,12 @@ public class KeyInputController extends KeyAdapter {
             DungeonAdventure.setRunning(false);
             System.exit(1);
 //            System.out.println("Esc Pressed");
+        }
+        if (key == KeyEvent.VK_F1) {
+
+        }
+        if (key == KeyEvent.VK_F2) {
+            Handler.getHandler();
         }
 
         DungeonAdventure.setWaitingForTurn(false);

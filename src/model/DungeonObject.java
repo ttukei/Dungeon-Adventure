@@ -1,6 +1,8 @@
 package model;
 
-public class DungeonObject {
+import java.io.Serializable;
+
+public class DungeonObject implements Serializable {
 
     private boolean myMarkedForDeath;
     private int myId;

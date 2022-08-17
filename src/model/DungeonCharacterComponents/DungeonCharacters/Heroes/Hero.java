@@ -47,7 +47,16 @@ public abstract class Hero extends DungeonCharacter {
         super.objectBehavior();
     }
 
-    //@Override
+    @Override
+    public boolean didIDie(){
+        boolean died = super.didIDie();
+        if (died){
+            //
+        }
+        return died;
+    }
+
+    @Override
     protected void outOfCombatBehavior(){
         Room playersCurrentRoom = Dungeon.getDungeon().getPlayersCurrentRoom();
 //        System.out.println(this.displayInventory());
@@ -81,6 +90,7 @@ public abstract class Hero extends DungeonCharacter {
                         Pit pit = (Pit) roomItem;
                         roomItems.remove(roomItem);
                         this.setMyHealthPoints(getMyHealthPoints() + pit.getMyHealthToBeDamaged());
+                        didIDie();
                         System.out.println("You have fell into a Pit!!");
                         System.out.println("Health before falling = " + (this.getMyHealthPoints() - pit.getMyHealthToBeDamaged()));
                         System.out.println("Health after falling = " + this.getMyHealthPoints());
