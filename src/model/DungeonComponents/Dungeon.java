@@ -36,64 +36,12 @@ public class Dungeon {
 
 //        System.out.println("Building New Dungeon");
         myDungeonGrid = new Room[theHeight][theWidth];
-        MAX_X = myDungeonGrid.length - 1;
-        MAX_Y = myDungeonGrid[0].length - 1;
+        MAX_X = myDungeonGrid.length - 2;
+        MAX_Y = myDungeonGrid[0].length - 2;
         createMaze();
     }
 
-    public Dungeon() {
-
-//        System.out.println("Building New Dungeon");
-
-        /* MIN AND MAX X, Y */
-
-        MAX_X = 4;
-        MAX_Y = 4;
-
-        myDungeonGrid = new Room[][]{
-            {   new Room(RoomsOfInterest.ENTRANCE, new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0, 0)),
-                new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR, Doors.WESTDOOR)), new Coordinates(1, 0)),
-                new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(2, 0)),
-                null,
-                null
-            },
-            {   null,
-                new Room(RoomsOfInterest.ABSTRACTION, new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.SOUTHDOOR)), new Coordinates(1, 1)),
-                null,
-                new Room(RoomsOfInterest.POLYMORPHISM, new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR)), new Coordinates(3,1)),
-                new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(4,1))
-            },
-            {   new Room(RoomsOfInterest.EXIT, new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0,2)),
-                new Room(RoomsOfInterest.ENCAPSULATION, new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR)), new Coordinates(1,2)),
-                new Room(new LinkedList<>(List.of(Doors.WESTDOOR, Doors.EASTDOOR)), new Coordinates(2,2)),
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.SOUTHDOOR)), new Coordinates(3,2)),
-                null
-            },
-            {   null,
-                null,
-                new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR)), new Coordinates(2,3)),
-                new Room(RoomsOfInterest.INHERITANCE, new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.EASTDOOR, Doors.WESTDOOR)), new Coordinates(3,3)),
-                new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(4,3))
-            },
-            {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0,4)),
-                new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.WESTDOOR)), new Coordinates(1,4)),
-                new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR)), new Coordinates(2,4)),
-                null,
-                null
-            }
-        };
-
-//        myDungeonGrid[0][1].addMonsterToRoom(Monsters.SKELETON);
-        myDungeonGrid[1][1].addItemToRoom(RoomItems.HEALTH_POTION);
-        myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
-        myDungeonGrid[0][2].addItemToRoom(RoomItems.HEALTH_POTION);
-        myDungeonGrid[2][1].addItemToRoom(RoomItems.PIT);
-//        myDungeonGrid[0][2].addMonsterToRoom(Monsters.SKELETON);
-//        myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
-//        System.out.println(this);
-    }
-
-    /* GET SINGLETONS */
+    /* GET SINGLETON */
 
     /**
      * Singleton accessor for Dungeon which generates the floor plan using createMaze().
@@ -102,18 +50,6 @@ public class Dungeon {
     public static synchronized Dungeon getDungeon(int theWidth, int theHeight){
         if (uniqueInstanceOfDungeon == null){
             uniqueInstanceOfDungeon = new Dungeon(theWidth, theHeight);
-        }
-        return uniqueInstanceOfDungeon;
-    }
-
-    /**
-     * Singleton accessor for Dungeon which forgoes generating the
-     * floor plan randomly for early iterations of game.
-     * @return the existing or new Singleton instance of Dungeon
-     */
-    public static synchronized Dungeon getDungeon(){
-        if (uniqueInstanceOfDungeon == null){
-            uniqueInstanceOfDungeon = new Dungeon();
         }
         return uniqueInstanceOfDungeon;
     }
@@ -526,6 +462,72 @@ public class Dungeon {
     public static void main(String... args) {
         Dungeon dungeon = new Dungeon(6, 6);
         dungeon.printDungeonMap();
+    }
+
+    /* MOCK DUNGEON */
+
+    public Dungeon() {
+
+//        System.out.println("Building New Dungeon");
+
+        /* MIN AND MAX X, Y */
+
+        MAX_X = 4;
+        MAX_Y = 4;
+
+        myDungeonGrid = new Room[][]{
+                {   new Room(RoomsOfInterest.ENTRANCE, new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0, 0)),
+                        new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR, Doors.WESTDOOR)), new Coordinates(1, 0)),
+                        new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(2, 0)),
+                        null,
+                        null
+                },
+                {   null,
+                        new Room(RoomsOfInterest.ABSTRACTION, new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.SOUTHDOOR)), new Coordinates(1, 1)),
+                        null,
+                        new Room(RoomsOfInterest.POLYMORPHISM, new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR)), new Coordinates(3,1)),
+                        new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(4,1))
+                },
+                {   new Room(RoomsOfInterest.EXIT, new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0,2)),
+                        new Room(RoomsOfInterest.ENCAPSULATION, new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.EASTDOOR)), new Coordinates(1,2)),
+                        new Room(new LinkedList<>(List.of(Doors.WESTDOOR, Doors.EASTDOOR)), new Coordinates(2,2)),
+                        new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR, Doors.SOUTHDOOR)), new Coordinates(3,2)),
+                        null
+                },
+                {   null,
+                        null,
+                        new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.SOUTHDOOR)), new Coordinates(2,3)),
+                        new Room(RoomsOfInterest.INHERITANCE, new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.EASTDOOR, Doors.WESTDOOR)), new Coordinates(3,3)),
+                        new Room(new LinkedList<>(List.of(Doors.WESTDOOR)), new Coordinates(4,3))
+                },
+                {   new Room(new LinkedList<>(List.of(Doors.EASTDOOR)), new Coordinates(0,4)),
+                        new Room(new LinkedList<>(List.of(Doors.EASTDOOR, Doors.WESTDOOR)), new Coordinates(1,4)),
+                        new Room(new LinkedList<>(List.of(Doors.NORTHDOOR, Doors.WESTDOOR)), new Coordinates(2,4)),
+                        null,
+                        null
+                }
+        };
+
+//        myDungeonGrid[0][1].addMonsterToRoom(Monsters.SKELETON);
+        myDungeonGrid[1][1].addItemToRoom(RoomItems.VISION_POTION);
+        myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
+        myDungeonGrid[0][2].addItemToRoom(RoomItems.HEALTH_POTION);
+        myDungeonGrid[2][1].addItemToRoom(RoomItems.PIT);
+//        myDungeonGrid[0][2].addMonsterToRoom(Monsters.SKELETON);
+//        myDungeonGrid[1][1].addMonsterToRoom(Monsters.SKELETON);
+//        System.out.println(this);
+    }
+
+    /**
+     * Singleton accessor for Dungeon which forgoes generating the
+     * floor plan randomly for early iterations of game.
+     * @return the existing or new Singleton instance of Dungeon
+     */
+    public static synchronized Dungeon getDungeon(){
+        if (uniqueInstanceOfDungeon == null){
+            uniqueInstanceOfDungeon = new Dungeon();
+        }
+        return uniqueInstanceOfDungeon;
     }
 
 }

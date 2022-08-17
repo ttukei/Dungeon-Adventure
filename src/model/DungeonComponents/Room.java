@@ -127,7 +127,7 @@ public class Room implements Serializable {
             if (!stringOfDoors.isEmpty()) {
                 stringOfDoors.append(", ");
             }
-            getUserFriendlyDoor(door);
+            stringOfDoors.append(getUserFriendlyDoor(door));
         }
         return stringOfDoors.toString();
     }

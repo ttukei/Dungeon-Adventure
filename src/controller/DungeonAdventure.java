@@ -57,7 +57,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
     private DungeonAdventure() throws InterruptedException {
 
 //        showIntroScreen();
-//        selectHeroClass();
+        selectHeroClass();
         HANDLER = getHandler();
         myHero = getMyHero();
         HANDLER.addObject(myHero);
@@ -140,14 +140,18 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         }
         HANDLER.tick();
         System.out.println("...");
+        if (myGUI != null){
+            updateReportPanel("...");
+            myGUI.updateDungeonPanel(DUNGEON.printDungeonMap());
+        }
     }
 
-    private void godMode(){
+    private static void godMode(){
         getMyHero().setMyHealthPoints(9999);
         getMyHero().setMyDamageRange(new DamageRange(98, 99));
     }
 
-    private void mouseMode(){
+    private static void mouseMode(){
         getMyHero().setMyHealthPoints(1);
         getMyHero().setMyDamageRange(new DamageRange(1, 2));
     }
@@ -274,6 +278,15 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         Thread.sleep(1000);
         String name = JOptionPane.showInputDialog("Please enter your name:");
         String heroType = JOptionPane.showInputDialog("Please enter (W)arrior, (T)hief, or (P)riestess:");
+//        String difficulty = JOptionPane.showInputDialog("Select Difficulty (N)ormal, (H)ard, God mode:");
+        switch (name.toLowerCase()) {
+            case "mouse", "h" -> {
+                mouseMode();
+            }
+            case "tom" -> {
+                godMode();
+            }
+        }
 
         frame.setVisible(false);
         switch (heroType.toLowerCase()) {
