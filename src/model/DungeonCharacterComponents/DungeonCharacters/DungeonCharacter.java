@@ -9,6 +9,7 @@ import model.RoomItemComponents.RoomItem;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Timon Tukei
@@ -110,7 +111,7 @@ public abstract class DungeonCharacter extends DungeonObject {
                     // select targets by testing that methodology against the objects of the
                     // type determined that are in the handler
         // inCombat() checks if in combat
-            // combatActions()
+            // combatActions(
                 // attackTarget() overloads a target or checks for null to not attack
 
     }
@@ -125,11 +126,20 @@ public abstract class DungeonCharacter extends DungeonObject {
      * Attacks an opponent.
      * @return The success of the attack.
      */
-    public String attack(final DungeonCharacter theCharacterToAttack) {
+    public String attack(final DungeonCharacter theTarget) {
+
+        // toHitRoll = Random 0 - 1
+        // targetDefense = theTarget.getMyChanceToDefend
+
+        // if (toHitRoll < myChanceToHit - targetDefense)
+
         // Randomly gets a number between the damage range.
-        if ((myChanceToHit == theCharacterToAttack.getMyChanceToHit() || Math.random() < this.getMyChanceToHit()) && !theCharacterToAttack.isMarkedForDeath()) {
+        double toHitRoll = ThreadLocalRandom.current().nextDouble();
+
+
+        if ((myChanceToHit == theTarget.getMyChanceToHit() || Math.random() < this.getMyChanceToHit()) && !theTarget.isMarkedForDeath()) {
             final int damage = getTheDamageToBeDealt();
-            theCharacterToAttack.setMyHealthPoints(theCharacterToAttack.getMyHealthPoints() - damage);
+            theTarget.setMyHealthPoints(theTarget.getMyHealthPoints() - damage);
             return "" + damage;
         } else {
             return "0";

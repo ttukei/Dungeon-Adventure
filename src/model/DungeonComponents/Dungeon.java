@@ -26,7 +26,9 @@ public class Dungeon {
     private static final int MIN_Y = 0;
     private static int MAX_Y;
     private final double CHANCE_FOR_MONSTER = 0.5;
-    private final double CHANCE_FOR_ITEM = 0.2;
+    private final double CHANCE_FOR_HEALTH_POTION = 0.25;
+    private final double CHANCE_FOR_VISION_POTION = 0.1;
+    private final double CHANCE_FOR_PIT = 0.15;
 
     /* CONSTRUCTORS */
 
@@ -445,6 +447,19 @@ public class Dungeon {
                 }
             }
 
+            double healthPotRoll = ThreadLocalRandom.current().nextDouble();
+            double visionPotRoll = ThreadLocalRandom.current().nextDouble();
+            double pitRoll = ThreadLocalRandom.current().nextDouble();
+
+            if (healthPotRoll < CHANCE_FOR_HEALTH_POTION){
+                newRoom.addItemToRoom(RoomItems.HEALTH_POTION);
+            }
+            if (visionPotRoll < CHANCE_FOR_VISION_POTION){
+                newRoom.addItemToRoom(RoomItems.VISION_POTION);
+            }
+            if (pitRoll < CHANCE_FOR_PIT){
+                newRoom.addItemToRoom(RoomItems.PIT);
+            }
 
             myDungeonGrid[NEW_ROOM_Y][NEW_ROOM_X] = newRoom;
 
