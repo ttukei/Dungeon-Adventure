@@ -275,6 +275,17 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         Thread.sleep(1000);
         String name = JOptionPane.showInputDialog("Please enter your name:");
         String heroType = JOptionPane.showInputDialog("Please enter (W)arrior, (T)hief, or (P)riestess:");
+        String difficulty = JOptionPane.showInputDialog("Select Difficulty (N)ormal, (H)ard, God mode:");
+        switch (difficulty.toLowerCase()) {
+            case "h" -> {
+                getMyHero().setMyHealthPoints(1);
+                getMyHero().setMyDamageRange(new DamageRange(1, 2));
+            }
+            case "tom" -> {
+                getMyHero().setMyHealthPoints(9999);
+                getMyHero().setMyDamageRange(new DamageRange(98, 99));
+            }
+        }
 
         frame.setVisible(false);
         switch (heroType.toLowerCase()) {
