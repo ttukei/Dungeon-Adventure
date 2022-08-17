@@ -8,7 +8,10 @@ import model.DungeonComponents.Dungeon;
 import model.DungeonComponents.Room;
 import model.DungeonComponents.RoomsOfInterest;
 import model.RoomItemComponents.*;
+import view.EndPanel;
+import view.IntroPanel;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -51,7 +54,13 @@ public abstract class Hero extends DungeonCharacter {
     public boolean didIDie(){
         boolean died = super.didIDie();
         if (died){
-            //
+            System.out.println(endScreenReadOut());
+            JFrame frame = new JFrame ("End");
+            frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().add(new EndPanel(0));
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible (true);
         }
         return died;
     }
@@ -73,6 +82,7 @@ public abstract class Hero extends DungeonCharacter {
                 }
                 System.out.println("You have found the pillar of OO, " + pillarOO);
                 System.out.println(displayInventory());
+                DungeonAdventure.updateReportPanel("You have found the pillar of OO, " + pillarOO);
             } else if (playersCurrentRoom.containsPotion()) {
                 for (RoomItem roomItem: roomItems) {
                     if (roomItem.getClass() == HealthPotion.class) {
@@ -82,6 +92,9 @@ public abstract class Hero extends DungeonCharacter {
                         System.out.println("You have found a health potion!");
                         System.out.println("Health before potion = " + (this.getMyHealthPoints() - healthPotion.getMyHealthToBeRegained()));
                         System.out.println("Health after potion = " + this.getMyHealthPoints());
+                        DungeonAdventure.updateReportPanel("You have found a health potion!");
+                        DungeonAdventure.updateReportPanel("Health before potion = " + (this.getMyHealthPoints() - healthPotion.getMyHealthToBeRegained()));
+                        DungeonAdventure.updateReportPanel("Health after potion = " + this.getMyHealthPoints());
                     }
                 }
             } else if (playersCurrentRoom.containsPit()) {
@@ -94,31 +107,46 @@ public abstract class Hero extends DungeonCharacter {
                         System.out.println("You have fell into a Pit!!");
                         System.out.println("Health before falling = " + (this.getMyHealthPoints() - pit.getMyHealthToBeDamaged()));
                         System.out.println("Health after falling = " + this.getMyHealthPoints());
+                        DungeonAdventure.updateReportPanel("You have fell into a Pit!!");
+                        DungeonAdventure.updateReportPanel("Health before falling = " + (this.getMyHealthPoints() - pit.getMyHealthToBeDamaged()));
+                        DungeonAdventure.updateReportPanel("Health after falling = " + this.getMyHealthPoints());
                     }
                 }
             }
         }
-
-
         if (this.hasAllPillarsOfOO() && (playersCurrentRoom.getRoomType() == RoomsOfInterest.EXIT)) {
-            endScreenReadOut();
+            System.out.println(endScreenReadOut());
+            JFrame frame = new JFrame ("End");
+            frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().add(new EndPanel(1));
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible (true);
+            //System.exit(1);
         }
         if (!this.hasAllPillarsOfOO() && (playersCurrentRoom.getRoomType() == RoomsOfInterest.EXIT)) {
             // is in exit but doesnt have all the pillars
             System.out.println("You found the EXIT but don't have all the Pillars");
+            DungeonAdventure.updateReportPanel("You found the EXIT but don't have all the Pillars");
         }
 
     }
 
-    private void endScreenReadOut() {
+    public String endScreenReadOut() {
         long totalDuration = System.currentTimeMillis() - DungeonAdventure.getMyTimeStart();
         long minutes = (totalDuration / 1000) / 60;
         long seconds = (totalDuration / 1000) % 60;
-        System.out.printf("\nPlayer: %s as Hero %s", getMyCharacterName(), getClass().getSimpleName());
-        System.out.printf("\nTime: %d:%d", minutes, seconds);
-        System.out.printf("\nHealth remaining: %d", getMyHealthPoints());
-        System.out.printf("\nMonsters Killed: %d", DungeonAdventure.getKillCount());
-        System.exit(1);
+        StringBuilder result = new StringBuilder();
+//        System.out.printf("\nPlayer: %s as Hero %s", getMyCharacterName(), getClass().getSimpleName());
+//        System.out.printf("\nTime: %d:%d", minutes, seconds);
+//        System.out.printf("\nHealth remaining: %d", getMyHealthPoints());
+//        System.out.printf("\nMonsters Killed: %d", DungeonAdventure.getKillCount());
+//
+        result.append("\nPlayer: " + getMyCharacterName() + " as " + getClass().getSimpleName());
+        result.append("\nTime: " + minutes + ":" + seconds);
+        result.append("\nHealth remaining: " + getMyHealthPoints());
+        result.append("\nMonsters Killed: " + DungeonAdventure.getKillCount());
+        return result.toString();
     }
 
 
@@ -182,9 +210,9 @@ public abstract class Hero extends DungeonCharacter {
     }
 
     public String displayInventory() {
-        StringBuilder result = new StringBuilder("Inventory:[");
+        StringBuilder result = new StringBuilder("[");
         for (int i = 0; i < myInventory.size() - 1; i++) {
-            result.append(myInventory.get(i).myName + ", ");
+            result.append(myInventory.get(i).myName + ",\n");
         }
         if (!myInventory.isEmpty()) {
             result.append(myInventory.get(myInventory.size() - 1).myName + "]");

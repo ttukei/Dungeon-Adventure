@@ -10,9 +10,7 @@ import model.DungeonComponents.Doors;
 import model.DungeonComponents.Dungeon;
 import model.DungeonComponents.Room;
 import model.DungeonComponents.RoomsOfInterest;
-import view.GamePanel;
-import view.GUI;
-import view.IntroPanel;
+import view.*;
 import view.Window;
 
 import javax.swing.*;
@@ -37,7 +35,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     private static long myTimeStart;
     private static int myKillCount;
-    private static GUI myGUI2;
+    //private static GUI myGUI2;
     private static Window myGUI;
 
 
@@ -84,6 +82,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         System.out.println(DUNGEON.printDungeonMap());
         myGUI.updateDungeonPanel(DUNGEON.printDungeonMap());
         myGUI.updateReportPanel(getPlayersCurrentRoom().getAnnouncement());
+        myGUI.updateRoomPanel(getPlayersCurrentRoom().printRoom());
         System.out.println(getPlayersCurrentRoom().printRoom());
         System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
@@ -198,6 +197,10 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         myRunning = theRunning;
     }
 
+    public static void updateReportPanel(String theReport) {
+        myGUI.updateReportPanel(theReport);
+    }
+
     public static long getMyTimeStart() {
         return myTimeStart;
     }
@@ -262,7 +265,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 //        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
 //        String heroType = sc.nextLine();
 
-        JFrame frame = new JFrame ("MyPanel");
+        JFrame frame = new JFrame ("Begin");
         frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(new IntroPanel());
         frame.pack();
@@ -356,6 +359,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
                 System.out.println(getPlayersCurrentRoom().printRoom());
                 myGUI.updateDungeonPanel(getDungeon().printDungeonMap());
                 myGUI.updateReportPanel(getPlayersCurrentRoom().getAnnouncement());
+                myGUI.updateRoomPanel(getPlayersCurrentRoom().printRoom());
                 System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
                 if (myMonsterToBattle != null){

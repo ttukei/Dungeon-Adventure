@@ -91,6 +91,7 @@ public abstract class DungeonCharacter extends DungeonObject {
                                     attack(getMyTarget()) +
                                     " damage";
             System.out.println(combatMessage);
+            DungeonAdventure.updateReportPanel(combatMessage);
             boolean myTargetDied = myTarget.didIDie();
 //            System.out.println("Did " + this.getMyTarget().getMyCharacterName() + " die?: " + myTargetDied);
 //            if (myTarget.isMarkedForDeath()){
@@ -101,6 +102,7 @@ public abstract class DungeonCharacter extends DungeonObject {
                 setCombatFlag(false);
 //                System.out.println(getMyCharacterName() + " combat status: " + isInCombat());
                 System.out.println(getMyCharacterName() + " defeated " + getMyTarget().getMyCharacterName());
+                DungeonAdventure.updateReportPanel(getMyCharacterName() + " defeated " + getMyTarget().getMyCharacterName());
             }
         }
         if (!isInCombat()){
@@ -167,6 +169,9 @@ public abstract class DungeonCharacter extends DungeonObject {
      * @return the characters' health points.
      */
     public int getMyHealthPoints() {
+        if (myHealthPoints <= 0) {
+            return 0;
+        }
         return myHealthPoints;
     }
     // TODO check data before assignment

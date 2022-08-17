@@ -10,8 +10,8 @@ public class IntroPanel extends JPanel {
     private JTextArea myTitle;
 
     public IntroPanel() {
-        setPreferredSize (new Dimension (623, 524));
-        setLayout (null);
+        setPreferredSize(new Dimension (623, 524));
+        setLayout(null);
 
         makeTitle();
         makeWarrior();
@@ -19,16 +19,16 @@ public class IntroPanel extends JPanel {
         makeThief();
 
         //add components
-        add (myWarrior);
-        add (myPriestess);
-        add (myThief);
-        add (myTitle);
+        add(myWarrior);
+        add(myPriestess);
+        add(myThief);
+        add(myTitle);
 
         //set component bounds (only needed by Absolute Positioning)
-        myWarrior.setBounds (40, 290, 150, 160);
-        myPriestess.setBounds (240, 290, 150, 160);
-        myThief.setBounds (430, 290, 150, 160);
-        myTitle.setBounds (160, 15, 600, 325);
+        myWarrior.setBounds(40, 290, 150, 160);
+        myPriestess.setBounds(240, 290, 150, 160);
+        myThief.setBounds(430, 290, 150, 160);
+        myTitle.setBounds(160, 15, 600, 325);
     }
 
     private void makeTitle() {
