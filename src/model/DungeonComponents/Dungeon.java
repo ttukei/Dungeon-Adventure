@@ -437,8 +437,7 @@ public class Dungeon {
                 if (specialRoom != RoomsOfInterest.ENTRANCE) {
                     newRoom.addMonsterToRoom(getRandomMonster());
                 }
-            }
-            else {
+            } else {
                 newRoom = new Room(newRoomDoors, newRoomCoordinates);
                 chanceForSpecialRoom += 0.1;
                 if (roomRoll < CHANCE_FOR_MONSTER){

@@ -58,12 +58,13 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     private DungeonAdventure() throws InterruptedException {
 
-        showIntroScreen();
+        //showIntroScreen();
         selectHeroClass();
         HANDLER = getHandler();
         myHero = getMyHero();
         HANDLER.addObject(myHero);
-        DUNGEON = getDungeon(8,8);
+        DUNGEON = getDungeon();
+//        DUNGEON = getDungeon(8,8);
         myTimeStart = System.currentTimeMillis();
 
         this.addKeyListener(new KeyInputController());

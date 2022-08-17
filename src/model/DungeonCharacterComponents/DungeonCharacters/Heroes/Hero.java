@@ -148,8 +148,14 @@ public abstract class Hero extends DungeonCharacter {
         for (int index = 0; index < this.myInventory.size(); index++) {
             if (this.myInventory.get(index).getClass().equals(VisionPotion.class)) {
                 VisionPotion visionPotion = (VisionPotion) this.myInventory.remove(index);
-                // TODO implement code to activate vision
-                return true;
+                for(RoomsOfInterest typeOfSpecialRoom : RoomsOfInterest.values()){
+                    Room currentRoom = Dungeon.getRoomOfInterest(typeOfSpecialRoom);
+                    if (!currentRoom.isRevealed()){
+                        currentRoom.reveal();
+                        return true;
+                    }
+                }
+                return false;
             }
         }
         return false;
