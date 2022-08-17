@@ -49,16 +49,18 @@ public class DungeonAdventure extends Canvas implements Runnable {
     private static final Dimension MY_DIMENSIONS = new Dimension(MY_WIDTH, MY_HEIGHT);
 
 
-    private DungeonAdventure(){
-        myTimeStart = System.currentTimeMillis();
+    private DungeonAdventure() throws InterruptedException {
 
+//        showIntroScreen();
+//        selectHeroClass();
         HANDLER = getHandler();
         myHero = getMyHero();
-//        mouseMode();
         HANDLER.addObject(myHero);
         DUNGEON = getDungeon(8,8);
+        myTimeStart = System.currentTimeMillis();
 
         this.addKeyListener(new KeyInputController());
+//        mouseMode();
         godMode();
         Room entrance = getRoomOfInterest(RoomsOfInterest.ENTRANCE);
         System.out.println("Entrance: " + entrance);
@@ -234,9 +236,12 @@ public class DungeonAdventure extends Canvas implements Runnable {
 
     public static void main(String[] args) throws InterruptedException {
 
-//        myTypeOfHero = Heroes.WARRIOR;
-//        myHeroName = "The Hero";
-        showIntroScreen();
+        myTypeOfHero = Heroes.WARRIOR;
+        myHeroName = "The Hero";
+        new DungeonAdventure();
+    }
+
+    private static void selectHeroClass() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Please enter your name: ");
         String name = sc.nextLine();
@@ -256,7 +261,6 @@ public class DungeonAdventure extends Canvas implements Runnable {
                 myHeroName = name;
             }
         }
-        new DungeonAdventure();
     }
 
     private static void showIntroScreen() throws InterruptedException {
@@ -330,7 +334,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
                     myMonsterToBattle.setCombatFlag(false);
                 }
 
-                if (getPlayersCurrentRoom().getMyMonsterFlag()) {
+                if (getPlayersCurrentRoom().getMonsterFromRoom() != null) {
                     myMonsterToBattle = getPlayersCurrentRoom().getMonsterFromRoom();
                     if (myMonsterToBattle != null) {
                         getMyHero().setMyTarget(myMonsterToBattle);
@@ -348,7 +352,7 @@ public class DungeonAdventure extends Canvas implements Runnable {
 //                System.out.println(getPlayerCoordinates());
 //                System.out.println(myHero.displayInventory());
             } else {
-                System.out.println("You cannot go that way, there is no " + door);
+                System.out.println("You cannot go that way, there is no " + Room.getUserFriendlyDoor(door));
             }
         }
 

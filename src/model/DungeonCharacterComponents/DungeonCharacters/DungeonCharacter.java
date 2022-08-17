@@ -3,6 +3,7 @@ package model.DungeonCharacterComponents.DungeonCharacters;
 import controller.DungeonAdventure;
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.Heroes.Hero;
+import model.DungeonComponents.DataTypes.Coordinates;
 import model.DungeonObject;
 import model.RoomItemComponents.RoomItem;
 
@@ -49,6 +50,7 @@ public abstract class DungeonCharacter extends DungeonObject {
      */
     private boolean myDeceased;
 
+    private Coordinates myCords;
 
     /**
      * The items the dungeon character has collected.
@@ -139,10 +141,6 @@ public abstract class DungeonCharacter extends DungeonObject {
             setMarkedForDeath(true);
         }
         return isMarkedForDeath();
-    }
-
-    private void killMe(){
-        controller.Handler.getHandler().removeObject(this);
     }
 
     public boolean isDeceased() {
@@ -258,6 +256,14 @@ public abstract class DungeonCharacter extends DungeonObject {
 
     public void setMyTarget(DungeonCharacter theTarget){
         this.myTarget = theTarget;
+    }
+
+    public Coordinates getMyCords(){
+        return myCords;
+    }
+
+    public void setMyCords(final Coordinates theCords){
+        myCords = theCords;
     }
 
 

@@ -24,8 +24,6 @@ public abstract class Hero extends DungeonCharacter {
 
     private final ArrayList<RoomItem> myInventory;
 
-    private Coordinates myCords;
-
 
     /**
      *
@@ -183,16 +181,5 @@ public abstract class Hero extends DungeonCharacter {
     public abstract boolean specialSkill(final DungeonCharacter theMonsterToAttack);
 
     // TODO write set method for chanceToAttack
-    // TODO change specialAttack to specialSkill
-
-    /* GETTERS AND SETTERS */
-
-    public Coordinates getMyCords(){
-        return myCords;
-    }
-
-    public void setMyCords(final Coordinates theCords){
-        myCords = theCords;
-    }
 
 }

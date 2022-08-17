@@ -5,10 +5,8 @@ import model.DungeonCharacterComponents.DungeonCharacters.Monsters.MonsterFactor
 import model.DungeonComponents.DataTypes.Coordinates;
 import model.RoomItemComponents.*;
 import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
-import org.sqlite.core.CoreDatabaseMetaData;
+import static controller.Handler.*;
 
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Room {
@@ -21,7 +19,7 @@ public class Room {
 
     private LinkedList<RoomItem> myRoomItems;
 
-    private LinkedList<Monster> myRoomMonsters;
+    private LinkedList<Integer> myRoomMonsters;
 
     private Coordinates myRoomCoordinates;
 
@@ -38,10 +36,10 @@ public class Room {
         myRoomType = TYPE_OF_ROOM;
         initializeFields(theRoomDoors, theCords);
         switch (myRoomType){
-            case ABSTRACTION -> addPillarToRoom(PillarsOO.ABSTRACTION);
-            case ENCAPSULATION -> addPillarToRoom(PillarsOO.ENCAPSULATION);
-            case INHERITANCE -> addPillarToRoom(PillarsOO.INHERITANCE);
-            case POLYMORPHISM -> addPillarToRoom(PillarsOO.POLYMORPHISM);
+            case ABSTRACTION    ->  addPillarToRoom(PillarsOO.ABSTRACTION);
+            case ENCAPSULATION  ->  addPillarToRoom(PillarsOO.ENCAPSULATION);
+            case INHERITANCE    ->  addPillarToRoom(PillarsOO.INHERITANCE);
+            case POLYMORPHISM   ->  addPillarToRoom(PillarsOO.POLYMORPHISM);
         }
     }
 
@@ -104,14 +102,18 @@ public class Room {
     public void addMonsterToRoom(final Monsters theMonsterToAdd){
         MonsterFactory factory = new MonsterFactory();
         Monster newMonster = factory.getMonster(theMonsterToAdd);
-        myRoomMonsters.add(newMonster);
-        controller.Handler.getHandler().addObject(newMonster);
+        int index = getHandler().addObject(newMonster);
+        myRoomMonsters.add(index);
 
         setMyMonsterFlag(true);
     }
 
     public Monster getMonsterFromRoom() {
-        return myRoomMonsters.getFirst();
+        int id = myRoomMonsters.size() > 0 ? myRoomMonsters.getFirst() : -1;
+        if (id > -1){
+            return (Monster) getHandler().getObject(id);
+        }
+        return null;
     }
 
     public String getUserFriendlyStringOfDoors(){
@@ -123,14 +125,20 @@ public class Room {
             if (!stringOfDoors.isEmpty()) {
                 stringOfDoors.append(", ");
             }
-            switch(door){
-                case NORTHDOOR -> stringOfDoors.append("north");
-                case EASTDOOR -> stringOfDoors.append("east");
-                case SOUTHDOOR -> stringOfDoors.append("south");
-                case WESTDOOR -> stringOfDoors.append("west");
-            }
+            getUserFriendlyDoor(door);
         }
         return stringOfDoors.toString();
+    }
+
+    public static String getUserFriendlyDoor(Doors door) {
+        String doorString = "not a door";
+        switch(door){
+            case NORTHDOOR  ->  doorString = "north";
+            case EASTDOOR   ->  doorString = "east";
+            case SOUTHDOOR  ->  doorString = "south";
+            case WESTDOOR   ->  doorString = "west";
+        }
+        return doorString;
     }
 
     public String printRoom(){
@@ -181,8 +189,11 @@ public class Room {
 
         /* ANNOUNCE MONSTERS */
 
-        for (Monster monster : myRoomMonsters){
-            roomAnnouncement.append(monster.getMyAnnouncement());
+        for (int monsterID : myRoomMonsters){
+            Monster monster = (Monster) getHandler().getObject(monsterID);
+            if (monster != null){
+                roomAnnouncement.append(monster.getMyAnnouncement());
+            }
         }
 
         /* ANNOUNCE DOORS */

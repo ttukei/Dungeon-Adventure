@@ -3,6 +3,7 @@ package model;
 public class DungeonObject {
 
     private boolean myMarkedForDeath;
+    private int myId;
 
     protected DungeonObject(){
         initializeFields();
@@ -21,8 +22,17 @@ public class DungeonObject {
         return myMarkedForDeath;
     }
 
+    public void killMe(){
+        controller.Handler.getHandler().removeObject(myId);
+    }
+
+    public void setId(int theID){
+        myId = theID;
+    }
+
     protected void setMarkedForDeath(boolean mark) {
         this.myMarkedForDeath = mark;
+
     }
 
     /**

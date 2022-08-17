@@ -304,28 +304,72 @@ public class Dungeon {
             /* ADD DOORS IF THERE'S ALREADY A DOOR ON THE OTHER SIDE */
 
             LinkedList<Doors> newRoomDoors = new LinkedList<>();
-            for (Coordinates neighbor : newRoomNeighbors){
-                if(NEW_ROOM_X - neighbor.getX() > 0){
-                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.EASTDOOR)){
-                        newRoomDoors.add(Doors.WESTDOOR);
+            for (Coordinates neighborCords : newRoomNeighbors){
+                // yDiff determines if new room is south, north or on the
+                // same row as neighbor with 1, -1, and 0 respectively.
+                int yDiff = NEW_ROOM_Y - neighborCords.getY();
+                Room neighbor = myDungeonGrid[neighborCords.getY()][neighborCords.getX()];
+
+                /* NESTED SWITCH STATEMENT */
+
+                switch (yDiff) {
+                    // New Room is south of neighbor
+                    case 1 -> {
+                        if (neighbor.hasDoor(Doors.SOUTHDOOR)) {
+                            newRoomDoors.add(Doors.NORTHDOOR);
+                        }
+                        doorsAvailable.remove(Doors.NORTHDOOR);
                     }
-                    doorsAvailable.remove(Doors.WESTDOOR);
-                } else if(NEW_ROOM_X - neighbor.getX() < 0){
-                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.WESTDOOR)){
-                        newRoomDoors.add(Doors.EASTDOOR);
+                    // New Room is north of neighbor
+                    case -1 -> {
+                        if (neighbor.hasDoor(Doors.NORTHDOOR)) {
+                            newRoomDoors.add(Doors.SOUTHDOOR);
+                        }
+                        doorsAvailable.remove(Doors.SOUTHDOOR);
                     }
-                    doorsAvailable.remove(Doors.EASTDOOR);
-                } else if(NEW_ROOM_Y - neighbor.getY() > 0){
-                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.SOUTHDOOR)){
-                        newRoomDoors.add(Doors.NORTHDOOR);
+                    // New Room is on the same Row as neighbor, now check column with nested switch
+                    case 0 -> {
+                        // xDiff determines if new room is east, west or on the same
+                        // column as neighbor with -1, 1, and 0 respectively.
+                        int xDiff = NEW_ROOM_X - neighborCords.getX();
+                        switch (xDiff) {
+                            // New Room is East of neighbor
+                            case 1 -> {
+                                if (neighbor.hasDoor(Doors.EASTDOOR)) {
+                                    newRoomDoors.add(Doors.WESTDOOR);
+                                }
+                                doorsAvailable.remove(Doors.WESTDOOR);
+                            }
+                            case -1 -> {
+                                if (neighbor.hasDoor(Doors.WESTDOOR)) {
+                                    newRoomDoors.add(Doors.EASTDOOR);
+                                }
+                                doorsAvailable.remove(Doors.EASTDOOR);
+                            }
+                        }
                     }
-                    doorsAvailable.remove(Doors.NORTHDOOR);
-                } else if(NEW_ROOM_Y - neighbor.getY() < 0){
-                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.NORTHDOOR)){
-                        newRoomDoors.add(Doors.SOUTHDOOR);
-                    }
-                    doorsAvailable.remove(Doors.SOUTHDOOR);
                 }
+//                if(NEW_ROOM_X - neighbor.getX() > 0){
+//                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.EASTDOOR)){
+//                        newRoomDoors.add(Doors.WESTDOOR);
+//                    }
+//                    doorsAvailable.remove(Doors.WESTDOOR);
+//                } else if(NEW_ROOM_X - neighbor.getX() < 0){
+//                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.WESTDOOR)){
+//                        newRoomDoors.add(Doors.EASTDOOR);
+//                    }
+//                    doorsAvailable.remove(Doors.EASTDOOR);
+//                } else if(NEW_ROOM_Y - neighbor.getY() > 0){
+//                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.SOUTHDOOR)){
+//                        newRoomDoors.add(Doors.NORTHDOOR);
+//                    }
+//                    doorsAvailable.remove(Doors.NORTHDOOR);
+//                } else if(NEW_ROOM_Y - neighbor.getY() < 0){
+//                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.NORTHDOOR)){
+//                        newRoomDoors.add(Doors.SOUTHDOOR);
+//                    }
+//                    doorsAvailable.remove(Doors.SOUTHDOOR);
+//                }
             }
 
             /* Generate 0-4 random doors, but only allow a dead end if there are still rooms to
