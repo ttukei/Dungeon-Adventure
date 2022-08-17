@@ -73,15 +73,17 @@ public abstract class Hero extends DungeonCharacter {
         if (playersCurrentRoom.containsRoomItem()) {
             LinkedList<RoomItem> roomItems = playersCurrentRoom.getMyRoomItems();
             if (playersCurrentRoom.containsPillar()) {
+                RoomItem itemToRemove = null;
                 for (RoomItem roomItem : roomItems) {
                     if (roomItem.getClass() == PillarOO.class) {
                         pillarOO = (PillarOO) roomItem;
-                        roomItems.remove(roomItem);
+                        itemToRemove = roomItem;
                         this.myInventory.add(pillarOO);
                     }
                 }
+                roomItems.remove(itemToRemove);
                 System.out.println("You have found the pillar of OO, " + pillarOO);
-                System.out.println(displayInventory());
+//                System.out.println(displayInventory());
                 DungeonAdventure.updateReportPanel("You have found the pillar of OO, " + pillarOO);
             } else if (playersCurrentRoom.containsPotion()) {
                 for (RoomItem roomItem: roomItems) {

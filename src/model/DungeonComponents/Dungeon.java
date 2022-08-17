@@ -451,14 +451,16 @@ public class Dungeon {
             double visionPotRoll = ThreadLocalRandom.current().nextDouble();
             double pitRoll = ThreadLocalRandom.current().nextDouble();
 
-            if (healthPotRoll < CHANCE_FOR_HEALTH_POTION){
-                newRoom.addItemToRoom(RoomItems.HEALTH_POTION);
-            }
-            if (visionPotRoll < CHANCE_FOR_VISION_POTION){
-                newRoom.addItemToRoom(RoomItems.VISION_POTION);
-            }
-            if (pitRoll < CHANCE_FOR_PIT){
-                newRoom.addItemToRoom(RoomItems.PIT);
+            if (newRoom.getRoomType() != RoomsOfInterest.ENTRANCE){
+                if (healthPotRoll < CHANCE_FOR_HEALTH_POTION){
+                    newRoom.addItemToRoom(RoomItems.HEALTH_POTION);
+                }
+                if (visionPotRoll < CHANCE_FOR_VISION_POTION){
+                    newRoom.addItemToRoom(RoomItems.VISION_POTION);
+                }
+                if (pitRoll < CHANCE_FOR_PIT){
+                    newRoom.addItemToRoom(RoomItems.PIT);
+                }
             }
 
             myDungeonGrid[NEW_ROOM_Y][NEW_ROOM_X] = newRoom;
