@@ -67,7 +67,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
         this.addKeyListener(new KeyInputController());
 //        mouseMode();
-        godMode();
+//        godMode();
 //        mouseMode();
         Room entrance = getRoomOfInterest(RoomsOfInterest.ENTRANCE);
         System.out.println("Entrance: " + entrance);
