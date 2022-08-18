@@ -10,6 +10,7 @@ public class IntroPanel extends JPanel {
     private JTextArea myTitle;
 
     public IntroPanel() {
+        setBackground(new Color(150, 69, 25));
         setPreferredSize(new Dimension (623, 524));
         setLayout(null);
 

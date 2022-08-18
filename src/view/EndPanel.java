@@ -10,6 +10,7 @@ public class EndPanel extends JPanel{
     private JTextArea myStats;
 
     public EndPanel(int theReason) {
+        setBackground(new Color(150, 69, 25));
         setPreferredSize(new Dimension(623, 524));
         setLayout(null);
         if (theReason == 1) {

@@ -13,10 +13,12 @@ import model.DungeonComponents.RoomsOfInterest;
 import view.*;
 import view.Window;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.Scanner;
 
 import static controller.Handler.getHandler;
 import static model.DungeonComponents.Dungeon.*;
@@ -57,6 +59,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
     private DungeonAdventure() throws InterruptedException {
 
 //        showIntroScreen();
+        music();
         selectHeroClass();
         HANDLER = getHandler();
         myHero = getMyHero();
@@ -342,6 +345,18 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         System.out.println("o88o     o8888o `Y8bod88P\"     `8'     `Y8bod8P' o888o o888o   \"888\"  `V88V\"V8P' d888b    `Y8bod8P' ");
         Thread.sleep(400);
         System.out.println();
+    }
+
+    private void music() {
+        try {
+            AudioInputStream music = AudioSystem.getAudioInputStream(new File("./Resources/Music.wav"));
+            Clip clip = AudioSystem.getClip();
+            clip.open(music);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            clip.start();
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /* INNER CLASSES */

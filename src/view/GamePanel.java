@@ -16,6 +16,7 @@ public class GamePanel extends JPanel {
 
 
     public GamePanel() {
+        setBackground(new Color(150, 69, 25));
         JLabel hero = new JLabel(DungeonAdventure.getMyHero().getMyCharacterName());
         hero.setFont(new Font("Default", Font.PLAIN, 20));
         myHealthLabel = new JLabel("❤ " + DungeonAdventure.getMyHero().getMyHealthPoints());
