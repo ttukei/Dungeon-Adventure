@@ -3,6 +3,8 @@ package model.DungeonCharacterComponents.DungeonCharacters;
 import controller.DungeonAdventure;
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.Heroes.Hero;
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monster;
+import model.DungeonCharacterComponents.DungeonCharacters.Monsters.Monsters;
 import model.DungeonComponents.DataTypes.Coordinates;
 import model.DungeonObject;
 import model.RoomItemComponents.RoomItem;
@@ -125,27 +127,22 @@ public abstract class DungeonCharacter extends DungeonObject {
     // TODO write a method called applyDamage
     // TODO override applyDamage in hero incorporating chance to defend
     /**
-     * Attacks an opponent.
+     * Attacks specifically a hero (called on an object of type <code>Monster</code>).
      * @return The success of the attack.
      */
     public String attack(final DungeonCharacter theTarget) {
-
-        // toHitRoll = Random 0 - 1
-        // targetDefense = theTarget.getMyChanceToDefend
-
-        // if (toHitRoll < myChanceToHit - targetDefense)
-
-        // Randomly gets a number between the damage range.
-        double toHitRoll = ThreadLocalRandom.current().nextDouble();
-
-
-        if ((myChanceToHit == theTarget.getMyChanceToHit() || Math.random() < this.getMyChanceToHit()) && !theTarget.isMarkedForDeath()) {
-            final int damage = getTheDamageToBeDealt();
-            theTarget.setMyHealthPoints(theTarget.getMyHealthPoints() - damage);
-            return "" + damage;
-        } else {
-            return "0";
+        int theDamageToBeDealt = 0;
+        int theDamageTaken = 0;
+        if (ThreadLocalRandom.current().nextDouble() < this.getMyChanceToHit()) {
+            theDamageToBeDealt = this.getTheDamageToBeDealt();
+            theDamageTaken = theTarget.takeDamage(theDamageToBeDealt);
         }
+        return "" + theDamageTaken;
+    }
+
+    public int takeDamage(int theDamageToTake){
+        this.setMyHealthPoints(this.getMyHealthPoints() - theDamageToTake);
+        return theDamageToTake;
     }
 
     public boolean didIDie() {

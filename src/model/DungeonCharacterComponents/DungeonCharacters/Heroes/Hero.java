@@ -14,6 +14,7 @@ import view.IntroPanel;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Timon Tukei
@@ -172,6 +173,10 @@ public abstract class Hero extends DungeonCharacter {
         return false;
     }
 
+    public double getMyChanceToDefend() {
+        return myChanceToDefend;
+    }
+
     public boolean useVisionPotion() {
         for (int index = 0; index < this.myInventory.size(); index++) {
             if (this.myInventory.get(index).getClass().equals(VisionPotion.class)) {
@@ -224,6 +229,12 @@ public abstract class Hero extends DungeonCharacter {
 
     public abstract boolean specialSkill(final DungeonCharacter theMonsterToAttack);
 
-    // TODO write set method for chanceToAttack
+    public int takeDamage(int theDamageToTake) {
+        if (!(ThreadLocalRandom.current().nextDouble() < this.getMyChanceToDefend())) {
+            super.takeDamage(theDamageToTake);
+            return theDamageToTake;
+        }
+        return 0;
+    }
 
 }

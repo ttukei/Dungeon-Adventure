@@ -48,13 +48,21 @@ public class Monster extends DungeonCharacter {
      * Attempts to heal the monster
      * @return whether the monster has healed.
      */
-    protected boolean heal() {
+    protected int heal() {
         if (Math.random() < myChanceToHeal) {
             final int amountOfHealthToBeRegained = (int) (Math.random() * myHealingRange.getMyUpperBound() - myHealingRange.getMyLowerBound()) + myHealingRange.getMyLowerBound();
             setMyHealthPoints(getMyHealthPoints() + amountOfHealthToBeRegained);
-            return true;
+            return amountOfHealthToBeRegained;
         }
-        return false;
+        return 0;
+    }
+
+    public void objectBehavior() {
+        super.objectBehavior();
+        int healthRegained = heal();
+        if (healthRegained > 0) {
+            System.out.println(this.getMyName() + " has healed for " + healthRegained);
+        }
     }
 
     private void setTheHealingRange(HealingRange theHealingRange) {
