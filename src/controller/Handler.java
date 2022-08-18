@@ -44,7 +44,7 @@ public class Handler implements Serializable {
 
     public int addObject(DungeonObject theObject){
         myDungeonObjects.put(myIdCounter, theObject);
-        System.out.println(myIdCounter);
+//        System.out.println(myIdCounter);
         theObject.setId(myIdCounter);
         return myIdCounter++;
     }
