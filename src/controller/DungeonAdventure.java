@@ -279,29 +279,38 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         frame.setVisible (true);
 
         Thread.sleep(1000);
-        String name = JOptionPane.showInputDialog("Please enter your name:");
-        String heroType = JOptionPane.showInputDialog("Please enter (W)arrior, (T)hief, or (P)riestess:");
-//        String difficulty = JOptionPane.showInputDialog("Select Difficulty (N)ormal, (H)ard, God mode:");
+        String name = "1";
+        while (!name.matches("[a-zA-Z]+")) {
+            name = JOptionPane.showInputDialog(null, "Please enter your name:",
+                    "Name", JOptionPane.INFORMATION_MESSAGE);
+            if (name == null) {
+                System.exit(1);
+            }
+        }
         switch (name.toLowerCase()) {
-            case "mouse", "h" -> {
+            case "mouse" -> {
                 mouseMode();
             }
             case "tom" -> {
                 godMode();
             }
         }
-
+        String[] heroChoices = {"Warrior", "Thief", "Priestess"};
+        int heroType = JOptionPane.showOptionDialog(null,
+                "Please choose a Hero", "Hero Selection",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, heroChoices, null);
         frame.setVisible(false);
-        switch (heroType.toLowerCase()) {
-            case "w" -> {
+        switch (heroType) {
+            case 0 -> {
                 myTypeOfHero = Heroes.WARRIOR;
                 myHeroName = name;
             }
-            case "t" -> {
+            case 1 -> {
                 myTypeOfHero = Heroes.THIEF;
                 myHeroName = name;
             }
-            case "p" -> {
+            case 2 -> {
                 myTypeOfHero = Heroes.PRIESTESS;
                 myHeroName = name;
             }
