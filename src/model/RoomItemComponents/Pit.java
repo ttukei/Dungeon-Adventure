@@ -2,10 +2,13 @@ package model.RoomItemComponents;
 
 import java.util.Random;
 
+/**
+ * This has the functionality of how the pit works
+ */
 public class Pit extends RoomItem{
 
     /** The amount of HitPoints it will subtract. */
-    private int myHealthToBeDamaged;
+    private final int myHealthToBeDamaged;
 
     /**
      * Constructor that will also generate a random HitPoint number
@@ -22,7 +25,7 @@ public class Pit extends RoomItem{
      * @return the random number to be subtracted.
      */
     private int getRandomHitPoint() {
-        Random rand = new Random();
+        final Random rand = new Random();
         return  -1 * (rand.nextInt(21 - 1) + 1);
     }
 

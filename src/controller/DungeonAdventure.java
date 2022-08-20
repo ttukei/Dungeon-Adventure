@@ -13,10 +13,12 @@ import model.DungeonComponents.RoomsOfInterest;
 import view.*;
 import view.Window;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.Scanner;
 
 import static controller.Handler.getHandler;
 import static model.DungeonComponents.Dungeon.*;
@@ -57,6 +59,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
     private DungeonAdventure() throws InterruptedException {
 
 //        showIntroScreen();
+        music();
         selectHeroClass();
         HANDLER = getHandler();
         myHero = getMyHero();
@@ -276,29 +279,38 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         frame.setVisible (true);
 
         Thread.sleep(1000);
-        String name = JOptionPane.showInputDialog("Please enter your name:");
-        String heroType = JOptionPane.showInputDialog("Please enter (W)arrior, (T)hief, or (P)riestess:");
-//        String difficulty = JOptionPane.showInputDialog("Select Difficulty (N)ormal, (H)ard, God mode:");
+        String name = "1";
+        while (!name.matches("[a-zA-Z]+")) {
+            name = JOptionPane.showInputDialog(null, "Please enter your name:",
+                    "Name", JOptionPane.INFORMATION_MESSAGE);
+            if (name == null) {
+                System.exit(1);
+            }
+        }
         switch (name.toLowerCase()) {
-            case "mouse", "h" -> {
+            case "mouse" -> {
                 mouseMode();
             }
             case "tom" -> {
                 godMode();
             }
         }
-
+        String[] heroChoices = {"Warrior", "Thief", "Priestess"};
+        int heroType = JOptionPane.showOptionDialog(null,
+                "Please choose a Hero", "Hero Selection",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, heroChoices, null);
         frame.setVisible(false);
-        switch (heroType.toLowerCase()) {
-            case "w" -> {
+        switch (heroType) {
+            case 0 -> {
                 myTypeOfHero = Heroes.WARRIOR;
                 myHeroName = name;
             }
-            case "t" -> {
+            case 1 -> {
                 myTypeOfHero = Heroes.THIEF;
                 myHeroName = name;
             }
-            case "p" -> {
+            case 2 -> {
                 myTypeOfHero = Heroes.PRIESTESS;
                 myHeroName = name;
             }
@@ -342,6 +354,18 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         System.out.println("o88o     o8888o `Y8bod88P\"     `8'     `Y8bod8P' o888o o888o   \"888\"  `V88V\"V8P' d888b    `Y8bod8P' ");
         Thread.sleep(400);
         System.out.println();
+    }
+
+    private void music() {
+        try {
+            AudioInputStream music = AudioSystem.getAudioInputStream(new File("./Resources/Music.wav"));
+            Clip clip = AudioSystem.getClip();
+            clip.open(music);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            clip.start();
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /* INNER CLASSES */

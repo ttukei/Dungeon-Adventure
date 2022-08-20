@@ -1,4 +1,4 @@
-package tests.model.RoomItemComponents;
+package model.RoomItemComponents;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

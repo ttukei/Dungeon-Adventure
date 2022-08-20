@@ -4,34 +4,42 @@ import model.DungeonObject;
 
 import java.util.Random;
 
+/**
+ * This holds the objects for all the room items.
+ */
 public abstract class RoomItem extends DungeonObject {
 
     /** The 10% possibility of an item being in a room. */
     public static final int PLACE_ITEM_CHANCE = 1;
 
     /** The name of the RoomItem. */
-    public String myName;
+    public final String myName;
 
+    /** The enum type of RoomItem.*/
     private RoomItems myType;
 
-    public RoomItem(String theName) {
+    /**
+     * Constructor for children classes to pass name.
+     *
+     * @param theName string of room item name
+     */
+    public RoomItem(final String theName) {
         super();
         myName = theName;
     }
 
     /**
-     * Places an item in the room
+     * Getter for the type of room item enum
+     * @return the room item type
      */
-    public void placeItem() {
-        if (!checkDoor() && getChanceToPlace()) {
-            //TODO figure out how to place item in dungeon
-        }
-    }
-
     public RoomItems getType(){
         return myType;
     }
 
+    /**
+     * Sets the given room item type to myType.
+     * @param theTypeOfItem the type of item
+     */
     protected void setType(final RoomItems theTypeOfItem){
         myType = theTypeOfItem;
     }
