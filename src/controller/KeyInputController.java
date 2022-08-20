@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 import static controller.DungeonAdventure.*;
 
-public class KeyInputController extends KeyAdapter {
+class KeyInputController extends KeyAdapter {
 
     public void keyPressed(KeyEvent e){
 

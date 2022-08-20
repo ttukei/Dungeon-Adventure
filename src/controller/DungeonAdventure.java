@@ -37,7 +37,6 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     private static long myTimeStart;
     private static int myKillCount;
-    //private static GUI myGUI2;
     private static Window myGUI;
 
 

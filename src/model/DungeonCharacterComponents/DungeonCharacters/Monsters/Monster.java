@@ -92,14 +92,6 @@ public class Monster extends DungeonCharacter {
         return myMonsterType;
     }
 
-    public double getMyChanceToHeal() {
-        return myChanceToHeal;
-    }
-
-    public HealingRange getMyHealingRange() {
-        return myHealingRange;
-    }
-
     @Override
     public String getMyName() {
         return "" + myMonsterType;
