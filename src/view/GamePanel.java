@@ -5,19 +5,41 @@ import controller.DungeonAdventure;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This makes Main JPanel that has all GUI components of when the
+ * game is running. The object created in Window class
+ */
 public class GamePanel extends JPanel {
-    private JTextArea myDungeonArea;
-    private JTextArea myReportArea;
-    private JTextArea myRoomArea;
-    private JTextArea myInventoryArea;
-    private JScrollPane myReportScroll;
+
+    /** The text area for the dungeon map. */
+    private final JTextArea myDungeonArea;
+
+    /** The text area for the reports. */
+    private final JTextArea myReportArea;
+
+    /** The text area for the current room map. */
+    private final JTextArea myRoomArea;
+
+    /** The text area for users current inventory. */
+    private final JTextArea myInventoryArea;
+
+    /** The Scroll pane for the reports to be in. */
+    private final JScrollPane myReportScroll;
+
+    /** The label for the user's health points. */
     private final JLabel myHealthLabel;
+
+    /** The label for the users inventory. */
     private final JLabel myInventoryLabel;
 
-
+    /**
+     * Constructs everything and calls the methods for the fields to be set
+     * and adds it all to the JPanel when this class is called in Window.java.
+     */
     public GamePanel() {
+        //makes the labels for user's name and inventory label and area
         setBackground(new Color(150, 69, 25));
-        JLabel hero = new JLabel(DungeonAdventure.getMyHero().getMyCharacterName());
+        final JLabel hero = new JLabel(DungeonAdventure.getMyHero().getMyCharacterName());
         hero.setFont(new Font("Default", Font.PLAIN, 20));
         myHealthLabel = new JLabel("❤ " + DungeonAdventure.getMyHero().getMyHealthPoints());
         myHealthLabel.setFont(new Font("Default", Font.PLAIN, 22));
@@ -31,10 +53,17 @@ public class GamePanel extends JPanel {
         setPreferredSize (new Dimension(750, 562));
         setLayout(null);
 
+        //Instantiate fields and calls its respected methods after
+        myDungeonArea = new JTextArea(5, 5);
         dungeonPanel();
+        myReportArea = new JTextArea(5, 5);
         reportPanel();
+        myRoomArea = new JTextArea(5, 5);
         roomPanel();
+        myReportScroll = new JScrollPane(myReportArea);
+        myReportScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
+        //sets the location and size of all the components
         myDungeonArea.setBounds(10, 10, 540, 365);
         myReportScroll.setBounds(10, 385, 540, 165);
         myRoomArea.setBounds(575, 150, 160, 165);
@@ -43,6 +72,7 @@ public class GamePanel extends JPanel {
         myInventoryLabel.setBounds(575, 355, 175, 30);
         myInventoryArea.setBounds(575, 385, 140, 150);
 
+        //adds all the components to the JPanel
         add(myDungeonArea);
         add(myReportScroll);
         add(myRoomArea);
@@ -52,55 +82,74 @@ public class GamePanel extends JPanel {
         add(myInventoryArea);
     }
 
+    /**
+     * Makes the Dungeon map textArea.
+     */
     private void dungeonPanel() {
-        Font font = new Font("Monospaced", Font.PLAIN, 28);
-        myDungeonArea = new JTextArea(5, 5);
         myDungeonArea.setBackground(Color.LIGHT_GRAY);
         myDungeonArea.setEditable(false);
-        myDungeonArea.setFont(font);
+        myDungeonArea.setFont(new Font("Monospaced", Font.PLAIN, 28));
     }
 
+    /**
+     * Makes the report scroll textArea.
+     */
     private void reportPanel() {
-        Font font = new Font("Monospaced", Font.PLAIN, 15);
-        myReportArea = new JTextArea(5, 5);
         myReportArea.setBackground(Color.LIGHT_GRAY);
         myReportArea.setEditable(false);
-        myReportArea.setFont(font);
-        myReportScroll = new JScrollPane(myReportArea);
-        myReportScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        myReportArea.setFont(new Font("Monospaced", Font.PLAIN, 15));
     }
 
+    /**
+     * Makes the current room map textArea.
+     */
     private void roomPanel() {
-        Font font = new Font("Monospaced", Font.PLAIN, 20);
-        myRoomArea = new JTextArea(5, 5);
-        //myRoomArea.setBackground(Color.LIGHT_GRAY);
         myRoomArea.setOpaque(false);
         myRoomArea.setEditable(false);
-        myRoomArea.setFont(font);
+        myRoomArea.setFont(new Font("Monospaced", Font.PLAIN, 20));
     }
 
-    public void updateDungeonPanel(String theMap) {
+    /**
+     * This is public for it to be called from window.java to update the
+     * dungeon map when the user moves.
+     */
+    public void updateDungeonPanel(final String theMap) {
         myDungeonArea.setText("");
         myDungeonArea.append(theMap + "\n");
-        updateHealth();
-        updateInventory();
+        updateHealth();     //these get called here since when the user moves
+        updateInventory();  //there health and inventory should be updated too
     }
 
-    public void updateReportPanel(String theReport){
+    /**
+     * This is public for it to be called from window.java to update the
+     * report area when the game is being played.
+     */
+    public void updateReportPanel(final String theReport){
         myReportArea.append(theReport + "\n");
         myReportArea.setCaretPosition(myReportArea.getDocument().getLength());
     }
 
-    public void updateRoomPanel(String theRoom) {
+    /**
+     * This is public for it to be called from window.java to update the
+     * current room map when the user moves.
+     */
+    public void updateRoomPanel(final String theRoom) {
         myRoomArea.setText("");
         myRoomArea.append(theRoom);
     }
 
-
+    /**
+     * This is called by the updateDungeonPanel when the user moves to also update
+     * the health bar JLabel.
+     */
     private void updateHealth() {
         myHealthLabel.setText("❤ " + DungeonAdventure.getMyHero().getMyHealthPoints());
     }
 
+    /**
+     * This is called by the updateDungeonPanel when the user moves to also update
+     * the pillars in the user's inventory textArea.
+     */
     private void updateInventory(){
         myInventoryArea.setText(DungeonAdventure.getMyHero().displayInventory());
     }

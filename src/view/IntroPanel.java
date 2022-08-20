@@ -3,37 +3,59 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * This is the Window that shows when the game is first ran to show
+ * an intro screen and the hero selection stats.
+ */
 public class IntroPanel extends JPanel {
-    private JTextArea myWarrior;
-    private JTextArea myPriestess;
-    private JTextArea myThief;
-    private JTextArea myTitle;
 
+    /** The Warrior area for its stats. */
+    private final JTextArea myWarrior;
+
+    /** The Priestess area for its stats. */
+    private final JTextArea myPriestess;
+
+    /** The Thief area for its stats. */
+    private final JTextArea myThief;
+
+    /** The welcome title. */
+    private final JTextArea myTitle;
+
+    /**
+     * This constructs everything into intro panel to be added to a frame.
+     */
     public IntroPanel() {
         setBackground(new Color(150, 69, 25));
         setPreferredSize(new Dimension (623, 524));
         setLayout(null);
 
+        //instantiates all the fields and calls its respected methods
+        myTitle = new JTextArea();
         makeTitle();
+        myWarrior = new JTextArea();
         makeWarrior();
+        myPriestess = new JTextArea();
         makePriestess();
+        myThief = new JTextArea();
         makeThief();
 
-        //add components
+        //add components to the JPanel
         add(myWarrior);
         add(myPriestess);
         add(myThief);
         add(myTitle);
 
-        //set component bounds (only needed by Absolute Positioning)
+        //set component bounds so they are cool clean in window
         myWarrior.setBounds(40, 290, 150, 160);
         myPriestess.setBounds(240, 290, 150, 160);
         myThief.setBounds(430, 290, 150, 160);
         myTitle.setBounds(160, 15, 600, 325);
     }
 
+    /**
+     * Makes the Welcome title.
+     */
     private void makeTitle() {
-        myTitle = new JTextArea();
         myTitle.setEditable(false);
         myTitle.setLineWrap(true);
         myTitle.setOpaque(false);
@@ -41,8 +63,10 @@ public class IntroPanel extends JPanel {
         myTitle.setText("Welcome to\n Dungeon\nAdventure");
     }
 
+    /**
+     * Make the Warrior section with its stats.
+     */
     private void makeWarrior() {
-        myWarrior = new JTextArea();
         myWarrior.setEditable(false);
         myWarrior.setLineWrap(true);
         myWarrior.setOpaque(false);
@@ -56,8 +80,10 @@ public class IntroPanel extends JPanel {
                 "\nEnter W to select");
     }
 
+    /**
+     * Make the Priestess section with its stats
+     */
     private void makePriestess() {
-        myPriestess = new JTextArea();
         myPriestess.setEditable(false);
         myPriestess.setLineWrap(true);
         myPriestess.setOpaque(false);
@@ -71,8 +97,10 @@ public class IntroPanel extends JPanel {
                 "\nEnter P to select");
     }
 
+    /**
+     * Make the Thief section with its stats
+     */
     private void makeThief() {
-        myThief = new JTextArea();
         myThief.setEditable(false);
         myThief.setLineWrap(true);
         myThief.setOpaque(false);

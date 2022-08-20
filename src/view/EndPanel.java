@@ -5,26 +5,46 @@ import controller.DungeonAdventure;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This is the Window that shows when the game is ended to show
+ * an end screen with the title for the reason on ending and the
+ * users stats.
+ */
 public class EndPanel extends JPanel{
-    private JTextArea myEndTitle;
-    private JTextArea myStats;
 
-    public EndPanel(int theReason) {
+    /** The ending title message. */
+    private final JTextArea myEndTitle;
+
+    /** The stats of the user. */
+    private final JTextArea myStats;
+
+    /**
+     * This constructs the JPanel with message and stats JComponent.
+     * @param theReason the number which tells if user died or won(1 = won)
+     */
+    public EndPanel(final int theReason) {
         setBackground(new Color(150, 69, 25));
         setPreferredSize(new Dimension(623, 524));
         setLayout(null);
+
+        //sets all fields and makes which title depending on what number was passed
+        //then adds the two fields to the JPanel.
+        myEndTitle = new JTextArea();
         if (theReason == 1) {
             makeTitleWin();
         } else {
             makeTitleLose();
         }
+        myStats = new JTextArea();
         makeStats();
         add(myEndTitle);
         add(myStats);
     }
 
+    /**
+     * Makes the title for when the user wins.
+     */
     private void makeTitleWin() {
-        myEndTitle = new JTextArea();
         myEndTitle.setEditable(false);
         myEndTitle.setLineWrap(true);
         myEndTitle.setOpaque(false);
@@ -34,8 +54,10 @@ public class EndPanel extends JPanel{
         myEndTitle.setBounds(40, 35, 600, 325);
     }
 
+    /**
+     * Makes the title for when the user loses.
+     */
     private void makeTitleLose() {
-        myEndTitle = new JTextArea();
         myEndTitle.setEditable(false);
         myEndTitle.setLineWrap(true);
         myEndTitle.setOpaque(false);
@@ -46,8 +68,10 @@ public class EndPanel extends JPanel{
         myEndTitle.setBounds(160, 75, 600, 325);
     }
 
+    /**
+     * Makes the stats of the user when they win or lose.
+     */
     private void makeStats() {
-        myStats = new JTextArea();
         myStats.setEditable(false);
         myStats.setLineWrap(true);
         myStats.setOpaque(false);
