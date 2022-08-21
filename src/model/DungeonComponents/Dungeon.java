@@ -225,7 +225,7 @@ public class Dungeon {
 
         final double CHANCE_FOR_MONSTER = 0.5;
         final double CHANCE_FOR_HEALTH_POTION = 0.25;
-        final double CHANCE_FOR_VISION_POTION = 0.1;
+        final double CHANCE_FOR_VISION_POTION = 0.2;
         final double CHANCE_FOR_PIT = 0.15;
 
         // Linked list of the coordinates of rooms to make, randomly generate starting coordinates
@@ -327,7 +327,7 @@ public class Dungeon {
                 if (visionPotRoll < CHANCE_FOR_VISION_POTION){
                     newRoom.addItemToRoom(RoomItems.VISION_POTION);
                 }
-                if (pitRoll < CHANCE_FOR_PIT){
+                if (!newRoom.getMyMonsterFlag() && pitRoll < CHANCE_FOR_PIT){
                     newRoom.addItemToRoom(RoomItems.PIT);
                 }
             }

@@ -74,39 +74,49 @@ public abstract class Hero extends DungeonCharacter {
         if (playersCurrentRoom.containsRoomItem()) {
             LinkedList<RoomItem> roomItems = playersCurrentRoom.getMyRoomItems();
             if (playersCurrentRoom.containsPillar()) {
-                RoomItem itemToRemove = null;
                 for (RoomItem roomItem : roomItems) {
-                    if (roomItem.getClass() == PillarOO.class) {
+                    if (roomItem.getType() == RoomItems.PILLAR) {
                         pillarOO = (PillarOO) roomItem;
-                        itemToRemove = roomItem;
                         this.myInventory.add(pillarOO);
                     }
                 }
-                roomItems.remove(itemToRemove);
                 System.out.println("You have found the pillar of OO, " + pillarOO);
 //                System.out.println(displayInventory());
                 DungeonAdventure.updateReportPanel("You have found the pillar of OO, " + pillarOO);
             }
             if (playersCurrentRoom.containsPotion()) {
                 for (RoomItem roomItem: roomItems) {
-                    if (roomItem.getClass() == HealthPotion.class) {
-                        HealthPotion healthPotion = (HealthPotion) roomItem;
-                        roomItems.remove(roomItem);
-                        this.setMyHealthPoints(getMyHealthPoints() + healthPotion.getMyHealthToBeRegained());
-                        System.out.println("You have found a health potion!");
-                        System.out.println("Health before potion = " + (this.getMyHealthPoints() - healthPotion.getMyHealthToBeRegained()));
-                        System.out.println("Health after potion = " + this.getMyHealthPoints());
-                        DungeonAdventure.updateReportPanel("You have found a health potion!");
-                        DungeonAdventure.updateReportPanel("Health before potion = " + (this.getMyHealthPoints() - healthPotion.getMyHealthToBeRegained()));
-                        DungeonAdventure.updateReportPanel("Health after potion = " + this.getMyHealthPoints());
+                    switch (roomItem.getType()){
+                        case HEALTH_POTION -> {
+                            HealthPotion healthPotion = (HealthPotion) roomItem;
+                            setMyHealthPoints(getMyHealthPoints() + healthPotion.getMyHealthToBeRegained());
+                            System.out.println("You have found a health potion!");
+                            System.out.println("Health before potion = " + (this.getMyHealthPoints() - healthPotion.getMyHealthToBeRegained()));
+                            System.out.println("Health after potion = " + this.getMyHealthPoints());
+                            DungeonAdventure.updateReportPanel("You have found a health potion!");
+                            DungeonAdventure.updateReportPanel("Health before potion = " + (this.getMyHealthPoints() - healthPotion.getMyHealthToBeRegained()));
+                            DungeonAdventure.updateReportPanel("Health after potion = " + this.getMyHealthPoints());
+                        }
+                        case VISION_POTION -> {
+                            for(RoomsOfInterest typeOfSpecialRoom : RoomsOfInterest.values()){
+                                Room currentRoom = Dungeon.getRoomOfInterest(typeOfSpecialRoom);
+                                if (currentRoom != null && !currentRoom.isRevealed()){
+                                    currentRoom.reveal();
+                                    System.out.println("You have found a vision potion!");
+                                    System.out.println("It reveals the room with the " + typeOfSpecialRoom);
+                                    DungeonAdventure.updateReportPanel("You have found a vision potion!");
+                                    DungeonAdventure.updateReportPanel("It reveals the room with the " + typeOfSpecialRoom);
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
             if (playersCurrentRoom.containsPit()) {
                 for (RoomItem roomItem: roomItems) {
-                    if (roomItem.getClass() == Pit.class) {
+                    if (roomItem.getType() == RoomItems.PIT) {
                         Pit pit = (Pit) roomItem;
-                        roomItems.remove(roomItem);
                         this.setMyHealthPoints(getMyHealthPoints() + pit.getMyHealthToBeDamaged());
                         didIDie();
                         System.out.println("You have fell into a Pit!!");
@@ -118,6 +128,7 @@ public abstract class Hero extends DungeonCharacter {
                     }
                 }
             }
+            roomItems.clear();
         }
         if (this.hasAllPillarsOfOO() && (playersCurrentRoom.getRoomType() == RoomsOfInterest.EXIT)) {
             System.out.println(endScreenReadOut());
@@ -167,23 +178,6 @@ public abstract class Hero extends DungeonCharacter {
 
     public double getMyChanceToDefend() {
         return myChanceToDefend;
-    }
-
-    public boolean useVisionPotion() {
-        for (int index = 0; index < this.myInventory.size(); index++) {
-            if (this.myInventory.get(index).getClass().equals(VisionPotion.class)) {
-                VisionPotion visionPotion = (VisionPotion) this.myInventory.remove(index);
-                for(RoomsOfInterest typeOfSpecialRoom : RoomsOfInterest.values()){
-                    Room currentRoom = Dungeon.getRoomOfInterest(typeOfSpecialRoom);
-                    if (!currentRoom.isRevealed()){
-                        currentRoom.reveal();
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-        return false;
     }
 
     public boolean doPitDamage() {
