@@ -47,6 +47,9 @@ public abstract class Hero extends DungeonCharacter {
     @Override
     public void objectBehavior(){
         super.objectBehavior();
+        if(!isInCombat()){
+            outOfCombatBehavior();
+        }
     }
 
     @Override
@@ -64,8 +67,7 @@ public abstract class Hero extends DungeonCharacter {
         return died;
     }
 
-    @Override
-    protected void outOfCombatBehavior(){
+    private void outOfCombatBehavior(){
         Room playersCurrentRoom = Dungeon.getDungeon().getPlayersCurrentRoom();
 //        System.out.println(this.displayInventory());
         PillarOO pillarOO = null;
@@ -178,17 +180,6 @@ public abstract class Hero extends DungeonCharacter {
         return myChanceToDefend;
     }
 
-    public boolean doPitDamage() {
-        for (int index = 0; index < this.myInventory.size(); index++) {
-            if (this.myInventory.get(index).getClass().equals(Pit.class)) {
-                Pit pit = (Pit) this.myInventory.remove(index);
-                this.setMyHealthPoints(this.getMyHealthPoints() + pit.getMyHealthToBeDamaged());
-                return true;
-            }
-        }
-        return false;
-    }
-
     public String displayInventory() {
         StringBuilder result = new StringBuilder("[");
         for (int i = 0; i < myInventory.size() - 1; i++) {
@@ -204,7 +195,7 @@ public abstract class Hero extends DungeonCharacter {
 
     public abstract int specialSkill(final DungeonCharacter theMonsterToAttack);
 
-    public int takeDamage(int theDamageToTake) {
+    public int takeDamage(final int theDamageToTake) {
         if (!(ThreadLocalRandom.current().nextDouble() < this.getMyChanceToDefend())) {
             super.takeDamage(theDamageToTake);
             return theDamageToTake;

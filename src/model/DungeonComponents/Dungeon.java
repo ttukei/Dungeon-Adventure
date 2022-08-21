@@ -35,7 +35,7 @@ public class Dungeon {
      * @param theWidth specified grid width
      * @param theHeight specified grid height
      */
-    private Dungeon(int theWidth, int theHeight) {
+    private Dungeon(final int theWidth, final int theHeight) {
 
 //        System.out.println("Building New Dungeon");
         myDungeonGrid = new Room[theHeight][theWidth];
@@ -50,7 +50,7 @@ public class Dungeon {
      * Singleton accessor for Dungeon which generates the floor plan using createMaze().
      * @return the existing or new Singleton instance of Dungeon
      */
-    public static synchronized Dungeon getDungeon(int theWidth, int theHeight){
+    public static synchronized Dungeon getDungeon(final int theWidth, final int theHeight){
         if (uniqueInstanceOfDungeon == null){
             uniqueInstanceOfDungeon = new Dungeon(theWidth, theHeight);
         }

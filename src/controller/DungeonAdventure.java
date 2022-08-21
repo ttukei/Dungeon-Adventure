@@ -54,7 +54,11 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
     private static final int MY_HEIGHT = 400;//640;
     private static final Dimension MY_DIMENSIONS = new Dimension(MY_WIDTH, MY_HEIGHT);
 
-
+    /**
+     * Most important parts of the game are initialized here. Barely a step removed from main method.
+     * Puts itself into the window, so it can run as a thread in the JFrame.
+     * @throws InterruptedException
+     */
     private DungeonAdventure() throws InterruptedException {
 
         music();
@@ -68,6 +72,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         myTimeStart = System.currentTimeMillis();
 
         this.addKeyListener(new KeyInputController());
+        toggleCheats();
 //        mouseMode();
 //        godMode();
         Room entrance = getRoomOfInterest(RoomsOfInterest.ENTRANCE);
@@ -75,9 +80,6 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         myHeroCoordinates = entrance == null ? new Coordinates(0,0) : entrance.getRoomCords();
 
         myGUI = new Window("Dungeon Adventure", this);
-        //myGUI = new GUI("Dungeon Adventure", this);
-
-//        System.out.println(DUNGEON.toString());
         getPlayersCurrentRoom().reveal();
         revealRoomsOnOtherSideOfDoors(getPlayersCurrentRoom());
         System.out.println(DUNGEON.printDungeonMap());
@@ -87,29 +89,23 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         System.out.println(getPlayersCurrentRoom().printRoom());
         System.out.println(getPlayersCurrentRoom().getAnnouncement());
 
-//        System.out.print(myHero.displayInventory());
-
         setWaitingForTurn(false);
-
-//        HANDLER.addObject(HeroFactory.instantiateHero(Heroes.WARRIOR, "War"));
-//        HANDLER.addObject(new MonsterFactory().getMonster(Monsters.SKELETON));
-
-//        System.out.println(HANDLER);
-
-        ///
-
-
-        ///
 
         // run() method does the game loop
     }
 
+    /**
+     * Starts the DungeonAdventure Object's thread
+     */
     public synchronized void start(){
         myThread = new Thread(this);
         myThread.start();
         myRunning = true;
     }
 
+    /**
+     *   Stops the DungeonAdventure Object's thread
+     */
     synchronized void stop(){
         try {
             myThread.join(); // kills myThread
@@ -119,6 +115,9 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         }
     }
 
+    /**
+     *  Runs the game loop in the thread
+     */
     public void run(){
         this.requestFocus();                // set OS to focus on game window
         while (myRunning){                  // check if game is running
@@ -130,6 +129,9 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         stop();
     }
 
+    /**
+     * What is called in every passing of the game loop
+     */
     private void tick(){
         if(RoomController.isMoving()){
             switch (RoomController.getDirectionToMove()){
@@ -148,11 +150,30 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         }
     }
 
+    /** Enter cheats depending on character name **/
+    void toggleCheats(){
+        switch (getMyHero().getMyCharacterName().toLowerCase()) {
+            case "mouse" -> {
+                mouseMode();
+            }
+            case "tom" -> {
+                godMode();
+            }
+        }
+    }
+
+    /**
+     * Cheat for virtual invulnerability
+     */
     private static void godMode(){
+        getMyHero().setMyMaxHealthPoints(9999);
         getMyHero().setMyHealthPoints(9999);
         getMyHero().setMyDamageRange(new DamageRange(98, 99));
     }
 
+    /**
+     * Cheat for virtually guaranteed death
+     */
     private static void mouseMode(){
         getMyHero().setMyHealthPoints(1);
         getMyHero().setMyDamageRange(new DamageRange(1, 2));
@@ -160,6 +181,13 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     // Public Static Methods
 
+    /**
+     * Utility method to limit assigned values.
+     * @param theInteger value attempting to assign
+     * @param theMin minimum possible value
+     * @param theMax maximum possible value
+     * @return the modified value after passing through clamp
+     */
     public static int clamp(int theInteger, int theMin, int theMax){
         if (theInteger >= theMax){
             return theMax;
@@ -169,6 +197,9 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         return theInteger;
     }
 
+    /**
+     * See clamp above. Overloads for doubles
+     */
     public static double clamp(final double theDouble, final double theMin, final double theMax){
         if (theDouble >= theMax){
             return theMax;
@@ -178,6 +209,10 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         return theDouble;
     }
 
+    /**
+     * Generates a new hero if one isn't made.
+     * @return globally accessible Hero object
+     */
     public static Hero getMyHero(){
         if (myHero == null){
             myHero = HeroFactory.instantiateHero(myTypeOfHero, myHeroName);
@@ -185,15 +220,27 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         return myHero;
     }
 
+    /**
+     *
+     * @return The coordinates representing the room that the player is in.
+     */
     public static Coordinates getPlayerCoordinates(){
         if (getMyHero().getMyCords() == null) return myHeroCoordinates;
         return getMyHero().getMyCords();
     }
 
+    /**
+     *
+     * @param theCords new cords to represent the player's location on the dungeon grid.
+     */
     static void setPlayerCoordinates(final Coordinates theCords){
         getMyHero().setMyCords(theCords);
     }
 
+    /**
+     *
+     * @param theWaiting whether the game loop is waiting to start the next cycle
+     */
     static void setWaitingForTurn(final boolean theWaiting){
         myWaitingForTurn = theWaiting;
     }
@@ -284,14 +331,6 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
                     "Name", JOptionPane.INFORMATION_MESSAGE);
             if (name == null) {
                 System.exit(1);
-            }
-        }
-        switch (name.toLowerCase()) {
-            case "mouse" -> {
-                mouseMode();
-            }
-            case "tom" -> {
-                godMode();
             }
         }
         String[] heroChoices = {"Warrior", "Thief", "Priestess"};

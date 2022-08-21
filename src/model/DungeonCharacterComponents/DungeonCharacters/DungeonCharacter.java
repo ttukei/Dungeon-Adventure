@@ -111,13 +111,6 @@ public abstract class DungeonCharacter extends DungeonObject {
                 DungeonAdventure.updateReportPanel(getMyCharacterName() + " defeated " + getMyTarget().getMyCharacterName());
             }
         }
-        if (!isInCombat()){
-            outOfCombatBehavior();
-        }
-    }
-
-    protected void outOfCombatBehavior() {
-
     }
 
     // TODO write a method called applyDamage
@@ -142,11 +135,15 @@ public abstract class DungeonCharacter extends DungeonObject {
         return attackString.toString();
     }
 
-    public int takeDamage(int theDamageToTake){
+    public int takeDamage(final int theDamageToTake){
         this.setMyHealthPoints(this.getMyHealthPoints() - theDamageToTake);
         return theDamageToTake;
     }
 
+    /**
+     *
+     * @return whether marked for death
+     */
     public boolean didIDie() {
         if (this.myHealthPoints <= 0) {
             setMarkedForDeath(true);
@@ -180,12 +177,16 @@ public abstract class DungeonCharacter extends DungeonObject {
         return myMaxHealthPoints;
     }
 
+    public void setMyMaxHealthPoints(int theMaxHealthPoints){
+        myMaxHealthPoints = theMaxHealthPoints;
+    }
+
     // TODO check data before assignment
     /**
      * Sets the characters' health points.
      * @param theHealthPoints The new health points
      */
-    public void setMyHealthPoints(int theHealthPoints) {
+    public void setMyHealthPoints(final int theHealthPoints) {
         this.myHealthPoints = clamp(theHealthPoints, 0, myMaxHealthPoints);
     }
 
@@ -201,7 +202,7 @@ public abstract class DungeonCharacter extends DungeonObject {
      * Sets the characters' damage range.
      * @param myDamageRange The new damage range
      */
-    public void setMyDamageRange(DamageRange myDamageRange) {
+    public void setMyDamageRange(final DamageRange myDamageRange) {
         this.myDamageRange = myDamageRange;
     }
 
@@ -227,7 +228,7 @@ public abstract class DungeonCharacter extends DungeonObject {
         return myCombatFlag;
     }
 
-    public void setCombatFlag(boolean theCombatFlag){
+    public void setCombatFlag(final boolean theCombatFlag){
         this.myCombatFlag = theCombatFlag;
     }
 
@@ -238,7 +239,7 @@ public abstract class DungeonCharacter extends DungeonObject {
         return myTarget;
     }
 
-    public void setMyTarget(DungeonCharacter theTarget){
+    public void setMyTarget(final DungeonCharacter theTarget){
         this.myTarget = theTarget;
     }
 

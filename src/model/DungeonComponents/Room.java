@@ -29,7 +29,7 @@ public class Room implements Serializable {
 
     private boolean myRevealed;
 
-    Room(LinkedList<Doors> theRoomDoors, Coordinates theCords) {
+    Room(final LinkedList<Doors> theRoomDoors, final Coordinates theCords) {
         myRoomType = null;
         initializeFields(theRoomDoors, theCords);
     }
@@ -132,7 +132,7 @@ public class Room implements Serializable {
         return stringOfDoors.toString();
     }
 
-    public static String getUserFriendlyDoor(Doors door) {
+    public static String getUserFriendlyDoor(final Doors door) {
         String doorString = "not a door";
         switch(door){
             case NORTHDOOR  ->  doorString = "north";
