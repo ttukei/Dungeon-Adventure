@@ -72,13 +72,12 @@ public class IntroPanel extends JPanel {
         myWarrior.setLineWrap(true);
         myWarrior.setOpaque(false);
         myWarrior.setFont(new Font("Monospaced", Font.BOLD, 14));
-        myWarrior.setText("Warrior \uD83D\uDCAA" +
+        myWarrior.setText("\n\nWarrior \uD83D\uDCAA" +
                 "\n❤125" +
-                "\nAttack Speed: 4" +
                 "\nHit Chance: 80%" +
                 "\nHit Range: 35-60" +
                 "\nBlock Chance: 20%" +
-                "\nEnter W to select");
+                "\nSpecial: Crushing Blow");
         myWarrior.setForeground(new Color(130, 140, 165));
     }
 
@@ -90,13 +89,12 @@ public class IntroPanel extends JPanel {
         myPriestess.setLineWrap(true);
         myPriestess.setOpaque(false);
         myPriestess.setFont(new Font("Monospaced", Font.BOLD, 14));
-        myPriestess.setText("Priestess \uD83D\uDCAB" +
+        myPriestess.setText("\n\nPriestess \uD83D\uDCAB" +
                 "\n❤75" +
-                "\nAttack Speed: 5" +
                 "\nHit Chance: 70%" +
                 "\nHit Range: 25-45" +
                 "\nBlock Chance: 30%" +
-                "\nEnter P to select");
+                "\nSpecial: Heal");
         myPriestess.setForeground(new Color(130, 140, 165));
     }
 
@@ -108,13 +106,12 @@ public class IntroPanel extends JPanel {
         myThief.setLineWrap(true);
         myThief.setOpaque(false);
         myThief.setFont(new Font("Monospaced", Font.BOLD, 14));
-        myThief.setText("Thief \uD83D\uDC00" +
+        myThief.setText("\n\nThief \uD83D\uDC00" +
                 "\n❤75" +
-                "\nAttack Speed: 6" +
                 "\nHit Chance: 80%" +
                 "\nHit Range: 20-40" +
                 "\nBlock Chance: 40%" +
-                "\nEnter T to select");
+                "\nSpecial: Surprise Attack");
         myThief.setForeground(new Color(130, 140, 165));
     }
 }
