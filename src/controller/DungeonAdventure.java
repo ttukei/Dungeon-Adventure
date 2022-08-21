@@ -188,7 +188,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
      * @param theMax maximum possible value
      * @return the modified value after passing through clamp
      */
-    public static int clamp(int theInteger, int theMin, int theMax){
+    public static int clamp(final int theInteger, final int theMin, final int theMax){
         if (theInteger >= theMax){
             return theMax;
         } else if (theInteger <= theMin){
@@ -245,77 +245,60 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         myWaitingForTurn = theWaiting;
     }
 
-    static void setRunning(boolean theRunning) {
+    /**
+     *
+     * @param theRunning whether the game loop is allowed to continue
+     */
+    static void setRunning(final boolean theRunning) {
         myRunning = theRunning;
     }
 
-    public static void updateReportPanel(String theReport) {
+    /**
+     *
+     * @param theReport message to pass to the report panel
+     */
+    public static void updateReportPanel(final String theReport) {
         myGUI.updateReportPanel(theReport);
     }
 
+    /**
+     *
+     * @return the time the game started
+     */
     public static long getMyTimeStart() {
         return myTimeStart;
     }
 
+    /**
+     * increment monster kills
+     */
     public static void addToKillCount() {
         myKillCount++;
     }
 
+    /**
+     *
+     * @return number of killed monsters
+     */
     public static int getKillCount() {
         return myKillCount;
     }
 
-    public Thread getMyThread() {
-        return myThread;
-    }
-
-    public void setMyThread(Thread myThread) {
-        this.myThread = myThread;
-    }
-
-    public static boolean getMyRunning() {
-        return myRunning;
-    }
-
-    public static boolean getMyWaitingForTurn() {
-        return myWaitingForTurn;
-    }
-
-    public Handler getMyHandler() {
-        return HANDLER;
-    }
-
-    public Dungeon getMyDungeon() {
-        return DUNGEON;
-    }
-
-    public static void setMyRunning(boolean theRunning) {
-        myRunning = theRunning;
-    }
-
-    public static void setMyWaitingForTurn(boolean theWaitingForTurn) {
-        myWaitingForTurn = theWaitingForTurn;
-    }
-
-
     public static void main(String[] args) throws InterruptedException {
+
+        // Default values to be overwritten under normal circumstances
         myTypeOfHero = Heroes.WARRIOR;
         myHeroName = "The Hero";
+
         new DungeonAdventure();
-//        showIntroScreen();
-//        Scanner sc = new Scanner(System.in);
-//        System.out.println("Please enter your name: ");
-//        String name = sc.nextLine();
-//        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
-//        String heroType = sc.nextLine();
+
     }
 
+    /**
+     * Prompts player with a panel to input name and select their class
+     * @throws InterruptedException
+     */
     private static void selectHeroClass() throws InterruptedException {
-//        Scanner sc = new Scanner(System.in);
-//        System.out.println("Please enter your name: ");
-//        String name = sc.nextLine();
-//        System.out.println("Please enter (W)arrior, (T)hief, or (P)riestess: ");
-//        String heroType = sc.nextLine();
 
         JFrame frame = new JFrame ("Begin");
         frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
@@ -355,6 +338,10 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Animated title introduction to the game
+     * @throws InterruptedException
+     */
     private static void showIntroScreen() throws InterruptedException {
         final JFrame frame = new JFrame ("Begin");
         frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
@@ -433,6 +420,9 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         frame.setVisible(false);
     }
 
+    /**
+     * plays the background music for the game
+     */
     private void music() {
         try {
             final AudioInputStream music = AudioSystem.getAudioInputStream(new File("./Resources/Music.wav"));
@@ -447,12 +437,22 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     /* INNER CLASSES */
 
+    /**
+     * Manages player movement between rooms and events that it triggers
+     */
     static class RoomController {
 
         private static boolean myMoving;
         private static Doors myDirectionToMove;
 
-        static synchronized void moveRooms(int theChangeInX, int theChangeInY, Doors door){
+        /**
+         * Uses information pased from four direction oriented movement functions to update the
+         * player's location, verify a legal move, and trigger subsequent events after movement.
+         * @param theChangeInX the literal change in X coordinate, positive or negative
+         * @param theChangeInY the literal change in Y coordinate, positive or negative
+         * @param door door passed determines which direction to move
+         */
+        static synchronized void moveRooms(final int theChangeInX, final int theChangeInY, final Doors door){
 
 //            System.out.println(getPlayersCurrentRoom());
 
@@ -500,43 +500,73 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
             }
         }
 
+        /**
+         * Triggers moveRooms passing arguments for northern direction
+         */
         static void moveNorth(){
 
             moveRooms(0, -1, Doors.NORTHDOOR);
 
         }
 
+        /**
+         * Triggers moveRooms passing arguments for eastern direction
+         */
         static void moveEast() {
 
             moveRooms(+1, 0, Doors.EASTDOOR);
 
         }
 
+        /**
+         * Triggers moveRooms passing arguments for southern direction
+         */
         static void moveSouth() {
 
             moveRooms(0, +1, Doors.SOUTHDOOR);
 
         }
 
+        /**
+         * Triggers moveRooms passing arguments for western direction
+         */
         static void moveWest() {
 
             moveRooms(-1, 0, Doors.WESTDOOR);
 
         }
 
-        public static Doors getDirectionToMove() {
+        /**
+         *
+         * @return the direction that the player has determined to move (represented with a Door Enum)
+         */
+        private static Doors getDirectionToMove() {
             return myDirectionToMove;
         }
 
-        public static void setDirectionToMove(Doors theDirectionToMove) {
+
+        /**
+         * Allows input to set the direction of player movement. Input doesn't directly call
+         * move{Direction}() so that the order of operations can be controlled in tick()
+         * @param theDirectionToMove door that represents the direction given to move
+         */
+        public static void setDirectionToMove(final Doors theDirectionToMove) {
             myDirectionToMove = theDirectionToMove;
         }
 
-        public static boolean isMoving() {
+        /**
+         *
+         * @return whether the player is going to move next tick()
+         */
+        private static boolean isMoving() {
             return myMoving;
         }
 
-        public static void setMyMoving(boolean theMoving) {
+        /**
+         *
+         * @param theMoving whether the player is going to move next tick()
+         */
+        static void setMyMoving(final boolean theMoving) {
             myMoving = theMoving;
         }
     }
