@@ -356,13 +356,13 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
     }
 
     private static void showIntroScreen() throws InterruptedException {
-        JFrame frame = new JFrame ("Begin");
+        final JFrame frame = new JFrame ("Begin");
         frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
-        JPanel panel = new JPanel();
+        final JPanel panel = new JPanel();
         panel.setPreferredSize(new Dimension(800, 550));
         panel.setBackground(new Color(28, 58, 74));
 
-        JTextArea text = new JTextArea(30,110);
+        final JTextArea text = new JTextArea(30,110);
         text.setEditable(false);
         text.setLineWrap(true);
         text.setOpaque(false);
@@ -435,8 +435,8 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     private void music() {
         try {
-            AudioInputStream music = AudioSystem.getAudioInputStream(new File("./Resources/Music.wav"));
-            Clip clip = AudioSystem.getClip();
+            final AudioInputStream music = AudioSystem.getAudioInputStream(new File("./Resources/Music.wav"));
+            final Clip clip = AudioSystem.getClip();
             clip.open(music);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
             clip.start();
