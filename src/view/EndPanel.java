@@ -23,7 +23,7 @@ public class EndPanel extends JPanel{
      * @param theReason the number which tells if user died or won(1 = won)
      */
     public EndPanel(final int theReason) {
-        setBackground(new Color(150, 69, 25));
+        setBackground(new Color(28, 58, 74));
         setPreferredSize(new Dimension(623, 524));
         setLayout(null);
 
@@ -76,6 +76,7 @@ public class EndPanel extends JPanel{
         myStats.setLineWrap(true);
         myStats.setOpaque(false);
         myStats.setFont(new Font("Monospaced", Font.PLAIN, 21));
+        myStats.setForeground(new Color(130, 140, 165));
         myStats.setText(DungeonAdventure.getMyHero().endScreenReadOut());
         myStats.setBounds(130, 190, 550, 260);
     }

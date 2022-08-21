@@ -38,15 +38,19 @@ public class GamePanel extends JPanel {
      */
     public GamePanel() {
         //makes the labels for user's name and inventory label and area
-        setBackground(new Color(150, 69, 25));
+        setBackground(new Color(28, 58, 74));
         final JLabel hero = new JLabel(DungeonAdventure.getMyHero().getMyCharacterName());
         hero.setFont(new Font("Default", Font.PLAIN, 20));
+        hero.setForeground(new Color(130, 140, 164));
         myHealthLabel = new JLabel("❤ " + DungeonAdventure.getMyHero().getMyHealthPoints());
         myHealthLabel.setFont(new Font("Default", Font.PLAIN, 22));
+        myHealthLabel.setForeground(new Color(130, 140, 164));
         myInventoryLabel = new JLabel("Inventory \uD83C\uDF92:");
         myInventoryLabel.setFont(new Font("Default", Font.PLAIN, 20));
+        myInventoryLabel.setForeground(new Color(130, 140, 164));
         myInventoryArea = new JTextArea(DungeonAdventure.getMyHero().displayInventory());
         myInventoryArea.setFont(new Font("Default", Font.PLAIN, 14));
+        myInventoryArea.setForeground(new Color(130, 140, 164));
         myInventoryArea.setEditable(false);
         myInventoryArea.setLineWrap(true);
         myInventoryArea.setOpaque(false);
@@ -88,7 +92,10 @@ public class GamePanel extends JPanel {
     private void dungeonPanel() {
         myDungeonArea.setBackground(Color.LIGHT_GRAY);
         myDungeonArea.setEditable(false);
+        myDungeonArea.setOpaque(false);
         myDungeonArea.setFont(new Font("Monospaced", Font.PLAIN, 28));
+        myDungeonArea.setBackground(new Color(28, 58, 74));
+        myDungeonArea.setForeground(new Color(130, 140, 164));
     }
 
     /**
@@ -98,6 +105,8 @@ public class GamePanel extends JPanel {
         myReportArea.setBackground(Color.LIGHT_GRAY);
         myReportArea.setEditable(false);
         myReportArea.setFont(new Font("Monospaced", Font.PLAIN, 15));
+        myReportArea.setBackground(new Color(130, 140, 166));
+        //myReportArea.setForeground(new Color(130, 140, 164));
     }
 
     /**
@@ -107,6 +116,7 @@ public class GamePanel extends JPanel {
         myRoomArea.setOpaque(false);
         myRoomArea.setEditable(false);
         myRoomArea.setFont(new Font("Monospaced", Font.PLAIN, 20));
+        myRoomArea.setForeground(new Color(130, 140, 164));
     }
 
     /**

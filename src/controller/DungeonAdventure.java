@@ -57,8 +57,8 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
     private DungeonAdventure() throws InterruptedException {
 
-//        showIntroScreen();
         music();
+        showIntroScreen();
         selectHeroClass();
         HANDLER = getHandler();
         myHero = getMyHero();
@@ -277,7 +277,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         frame.setLocationRelativeTo(null);
         frame.setVisible (true);
 
-        Thread.sleep(1000);
+        Thread.sleep(1300);
         String name = "1";
         while (!name.matches("[a-zA-Z]+")) {
             name = JOptionPane.showInputDialog(null, "Please enter your name:",
@@ -317,42 +317,81 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
     }
 
     private static void showIntroScreen() throws InterruptedException {
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        Thread.sleep(1000);
-        System.out.println("    oooooooooo.                                                                      ");
+        JFrame frame = new JFrame ("Begin");
+        frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(800, 550));
+        panel.setBackground(new Color(28, 58, 74));
+
+        JTextArea text = new JTextArea(30,110);
+        text.setEditable(false);
+        text.setLineWrap(true);
+        text.setOpaque(false);
+        text.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        text.setForeground(new Color(130, 140, 164));
+        text.append("\n\n\n\n");
+        text.setBounds(160, 150,790, 500);
+        panel.add(text);
+
+        frame.getContentPane().add(panel);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible (true);
+        //the title sets printed to intro window
         Thread.sleep(400);
-        System.out.println("    `888'   `Y8b                                                                    ");
-        Thread.sleep(400);
-        System.out.println("     888      888 oooo  oooo  ooo. .oo.    .oooooooo  .ooooo.   .ooooo.  ooo. .oo.  ");
-        Thread.sleep(400);
-        System.out.println("     888      888 `888  `888  `888P\"Y88b  888' `88b  d88' `88b d88' `88b `888P\"Y88b ");
-        Thread.sleep(400);
-        System.out.println("     888      888  888   888   888   888  888   888  888ooo888 888   888  888   888 ");
-        Thread.sleep(400);
-        System.out.println("     888      888  888   888   888   888  888   888  888ooo888 888   888  888   888 ");
-        Thread.sleep(400);
-        System.out.println("     888     d88'  888   888   888   888  `88bod8P'  888    .o 888   888  888   888 ");
-        Thread.sleep(400);
-        System.out.println("    o888bood8P'    `V88V\"V8P' o888o o888o `8oooooo.  `Y8bod8P' `Y8bod8P' o888o o888o");
-        Thread.sleep(400);
-        System.out.println("                                          d\"     YD                                 ");
-        Thread.sleep(400);
-        System.out.println("                                          \"Y88888P'                                 ");
-        System.out.println("      .o.             .o8                                        .                                  ");
-        Thread.sleep(400);
-        System.out.println("     .888.           \"888                                      .o8                                  ");
-        Thread.sleep(400);
-        System.out.println("    .8\"888.      .oooo888  oooo    ooo  .ooooo.  ooo. .oo.   .o888oo oooo  oooo  oooo d8b  .ooooo.  ");
-        Thread.sleep(400);
-        System.out.println("   .8' `888.    d88' `888   `88.  .8'  d88' `88b `888P\"Y88b    888   `888  `888  `888\"\"8P d88' `88b ");
-        Thread.sleep(400);
-        System.out.println("  .88ooo8888.   888   888    `88..8'   888ooo888  888   888    888    888   888   888     888ooo888 ");
-        Thread.sleep(400);
-        System.out.println(" .8'     `888.  888   888     `888'    888    .o  888   888    888 .  888   888   888     888    .o ");
-        Thread.sleep(400);
-        System.out.println("o88o     o8888o `Y8bod88P\"     `8'     `Y8bod8P' o888o o888o   \"888\"  `V88V\"V8P' d888b    `Y8bod8P' ");
-        Thread.sleep(400);
-        System.out.println();
+        text.append("             oooooooooo.                                                                      \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("             `888'   `Y8b                                                                    \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("              888      888 oooo  oooo  ooo. .oo.    .oooooooo  .ooooo.   .ooooo.  ooo. .oo.  \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("              888      888 `888  `888  `888P\"Y88b  888' `88b  d88' `88b d88' `88b `888P\"Y88b \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("              888      888  888   888   888   888  888   888  888ooo888 888   888  888   888 \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("              888      888  888   888   888   888  888   888  888ooo888 888   888  888   888 \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("              888     d88'  888   888   888   888  `88bod8P'  888    .o 888   888  888   888 \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("             o888bood8P'    `V88V\"V8P' o888o o888o `8oooooo.  `Y8bod8P' `Y8bod8P' o888o o888o\n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("                                                   d\"     YD                                 \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("                                                   \"Y88888P'                                 \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("\n\n\n");
+        text.append("          .o.             .o8                                        .                                  \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("         .888.           \"888                                      .o8                                  \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("        .8\"888.      .oooo888  oooo    ooo  .ooooo.  ooo. .oo.   .o888oo oooo  oooo  oooo d8b  .ooooo.  \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("       .8' `888.    d88' `888   `88.  .8'  d88' `88b `888P\"Y88b    888   `888  `888  `888\"\"8P d88' `88b \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("      .88ooo8888.   888   888    `88..8'   888ooo888  888   888    888    888   888   888     888ooo888 \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("     .8'     `888.  888   888     `888'    888    .o  888   888    888 .  888   888   888     888    .o \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(200);
+        text.append("    o88o     o8888o `Y8bod88P\"     `8'     `Y8bod8P' o888o o888o   \"888\"  `V88V\"V8P' d888b    `Y8bod8P' \n");
+        text.setCaretPosition(text.getDocument().getLength());
+        Thread.sleep(700);
+        frame.setVisible(false);
     }
 
     private void music() {

@@ -25,7 +25,7 @@ public class IntroPanel extends JPanel {
      * This constructs everything into intro panel to be added to a frame.
      */
     public IntroPanel() {
-        setBackground(new Color(150, 69, 25));
+        setBackground(new Color(28, 58, 74));
         setPreferredSize(new Dimension (623, 524));
         setLayout(null);
 
@@ -61,6 +61,7 @@ public class IntroPanel extends JPanel {
         myTitle.setOpaque(false);
         myTitle.setFont(new Font("Monospaced", Font.PLAIN, 50));
         myTitle.setText("Welcome to\n Dungeon\nAdventure");
+        myTitle.setForeground(new Color(130, 140, 164));
     }
 
     /**
@@ -78,6 +79,7 @@ public class IntroPanel extends JPanel {
                 "\nHit Range: 35-60" +
                 "\nBlock Chance: 20%" +
                 "\nEnter W to select");
+        myWarrior.setForeground(new Color(130, 140, 165));
     }
 
     /**
@@ -95,6 +97,7 @@ public class IntroPanel extends JPanel {
                 "\nHit Range: 25-45" +
                 "\nBlock Chance: 30%" +
                 "\nEnter P to select");
+        myPriestess.setForeground(new Color(130, 140, 165));
     }
 
     /**
@@ -112,5 +115,6 @@ public class IntroPanel extends JPanel {
                 "\nHit Range: 20-40" +
                 "\nBlock Chance: 40%" +
                 "\nEnter T to select");
+        myThief.setForeground(new Color(130, 140, 165));
     }
 }
