@@ -100,8 +100,8 @@ public class Dungeon {
         for (int i = 0; i < myDungeonGrid.length; i++){
             for (int j = 0; j < myDungeonGrid[i].length; j++){
                 Room currentRoom = myDungeonGrid[i][j];
-//                if (currentRoom != null && currentRoom.isRevealed()){
-                if (currentRoom != null){
+                if (currentRoom != null && currentRoom.isRevealed()){
+//                if (currentRoom != null){
                     result.append("[" + getRoomMarker(new Coordinates(j,i)) + "]");
                 } else{
                     result.append("###");
@@ -246,7 +246,7 @@ public class Dungeon {
         while (!roomsToAdd.isEmpty()){
 
             Coordinates newRoomCoordinates = roomsToAdd.poll();
-//            System.out.println("\nNew Room at: " + newRoomCoordinates);
+            System.out.println("\nNew Room at: " + newRoomCoordinates);
             final int NEW_ROOM_X = newRoomCoordinates.getX();
             final int NEW_ROOM_Y = newRoomCoordinates.getY();
             final double roomRoll = ThreadLocalRandom.current().nextDouble();
@@ -282,7 +282,7 @@ public class Dungeon {
 
             // Remove potential doors that lead to non-existent tiles
             removeDoorsToNowhere(NEW_ROOM_X, NEW_ROOM_Y, doorsAvailable);
-//            System.out.println("Doors available: " + doorsAvailable);
+            System.out.println("Doors available: " + doorsAvailable);
 
             // Add doors if there's already a door on the other side
             LinkedList<Doors> newRoomDoors = addDoorsCorrespondingToNeighbor(NEW_ROOM_X, NEW_ROOM_Y, newRoomNeighbors, doorsAvailable);
@@ -292,10 +292,11 @@ public class Dungeon {
                     roomsToAdd,
                     roomsNeeded,
                     roomsAvailable,
-                    northCord, eastCord, southCord, westCord,
+                    newRoomCoordinates,
                     doorsAvailable,
                     newRoomDoors    );
-//            System.out.println("Added Rooms To Build: " + stringOfNewRooms);
+            System.out.println("New room doors added: " + newRoomDoors);
+            System.out.println("Added Rooms To Build: " + stringOfNewRooms);
 
             /* ADD NEW ROOM, CHANCE TO BE SPECIAL ROOM */
 
@@ -340,32 +341,27 @@ public class Dungeon {
     /** Generate 0-4 random doors, but only allow a dead end if there are still rooms to
      *  add or no more RoomsOfInterest needed. Pick from doorsAvailable at random to keep it
      *  organic.
-     * @param roomsToAdd rooms will be added to the queue here.
-     * @param roomsNeeded the special rooms still left to generate
-     * @param roomsAvailable possible neighboring room tiles to create
-     * @param northCord coordinate of the space to the north
-     * @param eastCord coordinate of the space to the east
-     * @param southCord coordinate of the space to the south
-     * @param westCord coordinate of the space to the west
+     * @param theRoomsToAdd rooms will be added to the queue here.
+     * @param theRoomsNeeded the special rooms still left to generate
+     * @param theRoomsAvailable possible neighboring room tiles to create
      * @param doorsAvailable possible doors to generate for the new room
      * @param newRoomDoors list of doors to ultimately be added to the room later
      * @return list of the new rooms being added by this function
      */
     private String generateDoorsToEmptyTiles(
-            final LinkedList<Coordinates> roomsToAdd,
-            final LinkedList<RoomsOfInterest> roomsNeeded,
-            final LinkedList<Coordinates> roomsAvailable,
-            final Coordinates northCord,
-            final Coordinates eastCord,
-            final Coordinates southCord,
-            final Coordinates westCord,
+            final LinkedList<Coordinates> theRoomsToAdd,
+            final LinkedList<RoomsOfInterest> theRoomsNeeded,
+            final LinkedList<Coordinates> theRoomsAvailable,
+            final Coordinates theNewRoomCords,
             final LinkedList<Doors> doorsAvailable,
             final LinkedList<Doors> newRoomDoors)
     {
-        final int MINIMUM_DOORS = !roomsNeeded.isEmpty() ? 1 : 0;
+        final int MINIMUM_DOORS = !theRoomsNeeded.isEmpty() ? 1 : 0;
 //            final int MINIMUM_DOORS = 0;
         final int MAXIMUM_DOORS = doorsAvailable.size();
         final int numDoors;
+        final int X = theNewRoomCords.getX();
+        final int Y = theNewRoomCords.getY();
         if (MAXIMUM_DOORS > MINIMUM_DOORS) {
             numDoors = ThreadLocalRandom.current().nextInt(MINIMUM_DOORS, MAXIMUM_DOORS);
         } else {
@@ -378,36 +374,44 @@ public class Dungeon {
                     ThreadLocalRandom.current().nextInt(0, doorsAvailable.size() - 1) : 0;
             Doors newDoor = doorsAvailable.remove(indexOfDoorPicked);
             newRoomDoors.add(newDoor);
-//                System.out.println("new door: " + newDoor);
+//            System.out.println("new door: " + newDoor);
             switch (newDoor){
-                case NORTHDOOR :
-                    if (roomsAvailable.contains(northCord)) {
-//                            System.out.println("case: " + newDoor);
-                        roomsToAdd.add(northCord);
-                        stringOfNewRooms.append(northCord + ", ");
-                        break;
+                case NORTHDOOR -> {
+                    for (Coordinates theCord : theRoomsAvailable){
+                        if (theCord.isLocatedAtTheCoordinate(new Coordinates(X, Y-1))){
+                            System.out.println("case: " + newDoor);
+                            System.out.println("cord: " + theCord);
+                            theRoomsToAdd.add(theCord);
+                        }
                     }
-                case EASTDOOR :
-                    if (roomsAvailable.contains(eastCord)){
-//                            System.out.println("case: " + newDoor);
-                        roomsToAdd.add(eastCord);
-                        stringOfNewRooms.append(eastCord + ", ");
-                        break;
+                }
+                case EASTDOOR -> {
+                    for (Coordinates theCord : theRoomsAvailable){
+                        if (theCord.isLocatedAtTheCoordinate(new Coordinates(X+1, Y))){
+                            System.out.println("case: " + newDoor);
+                            System.out.println("cord: " + theCord);
+                            theRoomsToAdd.add(theCord);
+                        }
                     }
-                case SOUTHDOOR :
-                    if (roomsAvailable.contains(southCord)){
-//                            System.out.println("case: " + newDoor);
-                        roomsToAdd.add(southCord);
-                        stringOfNewRooms.append(southCord + ", ");
-                        break;
+                }
+                case SOUTHDOOR -> {
+                    for (Coordinates theCord : theRoomsAvailable){
+                        if (theCord.isLocatedAtTheCoordinate(new Coordinates(X, Y+1))){
+                            System.out.println("case: " + newDoor);
+                            System.out.println("cord: " + theCord);
+                            theRoomsToAdd.add(theCord);
+                        }
                     }
-                case WESTDOOR :
-                    if (roomsAvailable.contains(westCord)){
-//                            System.out.println("case: " + newDoor);
-                        roomsToAdd.add(westCord);
-                        stringOfNewRooms.append(westCord + ", ");
-                        break;
+                }
+                case WESTDOOR -> {
+                    for (Coordinates theCord : theRoomsAvailable){
+                        if (theCord.isLocatedAtTheCoordinate(new Coordinates(X-1, Y))){
+                            System.out.println("case: " + newDoor);
+                            System.out.println("cord: " + theCord);
+                            theRoomsToAdd.add(theCord);
+                        }
                     }
+                }
             }
         }
         return stringOfNewRooms.toString();
