@@ -64,7 +64,7 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
         HANDLER = getHandler();
         myHero = getMyHero();
         HANDLER.addObject(myHero);
-//        DUNGEON = getDungeon();
+//        DUNGEON = getDungeon();   //Mock Dungeon
         DUNGEON = getDungeon(8,8);
         myTimeStart = System.currentTimeMillis();
 
@@ -381,8 +381,8 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
 
             if (getPlayersCurrentRoom().hasDoor(door)) {
 
-                int currentY = getPlayerCoordinates().getY();
                 int currentX = getPlayerCoordinates().getX();
+                int currentY = getPlayerCoordinates().getY();
 
                 Coordinates newPlayerCoordinates = new Coordinates(
                         currentX + theChangeInX,
@@ -411,8 +411,6 @@ public class DungeonAdventure extends Canvas implements Runnable, Serializable {
                         myMonsterToBattle.setCombatFlag(true);
                         getMyHero().setCombatFlag(true);
                     }
-
-                        // Add reporting if monsterFlag was true but getMonsterFromRoom() returns null
                 } else {
                     getMyHero().setCombatFlag(false);
                     getMyHero().setMyTarget(null);

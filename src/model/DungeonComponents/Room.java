@@ -155,34 +155,39 @@ public class Room implements Serializable {
 
         /* CENTER ICON */
 
-        String centerIcon = "   ";
-        if (getRoomType() != null){
-            switch (getRoomType()){
-                case ENTRANCE       -> centerIcon = " e ";
-                case ABSTRACTION    -> centerIcon = " A ";
-                case ENCAPSULATION  -> centerIcon = " E ";
-                case INHERITANCE    -> centerIcon = " I ";
-                case POLYMORPHISM   -> centerIcon = " P ";
-                case EXIT           -> centerIcon = " ^ ";
-            }
-        } else if (myRoomItems.size() > 1){
-            centerIcon = " M ";
-        } else if (containsRoomItem(RoomItems.PIT)){
-            centerIcon = " X ";
-        } else if (containsRoomItem(RoomItems.HEALTH_POTION)){
-            centerIcon = " H ";
-        } else if (containsRoomItem(RoomItems.VISION_POTION)){
-            centerIcon = " V ";
-        }
+        String centerIcon = getCenterIcon();
 
         /* BUILD STRING */
 
         result.append("###" + northDoorIcon + "###\n");
-        result.append(westDoorIcon + centerIcon + eastDoorIcon + "\n");
+        result.append(westDoorIcon + " " + centerIcon + " " + eastDoorIcon + "\n");
         result.append("###" + southDoorIcon + "###\n");
 
         return result.toString();
 
+    }
+
+    String getCenterIcon() {
+        String centerIcon = " ";
+        if (getRoomType() != null){
+            switch (getRoomType()){
+                case ENTRANCE       -> centerIcon = "e";
+                case ABSTRACTION    -> centerIcon = "A";
+                case ENCAPSULATION  -> centerIcon = "E";
+                case INHERITANCE    -> centerIcon = "I";
+                case POLYMORPHISM   -> centerIcon = "P";
+                case EXIT           -> centerIcon = "^";
+            }
+        } else if (myRoomItems.size() > 1){
+            centerIcon = "M";
+        } else if (containsRoomItem(RoomItems.PIT)){
+            centerIcon = "X";
+        } else if (containsRoomItem(RoomItems.HEALTH_POTION)){
+            centerIcon = "h";
+        } else if (containsRoomItem(RoomItems.VISION_POTION)){
+            centerIcon = "v";
+        }
+        return centerIcon;
     }
 
     public String getAnnouncement(){

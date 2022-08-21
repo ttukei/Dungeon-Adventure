@@ -1,10 +1,8 @@
 package controller;
 
-import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
 import model.DungeonObject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 

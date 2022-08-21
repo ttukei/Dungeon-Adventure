@@ -8,6 +8,7 @@ import model.DungeonComponents.DataTypes.Coordinates;
 import model.RoomItemComponents.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -25,19 +26,21 @@ public class Dungeon {
     private static int MAX_X;
     private static final int MIN_Y = 0;
     private static int MAX_Y;
-    private final double CHANCE_FOR_MONSTER = 0.5;
-    private final double CHANCE_FOR_HEALTH_POTION = 0.25;
-    private final double CHANCE_FOR_VISION_POTION = 0.1;
-    private final double CHANCE_FOR_PIT = 0.15;
 
     /* CONSTRUCTORS */
 
+    /**
+     * Builds dungeon using createMaze, represented as myDungeonGrid, a 2D
+     * array with all the rooms in the dungeon.
+     * @param theWidth specified grid width
+     * @param theHeight specified grid height
+     */
     private Dungeon(int theWidth, int theHeight) {
 
 //        System.out.println("Building New Dungeon");
         myDungeonGrid = new Room[theHeight][theWidth];
-        MAX_X = myDungeonGrid.length - 2;
-        MAX_Y = myDungeonGrid[0].length - 2;
+        MAX_X = myDungeonGrid.length - 1;
+        MAX_Y = myDungeonGrid[0].length - 1;
         createMaze();
     }
 
@@ -57,8 +60,8 @@ public class Dungeon {
     /* OVERRIDDEN PUBLIC METHODS */
 
     /**
-     *
-     * @return
+     * Used during development for algorithm visibility.
+     * @return A list of features of the dungeon and each of the rooms within
      */
     @Override
     public String toString(){
@@ -88,27 +91,17 @@ public class Dungeon {
 
     /* PUBLIC METHODS */
 
-    public void printDungeonMap2(){
-        System.out.println("Dungeon Map:");
-        for (int i = 0; i < myDungeonGrid.length; i++){
-            for (int j = 0; j < myDungeonGrid[i].length; j++){
-                if (myDungeonGrid[i][j] != null){
-                    System.out.print("[" + getRoomMarker(new Coordinates(j,i)) + "]");
-                } else{
-                    System.out.print("###");
-                }
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-
+    /**
+     * Builds a map of the dungeon represented with ASCII characters
+     * @return the String representing the dungeon map.
+     */
     public String printDungeonMap(){
         StringBuilder result = new StringBuilder("Dungeon Map:\n");
         for (int i = 0; i < myDungeonGrid.length; i++){
             for (int j = 0; j < myDungeonGrid[i].length; j++){
                 Room currentRoom = myDungeonGrid[i][j];
-                if (currentRoom != null && currentRoom.isRevealed()){
+//                if (currentRoom != null && currentRoom.isRevealed()){
+                if (currentRoom != null){
                     result.append("[" + getRoomMarker(new Coordinates(j,i)) + "]");
                 } else{
                     result.append("###");
@@ -121,14 +114,27 @@ public class Dungeon {
 
     /* PUBLIC STATIC METHODS */
 
+    /**
+     * Can be checked anywhere in project.
+     * @return Maximum X value for a tile coordinate (also represents 2D array index)
+     */
     public static int getMAX_X(){
         return MAX_X;
     }
 
+    /**
+     * Can be checked anywhere in project.
+     * @return Maximum Y value for a tile coordinate (also represents 2D array index)
+     */
     public static int getMAX_Y(){
         return MAX_Y;
     }
 
+    /**
+     * Gets the room that the player is in based on the current coordinates. Depends on static
+     * DungeonAdventure function getPlayerCoordinates().
+     * @return the room the player is in.
+     */
     public static Room getPlayersCurrentRoom(){
         try {
             int y = getPlayerCoordinates().getY();
@@ -140,6 +146,11 @@ public class Dungeon {
         }
     }
 
+    /**
+     * Used to request a particular special room.
+     * @param theRoomOfInterest the Enum that the room to retrieved is marked.
+     * @return the room that is marked with the Enum passed.
+     */
     public static Room getRoomOfInterest(final RoomsOfInterest theRoomOfInterest){
         for (int i = 0; i < myDungeonGrid.length; i++) {
             for (int j = 0; j < myDungeonGrid[i].length; j++) {
@@ -151,6 +162,11 @@ public class Dungeon {
         return null;
     }
 
+    /**
+     * Takes a room as an argument and calls the reveal function on every
+     * room that has a door leading to it.
+     * @param theRoom room to reveal the neighboring rooms of.
+     */
     public static void revealRoomsOnOtherSideOfDoors(final Room theRoom){
         int roomY = theRoom.getRoomCords().getY();
         int roomX = theRoom.getRoomCords().getX();
@@ -158,10 +174,30 @@ public class Dungeon {
             if (theRoom.hasDoor(door)){
                 System.out.println("Rooms entered has " + door);
                 switch (door){
-                    case NORTHDOOR  ->  myDungeonGrid[roomY - 1][roomX].reveal();
-                    case EASTDOOR   ->  myDungeonGrid[roomY][roomX + 1].reveal();
-                    case SOUTHDOOR  ->  myDungeonGrid[roomY + 1][roomX].reveal();
-                    case WESTDOOR   ->  myDungeonGrid[roomY][roomX - 1].reveal();
+                    case NORTHDOOR  ->  {
+                        Room roomToCheck = myDungeonGrid[roomY - 1][roomX];
+                        if (roomToCheck != null){
+                            roomToCheck.reveal();
+                        }
+                    }
+                    case EASTDOOR   ->  {
+                        Room roomToCheck = myDungeonGrid[roomY][roomX + 1];
+                        if (roomToCheck != null){
+                            roomToCheck.reveal();
+                        }
+                    }
+                    case SOUTHDOOR  ->  {
+                        Room roomToCheck = myDungeonGrid[roomY + 1][roomX];
+                        if (roomToCheck != null){
+                            roomToCheck.reveal();
+                        }
+                    }
+                    case WESTDOOR   ->  {
+                        Room roomToCheck = myDungeonGrid[roomY][roomX - 1];
+                        if (roomToCheck != null){
+                            roomToCheck.reveal();
+                        }
+                    }
                 }
             }
         }
@@ -169,14 +205,28 @@ public class Dungeon {
 
     /* PRIVATE METHODS */
 
-    private String getRoomMarker(final Coordinates cord){
-        if (cord.isLocatedAtTheCoordinate(getPlayerCoordinates())){
-            return "X";
+    /**
+     * Returns a character representation of the room, first if the players in it, then what items are in it.
+     * @param theCords the Coordinates of the room to check
+     * @return
+     */
+    private String getRoomMarker(final Coordinates theCords){
+        if (theCords.isLocatedAtTheCoordinate(getPlayerCoordinates())){
+            return "@";
         }
-        return " ";
+        return myDungeonGrid[theCords.getY()][theCords.getX()].getCenterIcon();
     }
 
+    /**
+     * Builds the dungeon as a random maze by starting in one tile, then randomly choosing a number of doors
+     * and adding a queue of rooms to be generated for every door leading to an empty space.
+     */
     private void createMaze(){
+
+        final double CHANCE_FOR_MONSTER = 0.5;
+        final double CHANCE_FOR_HEALTH_POTION = 0.25;
+        final double CHANCE_FOR_VISION_POTION = 0.1;
+        final double CHANCE_FOR_PIT = 0.15;
 
         // Linked list of the coordinates of rooms to make, randomly generate starting coordinates
         LinkedList<Coordinates> roomsToAdd = new LinkedList();
@@ -200,16 +250,20 @@ public class Dungeon {
             final int NEW_ROOM_X = newRoomCoordinates.getX();
             final int NEW_ROOM_Y = newRoomCoordinates.getY();
             final double roomRoll = ThreadLocalRandom.current().nextDouble();
-            final Coordinates northCord = new Coordinates(NEW_ROOM_X, NEW_ROOM_Y-1);
-            final Coordinates eastCord = new Coordinates(NEW_ROOM_X+1, NEW_ROOM_Y);
-            final Coordinates southCord = new Coordinates(NEW_ROOM_X, NEW_ROOM_Y+1);
-            final Coordinates westCord = new Coordinates(NEW_ROOM_X-1, NEW_ROOM_Y);
 
             // Get the neighbors
             LinkedList<Coordinates> newRoomNeighbors = whoAreMyNeighbors(newRoomCoordinates);
 
             // Make a list to prevent attempting to create rooms where there are already neighbors
             LinkedList<Coordinates> roomsAvailable = new LinkedList<>();
+
+            // Record the location of the adjacent coordinates
+            final Coordinates northCord = new Coordinates(NEW_ROOM_X, NEW_ROOM_Y-1);
+            final Coordinates eastCord = new Coordinates(NEW_ROOM_X+1, NEW_ROOM_Y);
+            final Coordinates southCord = new Coordinates(NEW_ROOM_X, NEW_ROOM_Y+1);
+            final Coordinates westCord = new Coordinates(NEW_ROOM_X-1, NEW_ROOM_Y);
+
+
             roomsAvailable.add(northCord);
             roomsAvailable.add(eastCord);
             roomsAvailable.add(southCord);
@@ -217,152 +271,30 @@ public class Dungeon {
             for (Coordinates neighbor : newRoomNeighbors){
                 roomsAvailable.removeIf(cord -> cord.isLocatedAtTheCoordinate(neighbor));
             }
+            for (Coordinates roomToAdd : roomsToAdd){
+                roomsAvailable.removeIf(cord -> cord.isLocatedAtTheCoordinate(roomToAdd));
+            }
             roomsAvailable.removeIf(cord -> cord.isLocatedAtTheCoordinate(newRoomCoordinates));
 //            System.out.println("Potential rooms at: " + roomsAvailable);
 
             // Get potential doors per four cardinal direction, add them to a list
-            LinkedList<Doors> doorsAvailable = new LinkedList<>();
-            for (Doors door : Doors.values()){
-                doorsAvailable.add(door);
-            }
+            LinkedList<Doors> doorsAvailable = new LinkedList<>(Arrays.asList(Doors.values()));
 
             // Remove potential doors that lead to non-existent tiles
-//            System.out.println(doorsAvailable);
-            if (NEW_ROOM_Y == MIN_Y){
-                doorsAvailable.remove(Doors.NORTHDOOR);
-            } else if (NEW_ROOM_X == MAX_X){
-                doorsAvailable.remove(Doors.EASTDOOR);
-            } else if (NEW_ROOM_Y == MAX_Y){
-                doorsAvailable.remove(Doors.SOUTHDOOR);
-            } else if (NEW_ROOM_X == MIN_X){
-                doorsAvailable.remove(Doors.WESTDOOR);
-            }
+            removeDoorsToNowhere(NEW_ROOM_X, NEW_ROOM_Y, doorsAvailable);
 //            System.out.println("Doors available: " + doorsAvailable);
 
-            /* ADD DOORS IF THERE'S ALREADY A DOOR ON THE OTHER SIDE */
+            // Add doors if there's already a door on the other side
+            LinkedList<Doors> newRoomDoors = addDoorsCorrespondingToNeighbor(NEW_ROOM_X, NEW_ROOM_Y, newRoomNeighbors, doorsAvailable);
 
-            LinkedList<Doors> newRoomDoors = new LinkedList<>();
-            for (Coordinates neighborCords : newRoomNeighbors){
-                // yDiff determines if new room is south, north or on the
-                // same row as neighbor with 1, -1, and 0 respectively.
-                int yDiff = NEW_ROOM_Y - neighborCords.getY();
-                Room neighbor = myDungeonGrid[neighborCords.getY()][neighborCords.getX()];
-
-                /* NESTED SWITCH STATEMENT */
-
-                switch (yDiff) {
-                    // New Room is south of neighbor
-                    case 1 -> {
-                        if (neighbor.hasDoor(Doors.SOUTHDOOR)) {
-                            newRoomDoors.add(Doors.NORTHDOOR);
-                        }
-                        doorsAvailable.remove(Doors.NORTHDOOR);
-                    }
-                    // New Room is north of neighbor
-                    case -1 -> {
-                        if (neighbor.hasDoor(Doors.NORTHDOOR)) {
-                            newRoomDoors.add(Doors.SOUTHDOOR);
-                        }
-                        doorsAvailable.remove(Doors.SOUTHDOOR);
-                    }
-                    // New Room is on the same Row as neighbor, now check column with nested switch
-                    case 0 -> {
-                        // xDiff determines if new room is east, west or on the same
-                        // column as neighbor with -1, 1, and 0 respectively.
-                        int xDiff = NEW_ROOM_X - neighborCords.getX();
-                        switch (xDiff) {
-                            // New Room is East of neighbor
-                            case 1 -> {
-                                if (neighbor.hasDoor(Doors.EASTDOOR)) {
-                                    newRoomDoors.add(Doors.WESTDOOR);
-                                }
-                                doorsAvailable.remove(Doors.WESTDOOR);
-                            }
-                            case -1 -> {
-                                if (neighbor.hasDoor(Doors.WESTDOOR)) {
-                                    newRoomDoors.add(Doors.EASTDOOR);
-                                }
-                                doorsAvailable.remove(Doors.EASTDOOR);
-                            }
-                        }
-                    }
-                }
-//                if(NEW_ROOM_X - neighbor.getX() > 0){
-//                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.EASTDOOR)){
-//                        newRoomDoors.add(Doors.WESTDOOR);
-//                    }
-//                    doorsAvailable.remove(Doors.WESTDOOR);
-//                } else if(NEW_ROOM_X - neighbor.getX() < 0){
-//                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.WESTDOOR)){
-//                        newRoomDoors.add(Doors.EASTDOOR);
-//                    }
-//                    doorsAvailable.remove(Doors.EASTDOOR);
-//                } else if(NEW_ROOM_Y - neighbor.getY() > 0){
-//                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.SOUTHDOOR)){
-//                        newRoomDoors.add(Doors.NORTHDOOR);
-//                    }
-//                    doorsAvailable.remove(Doors.NORTHDOOR);
-//                } else if(NEW_ROOM_Y - neighbor.getY() < 0){
-//                    if (myDungeonGrid[neighbor.getY()][neighbor.getX()].hasDoor(Doors.NORTHDOOR)){
-//                        newRoomDoors.add(Doors.SOUTHDOOR);
-//                    }
-//                    doorsAvailable.remove(Doors.SOUTHDOOR);
-//                }
-            }
-
-            /* Generate 0-4 random doors, but only allow a dead end if there are still rooms to
-               add or no more RoomsOfInterest needed. Pick from doorsAvailable at random to keep it
-               organic.
-             */
-
-            final int MINIMUM_DOORS = !roomsNeeded.isEmpty() && roomsToAdd.isEmpty() ? 1 : 0;
-//            final int MINIMUM_DOORS = 0;
-            final int MAXIMUM_DOORS = doorsAvailable.size();
-            final int numDoors;
-            if (MAXIMUM_DOORS > MINIMUM_DOORS) {
-                numDoors = ThreadLocalRandom.current().nextInt(MINIMUM_DOORS, MAXIMUM_DOORS);
-            } else {
-                numDoors = MAXIMUM_DOORS;
-            }
-//            System.out.println("number of doors: " + numDoors);
-            StringBuilder stringOfNewRooms = new StringBuilder();
-            for (int i = 0; i < numDoors; i++){
-                int doorPicked = doorsAvailable.size() > 1 ?
-                        ThreadLocalRandom.current().nextInt(0, doorsAvailable.size() - 1) : 0;
-                Doors newDoor = doorsAvailable.remove(doorPicked);
-                newRoomDoors.add(newDoor);
-//                System.out.println("new door: " + newDoor);
-                switch (newDoor){
-                    case NORTHDOOR :
-                        if (roomsAvailable.contains(northCord)) {
-//                            System.out.println("case: " + newDoor);
-                            roomsToAdd.add(northCord);
-                            stringOfNewRooms.append(northCord + ", ");
-                            break;
-                        }
-                    case EASTDOOR :
-                        if (roomsAvailable.contains(eastCord)){
-//                            System.out.println("case: " + newDoor);
-                            roomsToAdd.add(eastCord);
-                            stringOfNewRooms.append(eastCord + ", ");
-                            break;
-                        }
-                    case SOUTHDOOR :
-                        if (roomsAvailable.contains(southCord)){
-//                            System.out.println("case: " + newDoor);
-                            roomsToAdd.add(southCord);
-                            stringOfNewRooms.append(southCord + ", ");
-                            break;
-                        }
-                    case WESTDOOR :
-                        if (roomsAvailable.contains(westCord)){
-//                            System.out.println("case: " + newDoor);
-                            roomsToAdd.add(westCord);
-                            stringOfNewRooms.append(westCord + ", ");
-                            break;
-                        }
-                }
-            }
+            // Generate doors to new rooms, adding those new rooms to the queue
+            String stringOfNewRooms = generateDoorsToEmptyTiles(
+                    roomsToAdd,
+                    roomsNeeded,
+                    roomsAvailable,
+                    northCord, eastCord, southCord, westCord,
+                    doorsAvailable,
+                    newRoomDoors    );
 //            System.out.println("Added Rooms To Build: " + stringOfNewRooms);
 
             /* ADD NEW ROOM, CHANCE TO BE SPECIAL ROOM */
@@ -405,6 +337,169 @@ public class Dungeon {
 
     }
 
+    /** Generate 0-4 random doors, but only allow a dead end if there are still rooms to
+     *  add or no more RoomsOfInterest needed. Pick from doorsAvailable at random to keep it
+     *  organic.
+     * @param roomsToAdd rooms will be added to the queue here.
+     * @param roomsNeeded the special rooms still left to generate
+     * @param roomsAvailable possible neighboring room tiles to create
+     * @param northCord coordinate of the space to the north
+     * @param eastCord coordinate of the space to the east
+     * @param southCord coordinate of the space to the south
+     * @param westCord coordinate of the space to the west
+     * @param doorsAvailable possible doors to generate for the new room
+     * @param newRoomDoors list of doors to ultimately be added to the room later
+     * @return list of the new rooms being added by this function
+     */
+    private String generateDoorsToEmptyTiles(
+            final LinkedList<Coordinates> roomsToAdd,
+            final LinkedList<RoomsOfInterest> roomsNeeded,
+            final LinkedList<Coordinates> roomsAvailable,
+            final Coordinates northCord,
+            final Coordinates eastCord,
+            final Coordinates southCord,
+            final Coordinates westCord,
+            final LinkedList<Doors> doorsAvailable,
+            final LinkedList<Doors> newRoomDoors)
+    {
+        final int MINIMUM_DOORS = !roomsNeeded.isEmpty() ? 1 : 0;
+//            final int MINIMUM_DOORS = 0;
+        final int MAXIMUM_DOORS = doorsAvailable.size();
+        final int numDoors;
+        if (MAXIMUM_DOORS > MINIMUM_DOORS) {
+            numDoors = ThreadLocalRandom.current().nextInt(MINIMUM_DOORS, MAXIMUM_DOORS);
+        } else {
+            numDoors = MAXIMUM_DOORS;
+        }
+//            System.out.println("number of doors: " + numDoors);
+        StringBuilder stringOfNewRooms = new StringBuilder();
+        for (int i = 0; i < numDoors; i++){
+            int indexOfDoorPicked = doorsAvailable.size() > 1 ?
+                    ThreadLocalRandom.current().nextInt(0, doorsAvailable.size() - 1) : 0;
+            Doors newDoor = doorsAvailable.remove(indexOfDoorPicked);
+            newRoomDoors.add(newDoor);
+//                System.out.println("new door: " + newDoor);
+            switch (newDoor){
+                case NORTHDOOR :
+                    if (roomsAvailable.contains(northCord)) {
+//                            System.out.println("case: " + newDoor);
+                        roomsToAdd.add(northCord);
+                        stringOfNewRooms.append(northCord + ", ");
+                        break;
+                    }
+                case EASTDOOR :
+                    if (roomsAvailable.contains(eastCord)){
+//                            System.out.println("case: " + newDoor);
+                        roomsToAdd.add(eastCord);
+                        stringOfNewRooms.append(eastCord + ", ");
+                        break;
+                    }
+                case SOUTHDOOR :
+                    if (roomsAvailable.contains(southCord)){
+//                            System.out.println("case: " + newDoor);
+                        roomsToAdd.add(southCord);
+                        stringOfNewRooms.append(southCord + ", ");
+                        break;
+                    }
+                case WESTDOOR :
+                    if (roomsAvailable.contains(westCord)){
+//                            System.out.println("case: " + newDoor);
+                        roomsToAdd.add(westCord);
+                        stringOfNewRooms.append(westCord + ", ");
+                        break;
+                    }
+            }
+        }
+        return stringOfNewRooms.toString();
+    }
+
+    /**
+     * Creates a list of doors checking each of the neighboring tiles of a new room passed and adding in the
+     * corresponding door for that the neighbor has. For example, if the neighbor to the East has a WestDoor, then it
+     * adds in an EastDoor which represents the other side of that door.
+     * @param theNewRoomX X coordinate of the room passed
+     * @param theNewRoomY y coordinate of the room passed
+     * @param theNewRoomNeighbors List of neighboring room coordinates
+     * @param theDoorsAvailable List of possible doors in the new room
+     * @return newRoomDoors - the list of doors to be added first to the new room
+     */
+    private LinkedList<Doors> addDoorsCorrespondingToNeighbor(
+            final int theNewRoomX,
+            final int theNewRoomY,
+            final LinkedList<Coordinates> theNewRoomNeighbors,
+            final LinkedList<Doors> theDoorsAvailable)
+    {
+        LinkedList<Doors> newRoomDoors = new LinkedList<>();
+        for (Coordinates neighborCords : theNewRoomNeighbors){
+            // yDiff determines if new room is south, north or on the
+            // same row as neighbor with 1, -1, and 0 respectively.
+            int yDiff = theNewRoomY - neighborCords.getY();
+            Room neighbor = myDungeonGrid[neighborCords.getY()][neighborCords.getX()];
+
+            /* NESTED SWITCH STATEMENT */
+
+            switch (yDiff) {
+                // New Room is south of neighbor
+                case 1 -> {
+                    if (neighbor.hasDoor(Doors.SOUTHDOOR)) {
+                        newRoomDoors.add(Doors.NORTHDOOR);
+                    }
+                    theDoorsAvailable.remove(Doors.NORTHDOOR);
+                }
+                // New Room is north of neighbor
+                case -1 -> {
+                    if (neighbor.hasDoor(Doors.NORTHDOOR)) {
+                        newRoomDoors.add(Doors.SOUTHDOOR);
+                    }
+                    theDoorsAvailable.remove(Doors.SOUTHDOOR);
+                }
+                // New Room is on the same Row as neighbor, now check column with nested switch
+                case 0 -> {
+                    // xDiff determines if new room is east, west or on the same
+                    // column as neighbor with -1, 1, and 0 respectively.
+                    int xDiff = theNewRoomX - neighborCords.getX();
+                    switch (xDiff) {
+                        // New Room is East of neighbor
+                        case 1 -> {
+                            if (neighbor.hasDoor(Doors.EASTDOOR)) {
+                                newRoomDoors.add(Doors.WESTDOOR);
+                            }
+                            theDoorsAvailable.remove(Doors.WESTDOOR);
+                        }
+                        case -1 -> {
+                            if (neighbor.hasDoor(Doors.WESTDOOR)) {
+                                newRoomDoors.add(Doors.EASTDOOR);
+                            }
+                            theDoorsAvailable.remove(Doors.EASTDOOR);
+                        }
+                    }
+                }
+            }
+        }
+        return newRoomDoors;
+    }
+
+    /**
+     * If a door would be out of bounds, remove it from the list passed in
+     * @param theNewRoomX X coordinate of the room passed
+     * @param theNewRoomY Y coordinate of the room passed
+     * @param theDoorsAvailable list to remove impossible doors from.
+     */
+    private void removeDoorsToNowhere(final int theNewRoomX, final int theNewRoomY, final LinkedList<Doors> theDoorsAvailable) {
+        if (theNewRoomY <= MIN_Y){
+            theDoorsAvailable.remove(Doors.NORTHDOOR);
+        }
+        if (theNewRoomX >= MAX_X){
+            theDoorsAvailable.remove(Doors.EASTDOOR);
+        }
+        if (theNewRoomY >= MAX_Y){
+            theDoorsAvailable.remove(Doors.SOUTHDOOR);
+        }
+        if (theNewRoomX <= MIN_X){
+            theDoorsAvailable.remove(Doors.WESTDOOR);
+        }
+    }
+
     /**
      * Given a set of Coordinates, returns a list of all adjacent Coordinates already containing rooms.
      * @param theCoordinates Coordinates to check the neighbors of.
@@ -440,32 +535,21 @@ public class Dungeon {
 
     }
 
+    /**
+     *
+     * @return A monster selected at random from the Monsters Enum
+     */
     private Monsters getRandomMonster (){
         int choice = ThreadLocalRandom.current().nextInt(0, Monsters.values().length);
         return Monsters.values()[choice];
     }
 
-    private RoomItems getRandomItem (){
-        int choice = ThreadLocalRandom.current().nextInt(0, RoomItems.values().length);
-        return RoomItems.values()[choice];
-    }
-
-    private static int getDungeonSize(){
-        try {
-            return uniqueInstanceOfDungeon.myDungeonGrid.length;
-        } catch (NullPointerException e){
-            System.out.println("Dungeon must be created before getting Dungeon Size");
-            return 0;
-        }
-    }
-
-    public static void main(String... args) {
-        Dungeon dungeon = new Dungeon(6, 6);
-        dungeon.printDungeonMap();
-    }
-
     /* MOCK DUNGEON */
 
+    /**
+     * Used for development to build the dungeon with all of its rooms manually instead of
+     * using createMaze().
+     */
     public Dungeon() {
 
 //        System.out.println("Building New Dungeon");

@@ -86,7 +86,8 @@ public abstract class Hero extends DungeonCharacter {
                 System.out.println("You have found the pillar of OO, " + pillarOO);
 //                System.out.println(displayInventory());
                 DungeonAdventure.updateReportPanel("You have found the pillar of OO, " + pillarOO);
-            } else if (playersCurrentRoom.containsPotion()) {
+            }
+            if (playersCurrentRoom.containsPotion()) {
                 for (RoomItem roomItem: roomItems) {
                     if (roomItem.getClass() == HealthPotion.class) {
                         HealthPotion healthPotion = (HealthPotion) roomItem;
@@ -100,7 +101,8 @@ public abstract class Hero extends DungeonCharacter {
                         DungeonAdventure.updateReportPanel("Health after potion = " + this.getMyHealthPoints());
                     }
                 }
-            } else if (playersCurrentRoom.containsPit()) {
+            }
+            if (playersCurrentRoom.containsPit()) {
                 for (RoomItem roomItem: roomItems) {
                     if (roomItem.getClass() == Pit.class) {
                         Pit pit = (Pit) roomItem;
