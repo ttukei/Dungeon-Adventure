@@ -111,13 +111,6 @@ public abstract class DungeonCharacter extends DungeonObject {
         if (!isInCombat()){
             outOfCombatBehavior();
         }
-        // getTarget() uses some methodology determined at a lower inheritance level to
-                    // select targets by testing that methodology against the objects of the
-                    // type determined that are in the handler
-        // inCombat() checks if in combat
-            // combatActions(
-                // attackTarget() overloads a target or checks for null to not attack
-
     }
 
     protected void outOfCombatBehavior() {
@@ -152,23 +145,12 @@ public abstract class DungeonCharacter extends DungeonObject {
         return isMarkedForDeath();
     }
 
-    public boolean isDeceased() {
-        return this.myHealthPoints <= 0;
-    }
     /**
      * Gets the characters' name.
      * @return the characters' name.
      */
     public String getMyCharacterName() {
         return myCharacterName;
-    }
-
-    /**
-     * Sets my characters' name.
-     * @param myCharacterName
-     */
-    public void setMyCharacterName(String myCharacterName) {
-        this.myCharacterName = myCharacterName;
     }
 
     /**
@@ -207,38 +189,11 @@ public abstract class DungeonCharacter extends DungeonObject {
     }
 
     /**
-     * Gets the characters' attack speed.
-     * @return The characters' attack speed.
-     */
-    public int getMyAttackSpeed() {
-        return myAttackSpeed;
-    }
-
-    /**
-     * Sets the characters' attack speed.
-     * @param myAttackSpeed The new attack speed.
-     */
-    public void setMyAttackSpeed(int myAttackSpeed) {
-        if (myAttackSpeed < 0) {
-            throw new IllegalArgumentException("Attack speed cannot be negative");
-        }
-        this.myAttackSpeed = myAttackSpeed;
-    }
-
-    /**
      * Gets the characters' probability of hitting an opponent
      * @return The chance to hit
      */
     public double getMyChanceToHit() {
         return myChanceToHit;
-    }
-
-    /**
-     * Sets the characters' probability to hit an opponent.
-     * @param myChanceToHit The new probability to hit.
-     */
-    public void setMyChanceToHit(double myChanceToHit) {
-        this.myChanceToHit = myChanceToHit;
     }
 
     /**

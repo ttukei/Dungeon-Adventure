@@ -165,18 +165,6 @@ public abstract class Hero extends DungeonCharacter {
         return pillarsCounter == 4;
     }
 
-
-    public boolean useHealthPotion() {
-        for (int index = 0; index < this.myInventory.size(); index++) {
-            if (this.myInventory.get(index).getClass().equals(HealthPotion.class)) {
-                HealthPotion healthPotion = (HealthPotion) this.myInventory.remove(index);
-                this.setMyHealthPoints(this.getMyHealthPoints() + healthPotion.getMyHealthToBeRegained());
-                return true;
-            }
-        }
-        return false;
-    }
-
     public double getMyChanceToDefend() {
         return myChanceToDefend;
     }
@@ -207,15 +195,6 @@ public abstract class Hero extends DungeonCharacter {
             }
         }
         return false;
-    }
-
-    /**
-     * Picks up and places a room item in the heroes inventory.
-     * @param theItemToPickUp The room item to pick up.
-     * @return True if the item was successfully placed in the inventory and false otherwise.
-     */
-    public boolean pickUpRoomItem(RoomItem theItemToPickUp) {
-        return this.myInventory.add(theItemToPickUp);
     }
 
     public String displayInventory() {
