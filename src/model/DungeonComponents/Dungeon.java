@@ -208,7 +208,7 @@ public class Dungeon {
     /**
      * Returns a character representation of the room, first if the players in it, then what items are in it.
      * @param theCords the Coordinates of the room to check
-     * @return
+     * @return The icon representing the room's contents
      */
     private String getRoomMarker(final Coordinates theCords){
         if (theCords.isLocatedAtTheCoordinate(getPlayerCoordinates())){

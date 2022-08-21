@@ -3,13 +3,11 @@ package model.DungeonCharacterComponents.DungeonCharacters.Heroes;
 import controller.DungeonAdventure;
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
-import model.DungeonComponents.DataTypes.Coordinates;
 import model.DungeonComponents.Dungeon;
 import model.DungeonComponents.Room;
 import model.DungeonComponents.RoomsOfInterest;
 import model.RoomItemComponents.*;
 import view.EndPanel;
-import view.IntroPanel;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -204,7 +202,7 @@ public abstract class Hero extends DungeonCharacter {
         return result + "\n";
     }
 
-    public abstract boolean specialSkill(final DungeonCharacter theMonsterToAttack);
+    public abstract int specialSkill(final DungeonCharacter theMonsterToAttack);
 
     public int takeDamage(int theDamageToTake) {
         if (!(ThreadLocalRandom.current().nextDouble() < this.getMyChanceToDefend())) {
