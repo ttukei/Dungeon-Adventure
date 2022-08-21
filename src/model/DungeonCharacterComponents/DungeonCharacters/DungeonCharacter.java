@@ -133,10 +133,13 @@ public abstract class DungeonCharacter extends DungeonObject {
             theDamageToBeDealt = this.getTheDamageToBeDealt();
             theDamageTaken = theTarget.takeDamage(theDamageToBeDealt);
         }
-        return getMyCharacterName() +
-                " attacks " +
-                getMyTarget().getMyCharacterName() +
-                " and deals " + theDamageTaken;
+        StringBuilder attackString = new StringBuilder(getMyCharacterName() + " attacks " + theTarget.getMyCharacterName());
+        if (theDamageTaken > 0){
+            attackString.append(" and deals " + theDamageTaken + " damage!");
+        } else {
+            attackString.append(" and misses!");
+        }
+        return attackString.toString();
     }
 
     public int takeDamage(int theDamageToTake){
