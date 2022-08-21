@@ -49,7 +49,7 @@ public class Monster extends DungeonCharacter {
      * @return whether the monster has healed.
      */
     protected int heal() {
-        if (Math.random() < myChanceToHeal) {
+        if (getMyHealthPoints() < getMyMaxHealthPoints() && Math.random() < myChanceToHeal) {
             final int amountOfHealthToBeRegained = (int) (Math.random() * myHealingRange.getMyUpperBound() - myHealingRange.getMyLowerBound()) + myHealingRange.getMyLowerBound();
             setMyHealthPoints(getMyHealthPoints() + amountOfHealthToBeRegained);
             return amountOfHealthToBeRegained;

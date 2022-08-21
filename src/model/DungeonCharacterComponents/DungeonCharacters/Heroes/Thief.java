@@ -3,6 +3,9 @@ package model.DungeonCharacterComponents.DungeonCharacters.Heroes;
 import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * @author Timon Tukei
  */
@@ -30,17 +33,30 @@ final public class Thief extends Hero {
     }
 
     /**
+     * Thief rolls for surprise attack in addition to attacking as normal
+     * @param theTarget
+     * @return
+     */
+    @Override
+    public String attack(DungeonCharacter theTarget) {
+        if (ThreadLocalRandom.current().nextDouble() < mySurpriseAttackSuccessProb){
+            int surpriseAttackDamage = specialSkill(theTarget);
+            return getMyCharacterName() + " makes a surprise attack for " + surpriseAttackDamage + " damage!";
+        }
+        return super.attack(theTarget);
+    }
+
+    /**
      * Surprise attacks an opponent.
      * @return The success of the surprise attack.
      */
-    public boolean specialSkill(final DungeonCharacter theMonsterToAttack) {
-        int damageToBeDealt = this.getTheDamageToBeDealt();
-        if (Math.random() < mySurpriseAttackSuccessProb) {
-            theMonsterToAttack.setMyHealthPoints(theMonsterToAttack.getMyHealthPoints() - damageToBeDealt);
-            return true;
-        } else {
-            return false;
-        }
+    public int specialSkill(final DungeonCharacter theMonsterToAttack) {
+        DamageRange dr = new DamageRange(100, 200);
+        Random random = new Random();
+        // Randomly gets a number between the damageToBeDealt range.
+        final int damageToBeDealt = random.nextInt(dr.getMyUpperBound() - dr.getMyLowerBound()) + dr.getMyLowerBound();
+        theMonsterToAttack.setMyHealthPoints(theMonsterToAttack.getMyHealthPoints() - damageToBeDealt);
+        return damageToBeDealt;
     }
 
     @Override

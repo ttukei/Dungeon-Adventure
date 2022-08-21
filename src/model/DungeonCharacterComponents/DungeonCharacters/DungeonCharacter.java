@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static controller.DungeonAdventure.clamp;
+
 /**
  * @author Timon Tukei
  */
@@ -27,6 +29,11 @@ public abstract class DungeonCharacter extends DungeonObject {
      * The characters' health points.
      */
     private int myHealthPoints;
+
+    /**
+     * The characters' maximum possible health points.
+     */
+    private int myMaxHealthPoints;
 
     /**
      * The characters' damage range.
@@ -75,6 +82,7 @@ public abstract class DungeonCharacter extends DungeonObject {
         super();
         this.myCharacterName = theCharacterName;
         this.myHealthPoints = theHealthPoints;
+        this.myMaxHealthPoints = myHealthPoints;
         this.myDamageRange = theDamageRange;
         this.myAttackSpeed = theAttackSpeed;
         this.myChanceToHit = theChanceToHit;
@@ -87,12 +95,7 @@ public abstract class DungeonCharacter extends DungeonObject {
         super.objectBehavior();
 //        System.out.println(getMyCharacterName() + " checks their behavior");
         if (isInCombat()){
-            String combatMessage =  getMyCharacterName() +
-                                    " attacks " +
-                                    getMyTarget().getMyCharacterName() +
-                                    " and deals " +
-                                    attack(getMyTarget()) +
-                                    " damage";
+            String combatMessage =  attack(getMyTarget());
             System.out.println(combatMessage);
             DungeonAdventure.updateReportPanel(combatMessage);
             boolean myTargetDied = myTarget.didIDie();
@@ -130,7 +133,13 @@ public abstract class DungeonCharacter extends DungeonObject {
             theDamageToBeDealt = this.getTheDamageToBeDealt();
             theDamageTaken = theTarget.takeDamage(theDamageToBeDealt);
         }
-        return "" + theDamageTaken;
+        StringBuilder attackString = new StringBuilder(getMyCharacterName() + " attacks " + theTarget.getMyCharacterName());
+        if (theDamageTaken > 0){
+            attackString.append(" and deals " + theDamageTaken + " damage!");
+        } else {
+            attackString.append(" and misses!");
+        }
+        return attackString.toString();
     }
 
     public int takeDamage(int theDamageToTake){
@@ -163,13 +172,21 @@ public abstract class DungeonCharacter extends DungeonObject {
         }
         return myHealthPoints;
     }
+
+    /**
+     * @return the characters maximum health points
+     */
+    protected int getMyMaxHealthPoints() {
+        return myMaxHealthPoints;
+    }
+
     // TODO check data before assignment
     /**
      * Sets the characters' health points.
-     * @param myHealthPoints The new health points
+     * @param theHealthPoints The new health points
      */
-    public void setMyHealthPoints(int myHealthPoints) {
-        this.myHealthPoints = myHealthPoints;
+    public void setMyHealthPoints(int theHealthPoints) {
+        this.myHealthPoints = clamp(theHealthPoints, 0, myMaxHealthPoints);
     }
 
     /**

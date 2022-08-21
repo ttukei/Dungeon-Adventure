@@ -5,6 +5,9 @@ import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
 import model.DungeonCharacterComponents.HealingRange;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+import static controller.DungeonAdventure.clamp;
 
 /**
  * @author Timon Tukei
@@ -16,6 +19,8 @@ final public class Priestess extends Hero {
      * The healing range of the priestess.
      */
     private final HealingRange myHealingRange;
+
+    private final double MY_CHANCE_TO_HEAL = 0.33;
 
     /**
      * Constructs an instance of warrior.
@@ -33,12 +38,26 @@ final public class Priestess extends Hero {
         this.myHealingRange = theHealingRange;
     }
 
+    @Override
+    public String attack(final DungeonCharacter theTarget){
+        StringBuilder priestAttackString = new StringBuilder();
+        if (ThreadLocalRandom.current().nextDouble() < MY_CHANCE_TO_HEAL){
+            priestAttackString.append(getMyCharacterName() + " heals herself for " + specialSkill(null) + "\n");
+        }
+        return priestAttackString + super.attack(theTarget);
+    }
+
     /**
      * Heals this priestess.
+     * @return
      */
-    public boolean specialSkill(final DungeonCharacter theMonsterToAttack) {
-        setMyHealthPoints(getMyHealthPoints() + getAmountOfHealthToBeRegained());
-        return true;
+    public int specialSkill(final DungeonCharacter theTarget) {
+        if (getMyHealthPoints() < getMyMaxHealthPoints()){
+            int healAmount = getAmountOfHealthToBeRegained();
+            setMyHealthPoints(getMyHealthPoints() + getAmountOfHealthToBeRegained());
+            return getAmountOfHealthToBeRegained();
+        }
+        return 0;
     }
 
     /**

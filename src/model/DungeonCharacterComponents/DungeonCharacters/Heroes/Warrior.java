@@ -4,6 +4,7 @@ import model.DungeonCharacterComponents.DamageRange;
 import model.DungeonCharacterComponents.DungeonCharacters.DungeonCharacter;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Timon Tukei
@@ -31,23 +32,28 @@ final public class Warrior extends Hero {
         this.myCrushingBlowSuccessProb = theCrushingBlowSuccessProb;
     }
 
+    @Override
+    public String attack(final DungeonCharacter theTarget) {
+        if (ThreadLocalRandom.current().nextDouble() < myCrushingBlowSuccessProb){
+            int crushingBlowDamage = specialSkill(theTarget);
+            return getMyCharacterName() + " makes a crushing blow for " + crushingBlowDamage + " damage!";
+        }
+        return super.attack(theTarget);
+    }
+
 
     /**
      * The warrior has a special skill (crushing blow) that is similar to attack but does more damage.
      * @param theMonsterToAttack The opponent.
      * @return The success of the attack.
      */
-    public boolean specialSkill(final DungeonCharacter theMonsterToAttack) {
+    public int specialSkill(final DungeonCharacter theMonsterToAttack) {
         DamageRange dr = new DamageRange(75, 175);
         Random random = new Random();
         // Randomly gets a number between the damageToBeDealt range.
         final int damageToBeDealt = random.nextInt(dr.getMyUpperBound() - dr.getMyLowerBound()) + dr.getMyLowerBound();
-        if (Math.random() < myCrushingBlowSuccessProb) {
-            theMonsterToAttack.setMyHealthPoints(theMonsterToAttack.getMyHealthPoints() - damageToBeDealt);
-            return true;
-        } else {
-            return false;
-        }
+        theMonsterToAttack.setMyHealthPoints(theMonsterToAttack.getMyHealthPoints() - damageToBeDealt);
+        return damageToBeDealt;
     }
 
     @Override
