@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Dungeon-Adventure
 TCSS 360 Summer 2022 Group Project
 =======
@@ -35,5 +34,4 @@ X - represents a pit. OH NO!
 Once the map is shown, move the player's location using W, A, S, and D keys.
 
 ## Monsters
-Rooms can have monsters. You can't pick up a useful item or pillar in a room with a monster until the monster is defeated.
->>>>>>> dev
+Rooms can have monsters. You can't pick up a useful item or pillar in a room with a monster until the monster is defeated
